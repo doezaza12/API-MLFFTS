@@ -1,0 +1,21 @@
+{
+  "name": "api-mlffts",
+  "version": "1.0.0",
+  "description": "api for multi-lane-free-flow-toll-system",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/express": "^4.17.1",
+    "express": "^4.17.1",
+    "mysql2": "^1.7.0",
+    "sequelize": "^5.19.4",
+    "sequelize-auto-v2": "^0.5.3"
+  },
+  "devDependencies": {
+    "@types/mysql2": "github:types/mysql2"
+  }
+}
