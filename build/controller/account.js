@@ -16,4 +16,15 @@ async function getAccountList(req, res, next) {
     }
 }
 exports.getAccountList = getAccountList;
+async function loginWithLine(req, res, next) {
+    try {
+        console.log(req.query);
+        return res.send();
+    }
+    catch (err) {
+        console.error(err);
+        return res.status(HttpStatus.NOT_FOUND).send();
+    }
+}
+exports.loginWithLine = loginWithLine;
 //# sourceMappingURL=account.js.map

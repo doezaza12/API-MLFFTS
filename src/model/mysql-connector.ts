@@ -1,6 +1,6 @@
 import * as Sequelize from 'sequelize';
-import * as dbTables from './db.tables'
-import * as dbModel from './db'
+import * as dbTables from './db.tables';
+import * as dbModel from './db';
 
 export class MySQLConnector {
     table: dbTables.ITables;
