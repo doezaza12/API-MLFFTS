@@ -1,24 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
-const sequelize_1 = require("sequelize");
+const bodyParser = require("body-parser");
 const config_1 = require("./util/config");
+const data_access_1 = require("./model/data-access/data-access");
+const routes_1 = require("./routes/routes");
 const app = express();
+app.use(bodyParser.urlencoded({ extended: false }));
+// init mysql
 const config = new config_1.Configuration('../db.config.json').mySql;
-const ss = new sequelize_1.Sequelize({
-    host: config.host,
-    username: config.username,
-    password: config.password,
-    database: config.database,
-    port: config.port,
-    dialect: 'mysql'
-});
-console.log(ss);
-// let conn = mysql2.createConnection({
-//     host: config.host,
-//     user: config.username,
-//     password: config.password,
-//     port: config.port,
-//     database: config.database
-// })
+new data_access_1.DAL(config);
+app.use(routes_1.router);
+app.listen(8080, () => { console.log('connected...'); });
 //# sourceMappingURL=app.js.map

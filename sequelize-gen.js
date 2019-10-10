@@ -8,11 +8,11 @@ var auto = new SequelizeAuto(config.database, config.username, config.password, 
     host: config.host,
     port: config.port,
     dialect: 'mysql',
-    directory: './build/model/',
+    directory: './src/model/',
     additional: {
         timestamps: false
     },
-    typescript: false,
+    typescript: true,
     camelCase: false,
     camelCaseForFileName: false
 });

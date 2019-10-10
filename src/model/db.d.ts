@@ -1,7 +1,6 @@
 // tslint:disable
 import * as Sequelize from 'sequelize';
 
-
 // table: account
 export interface accountAttribute {
 	id:any;
