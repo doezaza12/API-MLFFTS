@@ -20,3 +20,8 @@ export class MySqlConfig {
     password: string;
     database: string;
 }
+
+export class LineConfig {
+    client_id: string;
+    client_secret: string;
+}

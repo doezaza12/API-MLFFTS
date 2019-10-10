@@ -16,4 +16,7 @@ exports.Configuration = Configuration;
 class MySqlConfig {
 }
 exports.MySqlConfig = MySqlConfig;
+class LineConfig {
+}
+exports.LineConfig = LineConfig;
 //# sourceMappingURL=config.js.map
