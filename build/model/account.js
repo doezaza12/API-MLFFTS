@@ -11,13 +11,20 @@ module.exports = function (sequelize, DataTypes) {
         },
         'username': {
             type: DataTypes.STRING(50),
-            allowNull: false,
-            comment: "null"
+            allowNull: true,
+            comment: "null",
+            unique: true
         },
         'password': {
             type: DataTypes.STRING(100),
-            allowNull: false,
+            allowNull: true,
             comment: "null"
+        },
+        'line_id': {
+            type: DataTypes.STRING(255),
+            allowNull: true,
+            comment: "null",
+            unique: true
         },
         'type': {
             type: DataTypes.INTEGER(1),
@@ -28,7 +35,11 @@ module.exports = function (sequelize, DataTypes) {
         'user_info_id': {
             type: DataTypes.INTEGER(11),
             allowNull: false,
-            comment: "null"
+            comment: "null",
+            references: {
+                model: 'user_info',
+                key: 'id'
+            }
         },
         '_isVerify': {
             type: DataTypes.INTEGER(1),

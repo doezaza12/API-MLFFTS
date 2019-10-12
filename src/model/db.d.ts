@@ -1,11 +1,13 @@
 // tslint:disable
 import * as Sequelize from 'sequelize';
 
+
 // table: account
 export interface accountAttribute {
 	id:any;
-	username:any;
-	password:any;
+	username?:any;
+	password?:any;
+	line_id?:any;
 	type?:any;
 	user_info_id:any;
 	_isVerify?:any;
@@ -19,7 +21,7 @@ export interface user_infoAttribute {
 	id:any;
 	firstname?:any;
 	lastname?:any;
-	tel?:any;
+	email?:any;
 	lp_info_id?:any;
 }
 export interface user_infoInstance extends Sequelize.Instance<user_infoAttribute>, user_infoAttribute { }

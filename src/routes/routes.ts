@@ -1,14 +1,15 @@
 import * as express from 'express';
 
-import * as AccountCtrl from '../controller/account'
+import * as AccountCtrl from '../controller/account';
+import * as LoginCtrl from '../controller/login';
 
 const router = express.Router();
 
-// get
-router.get('/getaccountlist', AccountCtrl.getAccountList)
-router.get('/login-line', AccountCtrl.callbackLine)
+// account
+router.get('/getaccountlist', AccountCtrl.getAccountList);
+router.post('/addAccount', AccountCtrl.insertAccount);
 
-// post
-
+// login
+router.get('/cb-line', LoginCtrl.callbackLine);
 
 export { router };

@@ -23,7 +23,7 @@ module.exports = function(sequelize: sequelize.Sequelize, DataTypes: DataTypes) 
 			allowNull: true,
 			comment: "null"
 		},
-		'tel': {
+		'email': {
 			type: DataTypes.STRING(255),
 			allowNull: true,
 			comment: "null"
