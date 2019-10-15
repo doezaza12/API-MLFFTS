@@ -33,7 +33,10 @@ async function callbackLine(req, res, next) {
                 return reject(err);
             }
         });
-        return res.status(HttpStatus.OK).send(payload);
+        return res.status(HttpStatus.OK).send({
+            code: 'OK',
+            data: payload
+        });
     }
     catch (err) {
         console.error(err);
@@ -41,4 +44,7 @@ async function callbackLine(req, res, next) {
     }
 }
 exports.callbackLine = callbackLine;
+async function loginLine(req, res, next) {
+}
+exports.loginLine = loginLine;
 //# sourceMappingURL=login.js.map

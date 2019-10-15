@@ -28,10 +28,20 @@ module.exports = function(sequelize: sequelize.Sequelize, DataTypes: DataTypes) 
 			allowNull: true,
 			comment: "null"
 		},
+		'e_code': {
+			type: DataTypes.STRING(255),
+			allowNull: true,
+			comment: "easy pass code",
+			unique: true
+		},
 		'lp_info_id': {
 			type: DataTypes.INTEGER(11),
 			allowNull: true,
-			comment: "null"
+			comment: "null",
+			references: {
+				model: 'lp_info',
+				key: 'id'
+			}
 		}
 	}, {
 		tableName: 'user_info',

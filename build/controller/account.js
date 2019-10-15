@@ -22,7 +22,7 @@ async function getAccountList(req, res, next) {
     try {
         let accountList = await data_access_1.DAL.accountDAL.getAccountList();
         return res.status(HttpStatus.OK).send({
-            code: HttpStatus.OK,
+            code: 'OK',
             data: accountList
         });
     }
