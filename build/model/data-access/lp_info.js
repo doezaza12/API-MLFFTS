@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const data_access_1 = require("./data-access");
-class userInfoDAL {
-    insertUserInfo(data) {
+class lpInfoDAL {
+    insertLpInfo(data) {
         return new Promise(async (resolve, reject) => {
             try {
-                let result = await data_access_1.DAL.mysqlConnector.user_info.create(data);
+                let result = await data_access_1.DAL.mysqlConnector.lp_info.create(data);
                 return resolve(result.id);
             }
             catch (err) {
@@ -15,5 +15,5 @@ class userInfoDAL {
         });
     }
 }
-exports.userInfoDAL = userInfoDAL;
-//# sourceMappingURL=user_info.js.map
+exports.lpInfoDAL = lpInfoDAL;
+//# sourceMappingURL=lp_info.js.map

@@ -47,4 +47,7 @@ exports.callbackLine = callbackLine;
 async function loginLine(req, res, next) {
 }
 exports.loginLine = loginLine;
+async function login(req, res, next) {
+}
+exports.login = login;
 //# sourceMappingURL=login.js.map

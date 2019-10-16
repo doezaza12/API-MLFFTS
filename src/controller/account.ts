@@ -9,7 +9,6 @@ export async function insertAccount(req: express.Request, res: express.Response,
         let data: accountAttribute;
         data.username = req.body.username ? req.body.username : null;
         data.password = req.body.password ? req.body.password : null;
-        data.line_id = req.body.line_id ? req.body.line_id : null;
         data._isVerify = req.body.line_id ? 1 : 0;
         DAL.accountDAL.insertAccount(data);
         return res.status(HttpStatus.CREATED).send();

@@ -5,8 +5,8 @@ const path = require("path");
 exports.getModels = function (seq) {
     const tables = {
         lp_info: seq.import(path.join(__dirname, './lp_info')),
-        user_info: seq.import(path.join(__dirname, './user_info')),
         account: seq.import(path.join(__dirname, './account')),
+        user_info: seq.import(path.join(__dirname, './user_info')),
     };
     return tables;
 };

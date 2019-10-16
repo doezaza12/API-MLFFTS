@@ -1,17 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-// export async function insertAccount(req: express.Request, res: express.Response, next: express.NextFunction) {
-//     try {
-//         let data: accountAttribute;
-//         data.username = req.body.username ? req.body.username : null;
-//         data.password = req.body.password ? req.body.password : null;
-//         data.line_id = req.body.line_id ? req.body.line_id : null;
-//         data._isVerify = req.body.line_id ? 1 : 0;
-//         DAL.accountDAL.insertAccount(data);
-//         return res.status(HttpStatus.CREATED).send();
-//     } catch (err) {
-//         console.error(err);
-//         return res.status(HttpStatus.NOT_FOUND).send();
-//     }
-// }
+const HttpStatus = require("http-status-codes");
+const data_access_1 = require("../model/data-access/data-access");
+async function insertUserInfo(req, res, next) {
+    try {
+        let data;
+        data.firstname = req.body.firstname ? req.body.firstname : null;
+        data.lastname = req.body.lastname ? req.body.lastname : null;
+        data.e_code = req.body.e_code ? req.body.e_code : null;
+        data.email = req.body.email ? req.body.email : null;
+        data_access_1.DAL.userInfoDAL.insertUserInfo(data);
+        return res.status(HttpStatus.CREATED).send();
+    }
+    catch (err) {
+        console.error(err);
+        return res.status(HttpStatus.NOT_FOUND).send();
+    }
+}
+exports.insertUserInfo = insertUserInfo;
 //# sourceMappingURL=user_info.js.map

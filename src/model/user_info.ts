@@ -23,6 +23,12 @@ module.exports = function(sequelize: sequelize.Sequelize, DataTypes: DataTypes) 
 			allowNull: true,
 			comment: "null"
 		},
+		'line_id': {
+			type: DataTypes.STRING(255),
+			allowNull: true,
+			comment: "null",
+			unique: true
+		},
 		'email': {
 			type: DataTypes.STRING(255),
 			allowNull: true,

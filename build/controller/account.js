@@ -7,7 +7,6 @@ async function insertAccount(req, res, next) {
         let data;
         data.username = req.body.username ? req.body.username : null;
         data.password = req.body.password ? req.body.password : null;
-        data.line_id = req.body.line_id ? req.body.line_id : null;
         data._isVerify = req.body.line_id ? 1 : 0;
         data_access_1.DAL.accountDAL.insertAccount(data);
         return res.status(HttpStatus.CREATED).send();

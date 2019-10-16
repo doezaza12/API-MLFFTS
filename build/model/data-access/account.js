@@ -5,8 +5,8 @@ class accountDAL {
     insertAccount(data) {
         return new Promise(async (resolve, reject) => {
             try {
-                let result = await data_access_1.DAL.mysqlConnector.account.upsert(data);
-                return resolve(result);
+                let result = await data_access_1.DAL.mysqlConnector.account.create(data);
+                return resolve(result.id);
             }
             catch (err) {
                 console.error(err);

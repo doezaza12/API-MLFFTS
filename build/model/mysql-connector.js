@@ -6,6 +6,7 @@ class MySQLConnector {
         this.table = dbTables.getModels(sequelize);
         this.account = this.table.account;
         this.user_info = this.table.user_info;
+        this.lp_info = this.table.lp_info;
     }
 }
 exports.MySQLConnector = MySQLConnector;

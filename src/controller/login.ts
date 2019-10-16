@@ -47,3 +47,8 @@ export async function callbackLine(req: express.Request, res: express.Response, 
 export async function loginLine(req: express.Request, res: express.Response, next: express.NextFunction) {
 
 }
+
+
+export async function login(req: express.Request, res: express.Response, next: express.NextFunction) {
+
+}
