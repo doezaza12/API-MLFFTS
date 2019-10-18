@@ -6,10 +6,10 @@ export class accountDAL {
         return new Promise<accountAttribute>(async (resolve, reject) => {
             try {
                 let result = await DAL.mysqlConnector.account.create(data);
-                return resolve(result.id);
+                resolve(result.id);
             } catch (err) {
                 console.error(err);
-                return reject(err);
+                reject(err);
             }
         });
     }
@@ -17,10 +17,10 @@ export class accountDAL {
         return new Promise<accountAttribute[]>(async (resolve, reject) => {
             try {
                 let accountList = await DAL.mysqlConnector.account.findAll();
-                return resolve(accountList);
+                resolve(accountList);
             } catch (err) {
                 console.error(err);
-                return reject(err)
+                reject(err)
             }
         });
     }

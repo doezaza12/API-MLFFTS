@@ -1,5 +1,6 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
+import * as jwt from 'jsonwebtoken';
 
 import { Configuration } from './util/config';
 import { DAL } from './model/data-access/data-access';
@@ -15,4 +16,7 @@ new DAL(config);
 
 app.use(Router);
 
-app.listen(8080, () => { console.log('connected...')});
+app.listen(8080, () => {
+    console.log('connected...');
+    console.log(jwt.sign({ data: 'abc' }, 'there-is-no-secret.', { expiresIn: '1h' }));
+});

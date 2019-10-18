@@ -6,11 +6,11 @@ class lpInfoDAL {
         return new Promise(async (resolve, reject) => {
             try {
                 let result = await data_access_1.DAL.mysqlConnector.lp_info.create(data);
-                return resolve(result.id);
+                resolve(result.id);
             }
             catch (err) {
                 console.error(err);
-                return reject(err);
+                reject(err);
             }
         });
     }

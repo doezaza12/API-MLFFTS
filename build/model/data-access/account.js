@@ -6,11 +6,11 @@ class accountDAL {
         return new Promise(async (resolve, reject) => {
             try {
                 let result = await data_access_1.DAL.mysqlConnector.account.create(data);
-                return resolve(result.id);
+                resolve(result.id);
             }
             catch (err) {
                 console.error(err);
-                return reject(err);
+                reject(err);
             }
         });
     }
@@ -18,11 +18,11 @@ class accountDAL {
         return new Promise(async (resolve, reject) => {
             try {
                 let accountList = await data_access_1.DAL.mysqlConnector.account.findAll();
-                return resolve(accountList);
+                resolve(accountList);
             }
             catch (err) {
                 console.error(err);
-                return reject(err);
+                reject(err);
             }
         });
     }
