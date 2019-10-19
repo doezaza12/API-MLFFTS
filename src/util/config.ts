@@ -1,15 +1,21 @@
 import * as fs from 'fs';
 
 export class Configuration {
-    mySql: MySqlConfig;
+    static mySql: MySqlConfig;
+    static line: LineConfig;
     constructor(path: string) {
-        let config = JSON.parse(fs.readFileSync(path, {encoding: 'utf8'}));
-        this.mySql = new MySqlConfig();
-        this.mySql.host = config.mysql.host;
-        this.mySql.port = config.mysql.port;
-        this.mySql.username = config.mysql.username;
-        this.mySql.password = config.mysql.password;
-        this.mySql.database = config.mysql.database;
+        let config = JSON.parse(fs.readFileSync(path, { encoding: 'utf8' }));
+        // mysql config
+        Configuration.mySql = new MySqlConfig();
+        Configuration.mySql.host = config.mysql.host;
+        Configuration.mySql.port = config.mysql.port;
+        Configuration.mySql.username = config.mysql.username;
+        Configuration.mySql.password = config.mysql.password;
+        Configuration.mySql.database = config.mysql.database;
+        // line config
+        Configuration.line = new LineConfig();
+        Configuration.line.client_id = config.line.client_id;
+        Configuration.line.client_secret = config.line.client_secret;
     }
 }
 

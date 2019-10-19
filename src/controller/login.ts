@@ -2,11 +2,9 @@ import * as express from 'express';
 import * as HttpStatus from 'http-status-codes';
 import * as jwt from 'jsonwebtoken';
 import * as request from 'request';
-import * as fs from 'fs';
 
-import { LineConfig } from '../util/config';
+import { Configuration } from '../util/config';
 
-const lineConfig: LineConfig = JSON.parse(fs.readFileSync('../line.config.json', { encoding: 'utf8' }));
 
 export async function callbackLine(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
@@ -17,8 +15,8 @@ export async function callbackLine(req: express.Request, res: express.Response, 
                     form: {
                         grant_type: 'authorization_code',
                         code: req.query.code,
-                        client_id: lineConfig.client_id,
-                        client_secret: lineConfig.client_secret,
+                        client_id: Configuration.line.client_id,
+                        client_secret: Configuration.line.client_secret,
                         redirect_uri: 'http://localhost:8080/cb-line'
                     }
                 }, (err, res, body) => {

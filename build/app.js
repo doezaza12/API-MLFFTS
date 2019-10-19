@@ -8,9 +8,9 @@ const data_access_1 = require("./model/data-access/data-access");
 const routes_1 = require("./routes/routes");
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
-// init mysql
-const config = new config_1.Configuration('../db.config.json').mySql;
-new data_access_1.DAL(config);
+// init
+new config_1.Configuration('../config.json');
+new data_access_1.DAL(config_1.Configuration.mySql);
 app.use(routes_1.router);
 app.listen(8080, () => {
     console.log('connected...');

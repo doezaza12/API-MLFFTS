@@ -3,8 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const HttpStatus = require("http-status-codes");
 const jwt = require("jsonwebtoken");
 const request = require("request");
-const fs = require("fs");
-const lineConfig = JSON.parse(fs.readFileSync('../line.config.json', { encoding: 'utf8' }));
+const config_1 = require("../util/config");
 async function callbackLine(req, res, next) {
     try {
         // console.log(req.query);
@@ -14,8 +13,8 @@ async function callbackLine(req, res, next) {
                     form: {
                         grant_type: 'authorization_code',
                         code: req.query.code,
-                        client_id: lineConfig.client_id,
-                        client_secret: lineConfig.client_secret,
+                        client_id: config_1.Configuration.line.client_id,
+                        client_secret: config_1.Configuration.line.client_secret,
                         redirect_uri: 'http://localhost:8080/cb-line'
                     }
                 }, (err, res, body) => {
