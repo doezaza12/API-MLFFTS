@@ -14,6 +14,25 @@ class accountDAL {
             }
         });
     }
+    validateAccount(username, password) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let result = await data_access_1.DAL.mysqlConnector.account.findOne({
+                    where: {
+                        username: username,
+                        password: password
+                    }
+                });
+                if (result)
+                    resolve(result);
+                resolve(null);
+            }
+            catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+    }
     getAccountList() {
         return new Promise(async (resolve, reject) => {
             try {

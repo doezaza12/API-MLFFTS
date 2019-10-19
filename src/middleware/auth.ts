@@ -2,12 +2,14 @@ import * as express from 'express';
 import * as HttpStatus from 'http-status-codes';
 import * as jwt from 'jsonwebtoken';
 
+import { Configuration } from '../util/config';
+
 export function authentication(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
         let header = req.headers.authorization.split(' ')[0];
         let token = req.headers.authorization.split(' ')[1];
         if (header == 'Bearer') {
-            jwt.verify(token, 'there-is-no-secret.', (err, payload) => {
+            jwt.verify(token, Configuration.token.secret, (err, payload) => {
                 if (err) return res.status(HttpStatus.UNAUTHORIZED).send();
                 next();
             });

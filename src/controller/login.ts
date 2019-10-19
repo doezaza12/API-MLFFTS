@@ -4,7 +4,13 @@ import * as jwt from 'jsonwebtoken';
 import * as request from 'request';
 
 import { Configuration } from '../util/config';
+import { DAL } from '../model/data-access/data-access';
 
+function tokenGenerator(id: number) {
+    return jwt.sign({ id: id }, Configuration.token.secret, {
+        expiresIn: '1h'
+    });
+}
 
 export async function callbackLine(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
@@ -48,5 +54,15 @@ export async function loginLine(req: express.Request, res: express.Response, nex
 
 
 export async function login(req: express.Request, res: express.Response, next: express.NextFunction) {
-
+    try {
+        let account = await DAL.accountDAL.validateAccount(req.body.username, req.body.password);
+        if (account) {
+            if (account._isVerify === 0) return res.status(HttpStatus.FORBIDDEN).send('Please verify your account.');
+            return res.status(HttpStatus.OK).send({ 'token': tokenGenerator(account.id) });
+        }
+        return res.status(HttpStatus.NOT_FOUND).send('Wrong username or password.');
+    } catch (err) {
+        console.error(err);
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
+    }
 }

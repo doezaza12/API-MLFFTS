@@ -1,6 +1,5 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
-import * as jwt from 'jsonwebtoken';
 
 import { Configuration } from './util/config';
 import { DAL } from './model/data-access/data-access';
@@ -17,6 +16,5 @@ new DAL(Configuration.mySql);
 app.use(Router);
 
 app.listen(8080, () => {
-    console.log('connected...');
-    console.log(jwt.sign({ data: 'abc' }, 'there-is-no-secret.', { expiresIn: '1h' }));
+    console.log('connected to port 8080');
 });

@@ -10,10 +10,11 @@ const router = express.Router();
 
 // account
 router.get('/getaccountlist', Middleware.authentication, AccountCtrl.getAccountList);
-router.post('/addAccount', AccountCtrl.insertAccount);
+// router.post('/addAccount', AccountCtrl.insertAccount);
 
 // login
 router.get('/cb-line', LoginCtrl.callbackLine);
+router.post('/login', LoginCtrl.login);
 
 // register
 router.post('/register', RegisterCtrl.register);

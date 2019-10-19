@@ -15,6 +15,9 @@ class Configuration {
         Configuration.line = new LineConfig();
         Configuration.line.client_id = config.line.client_id;
         Configuration.line.client_secret = config.line.client_secret;
+        // token config
+        Configuration.token = new TokenConfig();
+        Configuration.token.secret = config.token.secret;
     }
 }
 exports.Configuration = Configuration;
@@ -24,4 +27,7 @@ exports.MySqlConfig = MySqlConfig;
 class LineConfig {
 }
 exports.LineConfig = LineConfig;
+class TokenConfig {
+}
+exports.TokenConfig = TokenConfig;
 //# sourceMappingURL=config.js.map

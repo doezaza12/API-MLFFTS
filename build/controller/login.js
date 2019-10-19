@@ -4,6 +4,12 @@ const HttpStatus = require("http-status-codes");
 const jwt = require("jsonwebtoken");
 const request = require("request");
 const config_1 = require("../util/config");
+const data_access_1 = require("../model/data-access/data-access");
+function tokenGenerator(id) {
+    return jwt.sign({ id: id }, config_1.Configuration.token.secret, {
+        expiresIn: '1h'
+    });
+}
 async function callbackLine(req, res, next) {
     try {
         // console.log(req.query);
@@ -47,6 +53,19 @@ async function loginLine(req, res, next) {
 }
 exports.loginLine = loginLine;
 async function login(req, res, next) {
+    try {
+        let account = await data_access_1.DAL.accountDAL.validateAccount(req.body.username, req.body.password);
+        if (account) {
+            if (account._isVerify === 0)
+                return res.status(HttpStatus.FORBIDDEN).send('Please verify your account.');
+            return res.status(HttpStatus.OK).send({ 'token': tokenGenerator(account.id) });
+        }
+        return res.status(HttpStatus.NOT_FOUND).send('Wrong username or password.');
+    }
+    catch (err) {
+        console.error(err);
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
+    }
 }
 exports.login = login;
 //# sourceMappingURL=login.js.map
