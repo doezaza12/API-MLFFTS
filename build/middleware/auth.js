@@ -11,6 +11,7 @@ function authentication(req, res, next) {
             jwt.verify(token, config_1.Configuration.token.secret, (err, payload) => {
                 if (err)
                     return res.status(HttpStatus.UNAUTHORIZED).send();
+                req.body.payload = payload;
                 next();
             });
         }
