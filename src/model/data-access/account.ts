@@ -13,13 +13,29 @@ export class accountDAL {
             }
         });
     }
-    validateAccount(username: string, password: string) {
+    // validateAccount(username: string, password: string) {
+    //     return new Promise<accountAttribute>(async (resolve, reject) => {
+    //         try {
+    //             let result = await DAL.mysqlConnector.account.findOne({
+    //                 where: {
+    //                     username: username,
+    //                     password: password
+    //                 }
+    //             });
+    //             if (result) resolve(result);
+    //             resolve(null);
+    //         } catch (err) {
+    //             console.error(err);
+    //             reject(err);
+    //         }
+    //     });
+    // }
+    getAccountByUsername(username: string) {
         return new Promise<accountAttribute>(async (resolve, reject) => {
             try {
                 let result = await DAL.mysqlConnector.account.findOne({
                     where: {
-                        username: username,
-                        password: password
+                        username: username
                     }
                 });
                 if (result) resolve(result);

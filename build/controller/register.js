@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const HttpStatus = require("http-status-codes");
+const bcrypt = require("bcrypt");
 const data_access_1 = require("../model/data-access/data-access");
 async function register(req, res, next) {
     try {
@@ -21,12 +22,15 @@ async function register(req, res, next) {
         // account
         let account = {};
         account.username = req.body.username;
-        account.password = req.body.password ? req.body.password : null;
+        // account.password = req.body.password ? req.body.password : null;
         account.type = 0;
         account._isVerify = req.body.line_id ? 1 : 0;
         account._isActive = 1;
         account.user_info_id = user_info_id;
-        data_access_1.DAL.accountDAL.insertAccount(account);
+        bcrypt.hash(req.body.password, 10, function (err, hash) {
+            account.password = hash;
+            data_access_1.DAL.accountDAL.insertAccount(account);
+        });
         return res.status(HttpStatus.CREATED).send();
     }
     catch (err) {

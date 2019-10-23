@@ -13,4 +13,20 @@ export class userInfoDAL {
             }
         });
     }
+    upsertLine(line_id: string) {
+        return new Promise<boolean>(async (resolve, reject) => {
+            try {
+                let result = await DAL.mysqlConnector.user_info.findOrCreate({
+                    where: {
+                        line_id: line_id
+                    }
+                });
+                // return ture = insert
+                resolve(result[1]);
+            } catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+    }
 }
