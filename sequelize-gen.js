@@ -2,11 +2,11 @@ const SequelizeAuto = require('sequelize-auto-v2');
 
 const Configuration = require('./build/util/config').Configuration;
 
-let config = (new Configuration('./db.config.json')).mySql;
+new Configuration('./config.json');
 
-var auto = new SequelizeAuto(config.database, config.username, config.password, {
-    host: config.host,
-    port: config.port,
+var auto = new SequelizeAuto(Configuration.mySql.database, Configuration.mySql.username, Configuration.mySql.password, {
+    host: Configuration.mySql.host,
+    port: Configuration.mySql.port,
     dialect: 'mysql',
     directory: './src/model/',
     additional: {

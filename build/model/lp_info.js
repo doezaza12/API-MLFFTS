@@ -2,12 +2,15 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 module.exports = function (sequelize, DataTypes) {
     return sequelize.define('lp_info', {
-        'id': {
+        'account_id': {
             type: DataTypes.INTEGER(11),
             allowNull: false,
             primaryKey: true,
             comment: "null",
-            autoIncrement: true
+            references: {
+                model: 'account',
+                key: 'id'
+            }
         },
         'license_number': {
             type: DataTypes.STRING(10),

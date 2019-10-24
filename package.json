@@ -18,7 +18,8 @@
     "nodemailer-sendgrid-transport": "^0.2.0",
     "request": "^2.88.0",
     "sequelize": "^4.38.0",
-    "sequelize-auto-v2": "^0.5.3"
+    "sequelize-auto-v2": "^0.5.3",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
@@ -26,6 +27,7 @@
     "@types/jsonwebtoken": "^8.3.4",
     "@types/nodemailer": "^6.2.1",
     "@types/request": "^2.48.3",
-    "@types/sequelize": "^4.27.24"
+    "@types/sequelize": "^4.27.24",
+    "@types/uuid": "^3.4.5"
   }
 }

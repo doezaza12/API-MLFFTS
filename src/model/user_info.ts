@@ -6,12 +6,15 @@ import {user_infoInstance, user_infoAttribute} from './db';
 
 module.exports = function(sequelize: sequelize.Sequelize, DataTypes: DataTypes) {
 	return sequelize.define<user_infoInstance, user_infoAttribute>('user_info', {
-		'id': {
+		'account_id': {
 			type: DataTypes.INTEGER(11),
 			allowNull: false,
 			primaryKey: true,
 			comment: "null",
-			autoIncrement: true
+			references: {
+				model: 'account',
+				key: 'id'
+			}
 		},
 		'firstname': {
 			type: DataTypes.STRING(255),
@@ -39,15 +42,6 @@ module.exports = function(sequelize: sequelize.Sequelize, DataTypes: DataTypes) 
 			allowNull: true,
 			comment: "easy pass code",
 			unique: true
-		},
-		'lp_info_id': {
-			type: DataTypes.INTEGER(11),
-			allowNull: true,
-			comment: "null",
-			references: {
-				model: 'lp_info',
-				key: 'id'
-			}
 		}
 	}, {
 		tableName: 'user_info',

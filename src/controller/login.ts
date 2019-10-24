@@ -3,12 +3,18 @@ import * as HttpStatus from 'http-status-codes';
 import * as jwt from 'jsonwebtoken';
 import * as request from 'request';
 import * as bcrypt from 'bcrypt';
+import * as uuid from 'uuid';
 
 import { Configuration } from '../util/config';
 import { DAL } from '../model/data-access/data-access';
+import { accountAttribute } from '../model/db';
 
-function tokenGenerator(id: number) {
-    return jwt.sign({ id: id }, Configuration.token.secret, {
+function tokenGenerator(account_id: number) {
+    let accountAttr = {} as accountAttribute
+    accountAttr.id = account_id;
+    accountAttr.token = uuid.v4();
+    DAL.accountDAL.updateTokenById(accountAttr);
+    return jwt.sign({ id: account_id, uuid:  accountAttr.token}, Configuration.token.secret, {
         expiresIn: '1h'
     });
 }
@@ -16,7 +22,7 @@ function tokenGenerator(id: number) {
 export async function callbackLine(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
         // console.log(req.query);
-        let payload = await new Promise<any>(async (resolve, reject) => {
+        let result = await new Promise<any>(async (resolve, reject) => {
             try {
                 request.post('https://api.line.me/oauth2/v2.1/token', {
                     form: {
@@ -32,29 +38,40 @@ export async function callbackLine(req: express.Request, res: express.Response, 
                     console.log(jsonBody);
                     let payload = jwt.decode(jsonBody.id_token);
                     console.log(payload);
-                    let result = await DAL.userInfoDAL.upsertLine(payload.sub);
-                    console.log(`isInserted: ${result}`);
-                    return resolve(payload);
+                    let result = await DAL.userInfoDAL.upsertLine(payload['sub']);
+                    if (result[1]) {
+                        // let dataAccount = {} as user_infoAttribute;
+                        // dataAccount.firstname = payload['name'];
+                        // dataAccount.email = payload['email'];
+                        // DAL.userInfoDAL.updateUserinfo(result[0], dataAccount);
+                        return resolve({ isExist: false, payload: payload });
+                    }
+                    // console.log(`isInserted: ${result[0].getDataValue}`);
+                    return resolve({ isExist: true, payload: result[0] });
                 });
             } catch (err) {
                 console.error(err);
                 return reject(err);
             }
         });
-        return res.status(HttpStatus.OK).send({
-            code: 'OK',
-            data: payload
-        });
+        if (result.isExist) {
+            return res.status(HttpStatus.OK).send({
+                code: 'OK',
+                data: tokenGenerator(result.payload.getDataValue('id'))
+            });
+        }
+        else {
+            // redirect
+            return res.status(HttpStatus.TEMPORARY_REDIRECT).send({
+                code: 'REDIRECT',
+                data: result.payload
+            });
+        }
     } catch (err) {
         console.error(err);
         return res.status(HttpStatus.NOT_FOUND).send();
     }
 }
-
-export async function loginLine(req: express.Request, res: express.Response, next: express.NextFunction) {
-
-}
-
 
 export async function login(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {

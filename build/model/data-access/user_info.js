@@ -6,7 +6,7 @@ class userInfoDAL {
         return new Promise(async (resolve, reject) => {
             try {
                 let result = await data_access_1.DAL.mysqlConnector.user_info.create(data);
-                resolve(result.id);
+                resolve(result);
             }
             catch (err) {
                 console.error(err);
@@ -18,12 +18,10 @@ class userInfoDAL {
         return new Promise(async (resolve, reject) => {
             try {
                 let result = await data_access_1.DAL.mysqlConnector.user_info.findOrCreate({
-                    where: {
-                        line_id: line_id
-                    }
+                    where: { line_id: line_id }
                 });
                 // return ture = insert
-                resolve(result[1]);
+                resolve(result);
             }
             catch (err) {
                 console.error(err);

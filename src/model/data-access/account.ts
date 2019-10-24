@@ -6,7 +6,37 @@ export class accountDAL {
         return new Promise<accountAttribute>(async (resolve, reject) => {
             try {
                 let result = await DAL.mysqlConnector.account.create(data);
-                resolve(result.id);
+                resolve(result);
+            } catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+    }
+    updateTokenById(data: accountAttribute) {
+        return new Promise<boolean>(async (resolve, reject) => {
+            try {
+                let result = await DAL.mysqlConnector.account.update({
+                    token: data.token
+                }, { where: { id: data.id } });
+                if (result[0] == 0) resolve(false);
+                resolve(true);
+            } catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+    }
+    validateToken(token: string) {
+        return new Promise<boolean>(async (resolve, reject) => {
+            try {
+                let result = await DAL.mysqlConnector.account.findOne({
+                    where: {
+                        token: token
+                    }
+                });
+                if (result) resolve(true);
+                resolve(false);
             } catch (err) {
                 console.error(err);
                 reject(err);

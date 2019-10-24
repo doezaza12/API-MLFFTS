@@ -30,15 +30,6 @@ module.exports = function(sequelize: sequelize.Sequelize, DataTypes: DataTypes) 
 			defaultValue: '0',
 			comment: "0 : general , 1 : admin"
 		},
-		'user_info_id': {
-			type: DataTypes.INTEGER(11),
-			allowNull: false,
-			comment: "null",
-			references: {
-				model: 'user_info',
-				key: 'id'
-			}
-		},
 		'_isVerify': {
 			type: DataTypes.INTEGER(1),
 			allowNull: true,
@@ -50,6 +41,11 @@ module.exports = function(sequelize: sequelize.Sequelize, DataTypes: DataTypes) 
 			allowNull: true,
 			defaultValue: '1',
 			comment: "0 : inactive , 1 : active"
+		},
+		'token': {
+			type: DataTypes.STRING(255),
+			allowNull: true,
+			comment: "null"
 		}
 	}, {
 		tableName: 'account',

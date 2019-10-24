@@ -4,17 +4,22 @@ const HttpStatus = require("http-status-codes");
 const jwt = require("jsonwebtoken");
 const request = require("request");
 const bcrypt = require("bcrypt");
+const uuid = require("uuid");
 const config_1 = require("../util/config");
 const data_access_1 = require("../model/data-access/data-access");
-function tokenGenerator(id) {
-    return jwt.sign({ id: id }, config_1.Configuration.token.secret, {
+function tokenGenerator(account_id) {
+    let accountAttr = {};
+    accountAttr.id = account_id;
+    accountAttr.token = uuid.v4();
+    data_access_1.DAL.accountDAL.updateTokenById(accountAttr);
+    return jwt.sign({ id: account_id, uuid: accountAttr.token }, config_1.Configuration.token.secret, {
         expiresIn: '1h'
     });
 }
 async function callbackLine(req, res, next) {
     try {
         // console.log(req.query);
-        let payload = await new Promise(async (resolve, reject) => {
+        let result = await new Promise(async (resolve, reject) => {
             try {
                 request.post('https://api.line.me/oauth2/v2.1/token', {
                     form: {
@@ -31,9 +36,16 @@ async function callbackLine(req, res, next) {
                     console.log(jsonBody);
                     let payload = jwt.decode(jsonBody.id_token);
                     console.log(payload);
-                    let result = await data_access_1.DAL.userInfoDAL.upsertLine(payload.sub);
-                    console.log(`isInserted: ${result}`);
-                    return resolve(payload);
+                    let result = await data_access_1.DAL.userInfoDAL.upsertLine(payload['sub']);
+                    if (result[1]) {
+                        // let dataAccount = {} as user_infoAttribute;
+                        // dataAccount.firstname = payload['name'];
+                        // dataAccount.email = payload['email'];
+                        // DAL.userInfoDAL.updateUserinfo(result[0], dataAccount);
+                        return resolve({ isExist: false, payload: payload });
+                    }
+                    // console.log(`isInserted: ${result[0].getDataValue}`);
+                    return resolve({ isExist: true, payload: result[0] });
                 });
             }
             catch (err) {
@@ -41,10 +53,19 @@ async function callbackLine(req, res, next) {
                 return reject(err);
             }
         });
-        return res.status(HttpStatus.OK).send({
-            code: 'OK',
-            data: payload
-        });
+        if (result.isExist) {
+            return res.status(HttpStatus.OK).send({
+                code: 'OK',
+                data: tokenGenerator(result.payload.getDataValue('id'))
+            });
+        }
+        else {
+            // redirect
+            return res.status(HttpStatus.TEMPORARY_REDIRECT).send({
+                code: 'REDIRECT',
+                data: result.payload
+            });
+        }
     }
     catch (err) {
         console.error(err);
@@ -52,9 +73,6 @@ async function callbackLine(req, res, next) {
     }
 }
 exports.callbackLine = callbackLine;
-async function loginLine(req, res, next) {
-}
-exports.loginLine = loginLine;
 async function login(req, res, next) {
     try {
         let account = await data_access_1.DAL.accountDAL.getAccountByUsername(req.body.username);
