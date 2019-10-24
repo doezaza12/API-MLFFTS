@@ -14,12 +14,12 @@ class accountDAL {
             }
         });
     }
-    updateTokenById(data) {
+    updateTokenById(id, token) {
         return new Promise(async (resolve, reject) => {
             try {
                 let result = await data_access_1.DAL.mysqlConnector.account.update({
-                    token: data.token
-                }, { where: { id: data.id } });
+                    token: token
+                }, { where: { id: id } });
                 if (result[0] == 0)
                     resolve(false);
                 resolve(true);
@@ -30,17 +30,33 @@ class accountDAL {
             }
         });
     }
-    validateToken(token) {
+    validateToken(id, token) {
         return new Promise(async (resolve, reject) => {
             try {
                 let result = await data_access_1.DAL.mysqlConnector.account.findOne({
                     where: {
+                        id: id,
                         token: token
                     }
                 });
                 if (result)
                     resolve(true);
                 resolve(false);
+            }
+            catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+    }
+    upsertAccountByLine(line_id) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let result = await data_access_1.DAL.mysqlConnector.account.findOrCreate({
+                    where: { username: line_id }, defaults: { id: null, _isVerify: 1 }
+                });
+                // return ture = insert
+                resolve(result);
             }
             catch (err) {
                 console.error(err);

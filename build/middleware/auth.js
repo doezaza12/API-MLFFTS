@@ -12,7 +12,7 @@ function authentication(req, res, next) {
             jwt.verify(token, config_1.Configuration.token.secret, async (err, payload) => {
                 if (err)
                     return res.status(HttpStatus.UNAUTHORIZED).send();
-                let result = await data_access_1.DAL.accountDAL.validateToken(payload['uuid']);
+                let result = await data_access_1.DAL.accountDAL.validateToken(payload['id'], payload['uuid']);
                 if (!result)
                     return res.status(HttpStatus.UNAUTHORIZED).send();
                 req.body.payload = payload;

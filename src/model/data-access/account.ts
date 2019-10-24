@@ -1,5 +1,5 @@
 import { DAL } from './data-access'
-import { accountAttribute } from '../db';
+import { accountAttribute, accountInstance } from '../db';
 
 export class accountDAL {
     insertAccount(data: accountAttribute) {
@@ -13,12 +13,12 @@ export class accountDAL {
             }
         });
     }
-    updateTokenById(data: accountAttribute) {
+    updateTokenById(id: number, token: string) {
         return new Promise<boolean>(async (resolve, reject) => {
             try {
                 let result = await DAL.mysqlConnector.account.update({
-                    token: data.token
-                }, { where: { id: data.id } });
+                    token: token
+                }, { where: { id: id } });
                 if (result[0] == 0) resolve(false);
                 resolve(true);
             } catch (err) {
@@ -27,16 +27,31 @@ export class accountDAL {
             }
         });
     }
-    validateToken(token: string) {
+    validateToken(id: number, token: string) {
         return new Promise<boolean>(async (resolve, reject) => {
             try {
                 let result = await DAL.mysqlConnector.account.findOne({
                     where: {
+                        id: id,
                         token: token
                     }
                 });
                 if (result) resolve(true);
                 resolve(false);
+            } catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+    }
+    upsertAccountByLine(line_id: string) {
+        return new Promise<[accountInstance, boolean]>(async (resolve, reject) => {
+            try {
+                let result = await DAL.mysqlConnector.account.findOrCreate({
+                    where: { username: line_id }, defaults: { id: null, _isVerify: 1 }
+                });
+                // return ture = insert
+                resolve(result);
             } catch (err) {
                 console.error(err);
                 reject(err);

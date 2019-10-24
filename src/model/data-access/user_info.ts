@@ -13,20 +13,20 @@ export class userInfoDAL {
             }
         });
     }
-    upsertLine(line_id: string) {
-        return new Promise<[user_infoInstance, boolean]>(async (resolve, reject) => {
-            try {
-                let result = await DAL.mysqlConnector.user_info.findOrCreate({
-                    where: { line_id: line_id }
-                });
-                // return ture = insert
-                resolve(result);
-            } catch (err) {
-                console.error(err);
-                reject(err);
-            }
-        });
-    }
+    // upsertLine(line_id: string) {
+    //     return new Promise<[user_infoInstance, boolean]>(async (resolve, reject) => {
+    //         try {
+    //             let result = await DAL.mysqlConnector.user_info.findOrCreate({
+    //                 where: { line_id: line_id }
+    //             });
+    //             // return ture = insert
+    //             resolve(result);
+    //         } catch (err) {
+    //             console.error(err);
+    //             reject(err);
+    //         }
+    //     });
+    // }
     // updateUserinfo(instance: user_infoInstance, data: user_infoAttribute) {
     //     return new Promise<user_infoInstance>(async (resolve, reject) => {
     //         try {

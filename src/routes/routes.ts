@@ -14,6 +14,7 @@ router.get('/getaccountlist', Middleware.authentication, AccountCtrl.getAccountL
 
 // login
 router.get('/cb-line', LoginCtrl.callbackLine);
+router.get('/logout', Middleware.authentication, LoginCtrl.logout);
 router.post('/login', LoginCtrl.login);
 
 // register

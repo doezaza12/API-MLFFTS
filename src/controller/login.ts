@@ -10,11 +10,9 @@ import { DAL } from '../model/data-access/data-access';
 import { accountAttribute } from '../model/db';
 
 function tokenGenerator(account_id: number) {
-    let accountAttr = {} as accountAttribute
-    accountAttr.id = account_id;
-    accountAttr.token = uuid.v4();
-    DAL.accountDAL.updateTokenById(accountAttr);
-    return jwt.sign({ id: account_id, uuid:  accountAttr.token}, Configuration.token.secret, {
+    let rand_token = uuid.v1();
+    DAL.accountDAL.updateTokenById(account_id, rand_token);
+    return jwt.sign({ id: account_id, uuid: rand_token }, Configuration.token.secret, {
         expiresIn: '1h'
     });
 }
@@ -38,12 +36,9 @@ export async function callbackLine(req: express.Request, res: express.Response, 
                     console.log(jsonBody);
                     let payload = jwt.decode(jsonBody.id_token);
                     console.log(payload);
-                    let result = await DAL.userInfoDAL.upsertLine(payload['sub']);
+                    let result = await DAL.accountDAL.upsertAccountByLine(payload['sub']);
                     if (result[1]) {
-                        // let dataAccount = {} as user_infoAttribute;
-                        // dataAccount.firstname = payload['name'];
-                        // dataAccount.email = payload['email'];
-                        // DAL.userInfoDAL.updateUserinfo(result[0], dataAccount);
+                        // redirect for insert lp & user info
                         return resolve({ isExist: false, payload: payload });
                     }
                     // console.log(`isInserted: ${result[0].getDataValue}`);
@@ -57,13 +52,15 @@ export async function callbackLine(req: express.Request, res: express.Response, 
         if (result.isExist) {
             return res.status(HttpStatus.OK).send({
                 code: 'OK',
-                data: tokenGenerator(result.payload.getDataValue('id'))
+                token: tokenGenerator(result.payload.getDataValue('id')),
+                data: null
             });
         }
         else {
             // redirect
             return res.status(HttpStatus.TEMPORARY_REDIRECT).send({
                 code: 'REDIRECT',
+                token: tokenGenerator(result.payload.getDataValue('id')),
                 data: result.payload
             });
         }
@@ -75,6 +72,7 @@ export async function callbackLine(req: express.Request, res: express.Response, 
 
 export async function login(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
+        if (!req.body.password) return res.status(HttpStatus.BAD_REQUEST).send('Require password.');
         let account = await DAL.accountDAL.getAccountByUsername(req.body.username);
         bcrypt.compare(req.body.password, account.password, (err, same) => {
             if (err) return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
@@ -83,13 +81,17 @@ export async function login(req: express.Request, res: express.Response, next: e
                 return res.status(HttpStatus.OK).send({ 'token': tokenGenerator(account.id) });
             }
             return res.status(HttpStatus.NOT_FOUND).send('Wrong username or password.');
-        })
-        // let account = await DAL.accountDAL.validateAccount(req.body.username, req.body.password);
-        // if (account) {
-        //     if (account._isVerify === 0) return res.status(HttpStatus.FORBIDDEN).send('Please verify your account.');
-        //     return res.status(HttpStatus.OK).send({ 'token': tokenGenerator(account.id) });
-        // }
-        // return res.status(HttpStatus.NOT_FOUND).send('Wrong username or password.');
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
+    }
+}
+
+export async function logout(req: express.Request, res: express.Response, next: express.NextFunction) {
+    try {
+        DAL.accountDAL.updateTokenById(req.body.payload.id, null);
+        return res.status(HttpStatus.OK).send('Logged out.');
     } catch (err) {
         console.error(err);
         return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();

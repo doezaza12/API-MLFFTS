@@ -8,11 +8,9 @@ const uuid = require("uuid");
 const config_1 = require("../util/config");
 const data_access_1 = require("../model/data-access/data-access");
 function tokenGenerator(account_id) {
-    let accountAttr = {};
-    accountAttr.id = account_id;
-    accountAttr.token = uuid.v4();
-    data_access_1.DAL.accountDAL.updateTokenById(accountAttr);
-    return jwt.sign({ id: account_id, uuid: accountAttr.token }, config_1.Configuration.token.secret, {
+    let rand_token = uuid.v1();
+    data_access_1.DAL.accountDAL.updateTokenById(account_id, rand_token);
+    return jwt.sign({ id: account_id, uuid: rand_token }, config_1.Configuration.token.secret, {
         expiresIn: '1h'
     });
 }
@@ -36,12 +34,9 @@ async function callbackLine(req, res, next) {
                     console.log(jsonBody);
                     let payload = jwt.decode(jsonBody.id_token);
                     console.log(payload);
-                    let result = await data_access_1.DAL.userInfoDAL.upsertLine(payload['sub']);
+                    let result = await data_access_1.DAL.accountDAL.upsertAccountByLine(payload['sub']);
                     if (result[1]) {
-                        // let dataAccount = {} as user_infoAttribute;
-                        // dataAccount.firstname = payload['name'];
-                        // dataAccount.email = payload['email'];
-                        // DAL.userInfoDAL.updateUserinfo(result[0], dataAccount);
+                        // redirect for insert lp & user info
                         return resolve({ isExist: false, payload: payload });
                     }
                     // console.log(`isInserted: ${result[0].getDataValue}`);
@@ -56,7 +51,7 @@ async function callbackLine(req, res, next) {
         if (result.isExist) {
             return res.status(HttpStatus.OK).send({
                 code: 'OK',
-                data: tokenGenerator(result.payload.getDataValue('id'))
+                token: tokenGenerator(result.payload.getDataValue('id'))
             });
         }
         else {
@@ -75,6 +70,8 @@ async function callbackLine(req, res, next) {
 exports.callbackLine = callbackLine;
 async function login(req, res, next) {
     try {
+        if (!req.body.password)
+            return res.status(HttpStatus.BAD_REQUEST).send('Require password.');
         let account = await data_access_1.DAL.accountDAL.getAccountByUsername(req.body.username);
         bcrypt.compare(req.body.password, account.password, (err, same) => {
             if (err)
@@ -86,12 +83,6 @@ async function login(req, res, next) {
             }
             return res.status(HttpStatus.NOT_FOUND).send('Wrong username or password.');
         });
-        // let account = await DAL.accountDAL.validateAccount(req.body.username, req.body.password);
-        // if (account) {
-        //     if (account._isVerify === 0) return res.status(HttpStatus.FORBIDDEN).send('Please verify your account.');
-        //     return res.status(HttpStatus.OK).send({ 'token': tokenGenerator(account.id) });
-        // }
-        // return res.status(HttpStatus.NOT_FOUND).send('Wrong username or password.');
     }
     catch (err) {
         console.error(err);
@@ -99,4 +90,15 @@ async function login(req, res, next) {
     }
 }
 exports.login = login;
+async function logout(req, res, next) {
+    try {
+        data_access_1.DAL.accountDAL.updateTokenById(req.body.payload.id, null);
+        return res.status(HttpStatus.OK).send('Logged out.');
+    }
+    catch (err) {
+        console.error(err);
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
+    }
+}
+exports.logout = logout;
 //# sourceMappingURL=login.js.map

@@ -12,6 +12,7 @@ router.get('/getaccountlist', Middleware.authentication, AccountCtrl.getAccountL
 // router.post('/addAccount', AccountCtrl.insertAccount);
 // login
 router.get('/cb-line', LoginCtrl.callbackLine);
+router.get('/logout', Middleware.authentication, LoginCtrl.logout);
 router.post('/login', LoginCtrl.login);
 // register
 router.post('/register', RegisterCtrl.register);
