@@ -51,13 +51,15 @@ async function callbackLine(req, res, next) {
         if (result.isExist) {
             return res.status(HttpStatus.OK).send({
                 code: 'OK',
-                token: tokenGenerator(result.payload.getDataValue('id'))
+                token: tokenGenerator(result.payload.getDataValue('id')),
+                data: null
             });
         }
         else {
             // redirect
             return res.status(HttpStatus.TEMPORARY_REDIRECT).send({
                 code: 'REDIRECT',
+                token: tokenGenerator(result.payload.getDataValue('id')),
                 data: result.payload
             });
         }

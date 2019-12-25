@@ -9,7 +9,7 @@ import * as RegisterCtrl from '../controller/register';
 const router = express.Router();
 
 // account
-router.get('/getaccountlist', Middleware.authentication, AccountCtrl.getAccountList);
+router.get('/getaccountlist', AccountCtrl.getAccountList); // testing route
 // router.post('/addAccount', AccountCtrl.insertAccount);
 
 // login
