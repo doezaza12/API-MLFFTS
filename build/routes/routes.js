@@ -8,7 +8,7 @@ const RegisterCtrl = require("../controller/register");
 const router = express.Router();
 exports.router = router;
 // account
-router.get('/getaccountlist', AccountCtrl.getAccountList);
+router.get('/getaccountlist', AccountCtrl.getAccountList); // testing route
 // router.post('/addAccount', AccountCtrl.insertAccount);
 // login
 router.get('/cb-line', LoginCtrl.callbackLine);
