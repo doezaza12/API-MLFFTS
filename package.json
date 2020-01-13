@@ -24,7 +24,6 @@
     "nodemailer-sendgrid-transport": "^0.2.0",
     "request": "^2.88.0",
     "sequelize": "^4.38.0",
-    "sequelize-auto-v2": "^0.5.3",
     "uuid": "^3.3.3"
   },
   "devDependencies": {
