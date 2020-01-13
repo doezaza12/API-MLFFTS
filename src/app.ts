@@ -20,7 +20,7 @@ new DAL(Configuration.mySql);
 
 app.use(Router);
 
-app.listen(8080, () => {
-    console.log('connected to port 8080');
+app.listen((process.env.PORT || 8080), () => {
+    console.log(`connected to port ${process.env.PORT || 8080}`);
     process.env.config_path ? console.log('using prod') : console.log('using local');
 });
