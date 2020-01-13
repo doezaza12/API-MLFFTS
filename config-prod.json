@@ -1,0 +1,16 @@
+{
+    "mysql": {
+        "host": "mlffts.czjoglwrk73n.us-east-2.rds.amazonaws.com",
+        "port": 3306,
+        "username": "admin",
+        "password": "d152497d",
+        "database": "mlffts"
+    },
+    "line": {
+        "client_id": "1653327020",
+        "client_secret": "94d3f73ce54cb17235785bf81bdd802c"
+    },
+    "token": {
+        "secret": "super-duper-happy"
+    }
+}
