@@ -2,7 +2,7 @@ import * as express from 'express';
 import * as HttpStatus from 'http-status-codes';
 import * as jwt from 'jsonwebtoken';
 import * as request from 'request';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import * as uuid from 'uuid';
 
 import { Configuration } from '../util/config';

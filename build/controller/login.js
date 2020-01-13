@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const HttpStatus = require("http-status-codes");
 const jwt = require("jsonwebtoken");
 const request = require("request");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const uuid = require("uuid");
 const config_1 = require("../util/config");
 const data_access_1 = require("../model/data-access/data-access");

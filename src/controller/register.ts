@@ -1,6 +1,6 @@
 import * as express from 'express';
 import * as HttpStatus from 'http-status-codes';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 
 import { DAL } from '../model/data-access/data-access';
 import { accountAttribute, lp_infoAttribute, user_infoAttribute } from '../model/db';

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const HttpStatus = require("http-status-codes");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const data_access_1 = require("../model/data-access/data-access");
 async function register(req, res, next) {
     try {
