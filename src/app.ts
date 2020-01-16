@@ -1,9 +1,6 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
-import * as dotenv from 'dotenv';
 import * as helmet from 'helmet';
-
-dotenv.config();
 
 import { Configuration } from './util/config';
 import { DAL } from './model/data-access/data-access';
@@ -15,7 +12,7 @@ app.use(helmet())
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // init
-new Configuration(process.env.config_path || './config.json');
+new Configuration('./config.json');
 new DAL(Configuration.mySql);
 
 app.use(Router);

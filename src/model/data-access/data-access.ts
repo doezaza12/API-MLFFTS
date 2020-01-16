@@ -15,14 +15,17 @@ export class DAL {
 
     constructor(config: MySqlConfig) {
         try {
-            DAL.sequelize = new Sequelize({
-                host: config.host,
-                username: config.username,
-                password: config.password,
-                database: config.database,
-                port: config.port,
-                dialect: 'mysql'
-            });
+            if (!config.url) {
+                DAL.sequelize = new Sequelize({
+                    host: config.host,
+                    username: config.username,
+                    password: config.password,
+                    database: config.database,
+                    port: config.port,
+                    dialect: 'mysql'
+                });
+            }
+            else { DAL.sequelize = new Sequelize(config.url, { dialect: 'mysql' }); }
             DAL.mysqlConnector = new MySQLConnector(DAL.sequelize);
             DAL.accountDAL = new accountDAL();
             DAL.userInfoDAL = new userInfoDAL();
