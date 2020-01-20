@@ -13,28 +13,30 @@ async function register(req, res, next) {
         account._isVerify = req.body.line_id ? 1 : 0;
         account._isActive = 1;
         // account.user_info_id = user_info_id;
-        bcrypt.hash(req.body.password, 10, async function (err, hash) {
-            if (err)
-                console.error(err);
-            account.password = hash;
-            let result = await data_access_1.DAL.accountDAL.insertAccount(account);
-            // lp-info
-            let lp_data = {};
-            lp_data.account_id = result.id;
-            lp_data.license_number = req.body.license_number;
-            lp_data.province = req.body.province;
-            data_access_1.DAL.lpInfoDAL.insertLpInfo(lp_data);
-            // user-info
-            let user_data = {};
-            user_data.account_id = result.id;
-            user_data.firstname = req.body.firstname;
-            user_data.lastname = req.body.lastname;
-            user_data.email = req.body.email;
-            user_data.e_code = req.body.e_code;
-            user_data.citizen_id = req.body.citizen_id;
-            user_data.line_id = req.body.line_id ? req.body.line_id : null;
-            data_access_1.DAL.userInfoDAL.insertUserInfo(user_data);
+        account.password = await new Promise((resolve, reject) => {
+            bcrypt.hash(req.body.password, 10, async function (err, hash) {
+                if (err)
+                    reject(err);
+                resolve(hash);
+            });
         });
+        let result = await data_access_1.DAL.accountDAL.insertAccount(account);
+        // lp-info
+        let lp_data = {};
+        lp_data.account_id = result.id;
+        lp_data.license_number = req.body.license_number;
+        lp_data.province = req.body.province;
+        await data_access_1.DAL.lpInfoDAL.insertLpInfo(lp_data);
+        // user-info
+        let user_data = {};
+        user_data.account_id = result.id;
+        user_data.firstname = req.body.firstname;
+        user_data.lastname = req.body.lastname;
+        user_data.email = req.body.email;
+        user_data.e_code = req.body.e_code;
+        user_data.citizen_id = req.body.citizen_id;
+        user_data.line_id = req.body.line_id ? req.body.line_id : null;
+        await data_access_1.DAL.userInfoDAL.insertUserInfo(user_data);
         return res.status(HttpStatus.CREATED).send();
     }
     catch (err) {
