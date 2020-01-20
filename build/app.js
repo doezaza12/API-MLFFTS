@@ -15,6 +15,5 @@ new data_access_1.DAL(config_1.Configuration.mySql);
 app.use(routes_1.router);
 app.listen((process.env.PORT || 8080), () => {
     console.log(`connected to port ${process.env.PORT || 8080}`);
-    process.env.config_path ? console.log('using prod') : console.log('using local');
 });
 //# sourceMappingURL=app.js.map

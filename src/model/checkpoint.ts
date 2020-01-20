@@ -2,10 +2,10 @@
 // tslint:disable
 import * as sequelize from 'sequelize';
 import {DataTypes} from 'sequelize';
-import {lp_infoInstance, lp_infoAttribute} from './db';
+import {checkpointInstance, checkpointAttribute} from './db';
 
 module.exports = function(sequelize: sequelize.Sequelize, DataTypes: DataTypes) {
-	return sequelize.define<lp_infoInstance, lp_infoAttribute>('lp_info', {
+	return sequelize.define<checkpointInstance, checkpointAttribute>('checkpoint', {
 		'id': {
 			type: DataTypes.INTEGER(11),
 			allowNull: false,
@@ -13,27 +13,23 @@ module.exports = function(sequelize: sequelize.Sequelize, DataTypes: DataTypes) 
 			comment: "null",
 			autoIncrement: true
 		},
-		'account_id': {
+		'lat': {
 			type: DataTypes.INTEGER(11),
-			allowNull: false,
-			comment: "null",
-			references: {
-				model: 'account',
-				key: 'id'
-			}
-		},
-		'license_number': {
-			type: DataTypes.STRING(10),
 			allowNull: true,
 			comment: "null"
 		},
-		'province': {
-			type: DataTypes.STRING(20),
+		'lng': {
+			type: DataTypes.INTEGER(11),
+			allowNull: true,
+			comment: "null"
+		},
+		'area_name': {
+			type: DataTypes.STRING(100),
 			allowNull: true,
 			comment: "null"
 		}
 	}, {
-		tableName: 'lp_info',
+		tableName: 'checkpoint',
 		timestamps: false
 	});
 };

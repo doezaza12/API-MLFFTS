@@ -35,10 +35,17 @@ module.exports = function(sequelize: sequelize.Sequelize, DataTypes: DataTypes) 
 		'email': {
 			type: DataTypes.STRING(255),
 			allowNull: true,
-			comment: "null"
+			comment: "null",
+			unique: true
+		},
+		'citizen_id': {
+			type: DataTypes.STRING(13),
+			allowNull: true,
+			comment: "null",
+			unique: true
 		},
 		'e_code': {
-			type: DataTypes.STRING(255),
+			type: DataTypes.STRING(50),
 			allowNull: true,
 			comment: "easy pass code",
 			unique: true

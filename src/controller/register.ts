@@ -32,6 +32,7 @@ export async function register(req: express.Request, res: express.Response, next
             user_data.lastname = req.body.lastname;
             user_data.email = req.body.email;
             user_data.e_code = req.body.e_code;
+            user_data.citizen_id = req.body.citizen_id;
             user_data.line_id = req.body.line_id ? req.body.line_id : null;
             DAL.userInfoDAL.insertUserInfo(user_data);
         });

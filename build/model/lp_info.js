@@ -2,10 +2,16 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 module.exports = function (sequelize, DataTypes) {
     return sequelize.define('lp_info', {
-        'account_id': {
+        'id': {
             type: DataTypes.INTEGER(11),
             allowNull: false,
             primaryKey: true,
+            comment: "null",
+            autoIncrement: true
+        },
+        'account_id': {
+            type: DataTypes.INTEGER(11),
+            allowNull: false,
             comment: "null",
             references: {
                 model: 'account',
@@ -15,12 +21,12 @@ module.exports = function (sequelize, DataTypes) {
         'license_number': {
             type: DataTypes.STRING(10),
             allowNull: true,
-            comment: "เลขทะเบียนรถ"
+            comment: "null"
         },
         'province': {
             type: DataTypes.STRING(20),
             allowNull: true,
-            comment: "จังหวัด"
+            comment: "null"
         }
     }, {
         tableName: 'lp_info',

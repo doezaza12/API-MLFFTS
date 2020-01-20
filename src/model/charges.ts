@@ -2,10 +2,10 @@
 // tslint:disable
 import * as sequelize from 'sequelize';
 import {DataTypes} from 'sequelize';
-import {lp_infoInstance, lp_infoAttribute} from './db';
+import {chargesInstance, chargesAttribute} from './db';
 
 module.exports = function(sequelize: sequelize.Sequelize, DataTypes: DataTypes) {
-	return sequelize.define<lp_infoInstance, lp_infoAttribute>('lp_info', {
+	return sequelize.define<chargesInstance, chargesAttribute>('charges', {
 		'id': {
 			type: DataTypes.INTEGER(11),
 			allowNull: false,
@@ -13,27 +13,31 @@ module.exports = function(sequelize: sequelize.Sequelize, DataTypes: DataTypes) 
 			comment: "null",
 			autoIncrement: true
 		},
-		'account_id': {
+		'cpk_1': {
 			type: DataTypes.INTEGER(11),
-			allowNull: false,
+			allowNull: true,
 			comment: "null",
 			references: {
-				model: 'account',
+				model: 'checkpoint',
 				key: 'id'
 			}
 		},
-		'license_number': {
-			type: DataTypes.STRING(10),
+		'cpk_2': {
+			type: DataTypes.INTEGER(11),
 			allowNull: true,
-			comment: "null"
+			comment: "null",
+			references: {
+				model: 'checkpoint',
+				key: 'id'
+			}
 		},
-		'province': {
-			type: DataTypes.STRING(20),
+		'cost': {
+			type: DataTypes.INTEGER(11),
 			allowNull: true,
 			comment: "null"
 		}
 	}, {
-		tableName: 'lp_info',
+		tableName: 'charges',
 		timestamps: false
 	});
 };
