@@ -7,6 +7,9 @@ class MySQLConnector {
         this.account = this.table.account;
         this.user_info = this.table.user_info;
         this.lp_info = this.table.lp_info;
+        this.checkpoint = this.table.checkpoint;
+        this.charges = this.table.charges;
+        this.transaction = this.table.transaction;
     }
 }
 exports.MySQLConnector = MySQLConnector;

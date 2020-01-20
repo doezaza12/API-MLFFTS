@@ -5,6 +5,8 @@ const Middleware = require("../middleware/auth");
 const AccountCtrl = require("../controller/account");
 const LoginCtrl = require("../controller/login");
 const RegisterCtrl = require("../controller/register");
+const CheckpointCtrl = require("../controller/checkpoint");
+const ChargesCtrl = require("../controller/charges");
 const router = express.Router();
 exports.router = router;
 // account
@@ -16,4 +18,8 @@ router.get('/logout', Middleware.authentication, LoginCtrl.logout);
 router.post('/login', LoginCtrl.login);
 // register
 router.post('/register', RegisterCtrl.register);
+// checkpoint
+router.post('/checkpoint/add', CheckpointCtrl.insertCheckpoint);
+// charges
+router.post('/charges/add', ChargesCtrl.insertCharges);
 //# sourceMappingURL=routes.js.map

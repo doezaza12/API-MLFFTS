@@ -5,6 +5,8 @@ import { MySQLConnector } from '../mysql-connector';
 import { accountDAL } from './account';
 import { userInfoDAL } from './user_info';
 import { lpInfoDAL } from './lp_info';
+import { checkpointDAL } from './checkpoint';
+import { chargesDAL } from './charges';
 
 export class DAL {
     static sequelize: Sequelize.Sequelize;
@@ -12,6 +14,8 @@ export class DAL {
     static accountDAL: accountDAL;
     static userInfoDAL: userInfoDAL;
     static lpInfoDAL: lpInfoDAL;
+    static checkpointDAL: checkpointDAL;
+    static chargesDAL: chargesDAL;
 
     constructor(config: MySqlConfig) {
         try {
@@ -30,6 +34,8 @@ export class DAL {
             DAL.accountDAL = new accountDAL();
             DAL.userInfoDAL = new userInfoDAL();
             DAL.lpInfoDAL = new lpInfoDAL();
+            DAL.checkpointDAL = new checkpointDAL();
+            DAL.chargesDAL = new chargesDAL();
         } catch (err) {
             console.error(err);
         }

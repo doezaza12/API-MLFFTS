@@ -5,6 +5,8 @@ const mysql_connector_1 = require("../mysql-connector");
 const account_1 = require("./account");
 const user_info_1 = require("./user_info");
 const lp_info_1 = require("./lp_info");
+const checkpoint_1 = require("./checkpoint");
+const charges_1 = require("./charges");
 class DAL {
     constructor(config) {
         try {
@@ -25,6 +27,8 @@ class DAL {
             DAL.accountDAL = new account_1.accountDAL();
             DAL.userInfoDAL = new user_info_1.userInfoDAL();
             DAL.lpInfoDAL = new lp_info_1.lpInfoDAL();
+            DAL.checkpointDAL = new checkpoint_1.checkpointDAL();
+            DAL.chargesDAL = new charges_1.chargesDAL();
         }
         catch (err) {
             console.error(err);
