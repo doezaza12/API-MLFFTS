@@ -7,14 +7,14 @@ async function register(req, res, next) {
     try {
         // account
         let account = {};
-        account.username = req.body.username;
+        account.username = req.body.line_id ? req.body.line_id : req.body.username;
         // account.password = req.body.password ? req.body.password : null;
         account.type = 0;
         account._isVerify = req.body.line_id ? 1 : 0;
         account._isActive = 1;
         // account.user_info_id = user_info_id;
         account.password = await new Promise((resolve, reject) => {
-            bcrypt.hash(req.body.password, 10, async function (err, hash) {
+            bcrypt.hash(req.body.line_id ? req.body.line_id : req.body.password, 10, async function (err, hash) {
                 if (err)
                     reject(err);
                 resolve(hash);
