@@ -15,7 +15,8 @@ function authentication(req, res, next) {
                 let result = await data_access_1.DAL.accountDAL.validateToken(payload['id'], payload['uuid']);
                 if (!result)
                     return res.status(HttpStatus.UNAUTHORIZED).send();
-                req.body.payload = payload;
+                // req.body.payload = payload;
+                req['payload'] = payload;
                 next();
             });
         }

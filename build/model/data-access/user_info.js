@@ -14,6 +14,37 @@ class userInfoDAL {
             }
         });
     }
+    getUserInfoById(id) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let result = await data_access_1.DAL.mysqlConnector.user_info.findOne({ where: { account_id: id } });
+                resolve(result);
+            }
+            catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+    }
+    updateUserInfo(data, id) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let update_data = {};
+                data.citizen_id ? update_data.citizen_id = data.citizen_id : '';
+                data.e_code ? update_data.e_code = data.e_code : '';
+                data.email ? update_data.email = data.email : '';
+                data.firstname ? update_data.firstname = data.firstname : '';
+                data.lastname ? update_data.lastname = data.lastname : '';
+                data.line_id ? update_data.line_id = data.line_id : '';
+                await data_access_1.DAL.mysqlConnector.user_info.update(update_data, { where: { account_id: id } });
+                resolve(true);
+            }
+            catch (err) {
+                console.error(err);
+                reject(false);
+            }
+        });
+    }
 }
 exports.userInfoDAL = userInfoDAL;
 //# sourceMappingURL=user_info.js.map

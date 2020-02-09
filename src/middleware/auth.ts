@@ -14,7 +14,8 @@ export function authentication(req: express.Request, res: express.Response, next
                 if (err) return res.status(HttpStatus.UNAUTHORIZED).send();
                 let result = await DAL.accountDAL.validateToken(payload['id'], payload['uuid']);
                 if (!result) return res.status(HttpStatus.UNAUTHORIZED).send();
-                req.body.payload = payload;
+                // req.body.payload = payload;
+                req['payload'] = payload;
                 next();
             });
         }
