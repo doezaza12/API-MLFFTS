@@ -1,6 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const HttpStatus = require("http-status-codes");
+const request = require("request");
+const jwt = require("jsonwebtoken");
+const config_1 = require("../util/config");
 const data_access_1 = require("../model/data-access/data-access");
 // export async function insertUserInfo(req: express.Request, res: express.Response, next: express.NextFunction) {
 //     try {
@@ -48,4 +51,39 @@ async function editUserInfo(req, res, next) {
     }
 }
 exports.editUserInfo = editUserInfo;
+async function callbackLine(req, res, next) {
+    try {
+        let result = await new Promise(async (resolve, reject) => {
+            try {
+                request.post('https://api.line.me/oauth2/v2.1/token', {
+                    form: {
+                        grant_type: 'authorization_code',
+                        code: req.query.code,
+                        client_id: process.env.line_client_id || config_1.Configuration.line.client_id,
+                        client_secret: process.env.line_client_secret || config_1.Configuration.line.client_secret,
+                        redirect_uri: process.env.NODE_ENV == 'production' ? 'https://mlffts-api.herokuapp.com/profile/cb-line' : 'http://localhost:8080/profile/cb-line'
+                    }
+                }, async (err, res, body) => {
+                    if (err)
+                        console.error(err);
+                    let jsonBody = JSON.parse(body);
+                    console.log(jsonBody);
+                    let payload = jwt.decode(jsonBody.id_token);
+                    console.log(payload);
+                    resolve(payload['sub']);
+                });
+            }
+            catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+        return res.status(HttpStatus.OK).send({ line_id: result });
+    }
+    catch (err) {
+        console.error(err);
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
+    }
+}
+exports.callbackLine = callbackLine;
 //# sourceMappingURL=user_info.js.map

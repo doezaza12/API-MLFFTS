@@ -16,6 +16,7 @@ router.get('/getaccountlist', AccountCtrl.getAccountList); // testing route
 // router.post('/addAccount', AccountCtrl.insertAccount);
 
 // userinfo
+router.get('/profile/cb-line', UserInfoCtrl.callbackLine);
 router.get('/profile', Middleware.authentication, UserInfoCtrl.getUserInfo);
 router.post('/profile/edit', Middleware.authentication, UserInfoCtrl.editUserInfo);
 

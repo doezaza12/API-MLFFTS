@@ -14,64 +14,6 @@ function tokenGenerator(account_id) {
         expiresIn: '1h'
     });
 }
-// outdated
-async function callbackLine_OutDated(req, res, next) {
-    try {
-        // console.log(req.query);
-        let result = await new Promise(async (resolve, reject) => {
-            try {
-                request.post('https://api.line.me/oauth2/v2.1/token', {
-                    form: {
-                        grant_type: 'authorization_code',
-                        code: req.query.code,
-                        client_id: config_1.Configuration.line.client_id,
-                        client_secret: config_1.Configuration.line.client_secret,
-                        redirect_uri: 'http://localhost:8080/cb-line'
-                    }
-                }, async (err, res, body) => {
-                    if (err)
-                        console.error(err);
-                    let jsonBody = JSON.parse(body);
-                    console.log(jsonBody);
-                    let payload = jwt.decode(jsonBody.id_token);
-                    console.log(payload);
-                    let result = await data_access_1.DAL.accountDAL.upsertAccountByLine(payload['sub']);
-                    if (result[1]) {
-                        // redirect for insert lp & user info
-                        payload['id'] = result[0].id;
-                        return resolve({ isExist: false, payload: payload });
-                    }
-                    // console.log(`isInserted: ${result[0].getDataValue}`);
-                    return resolve({ isExist: true, payload: result[0] });
-                });
-            }
-            catch (err) {
-                console.error(err);
-                return reject(err);
-            }
-        });
-        if (result.isExist) {
-            return res.status(HttpStatus.OK).send({
-                code: 'OK',
-                token: tokenGenerator(result.payload.id),
-                data: null
-            });
-        }
-        else {
-            // redirect
-            return res.status(HttpStatus.TEMPORARY_REDIRECT).send({
-                code: 'REDIRECT',
-                token: tokenGenerator(result.payload.id),
-                data: result.payload
-            });
-        }
-    }
-    catch (err) {
-        console.error(err);
-        return res.status(HttpStatus.NOT_FOUND).send();
-    }
-}
-exports.callbackLine_OutDated = callbackLine_OutDated;
 async function callbackLine(req, res, next) {
     try {
         let result = await new Promise(async (resolve, reject) => {
@@ -80,9 +22,9 @@ async function callbackLine(req, res, next) {
                     form: {
                         grant_type: 'authorization_code',
                         code: req.query.code,
-                        client_id: config_1.Configuration.line.client_id,
-                        client_secret: config_1.Configuration.line.client_secret,
-                        redirect_uri: 'http://localhost:8080/cb-line'
+                        client_id: process.env.line_client_id || config_1.Configuration.line.client_id,
+                        client_secret: process.env.line_client_secret || config_1.Configuration.line.client_secret,
+                        redirect_uri: process.env.NODE_ENV == 'production' ? 'https://mlffts-api.herokuapp.com/cb-line' : 'http://localhost:8080/cb-line'
                     }
                 }, async (err, res, body) => {
                     if (err)

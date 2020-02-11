@@ -1,6 +1,9 @@
 import * as express from 'express';
 import * as HttpStatus from 'http-status-codes';
+import * as request from 'request';
+import * as jwt from 'jsonwebtoken';
 
+import { Configuration } from '../util/config';
 import { DAL } from '../model/data-access/data-access';
 import { user_infoAttribute } from '../model/db';
 
@@ -42,6 +45,38 @@ export async function editUserInfo(req: express.Request, res: express.Response, 
         let result = await DAL.userInfoDAL.updateUserInfo(user_data, account_id);
         if(result) return res.status(HttpStatus.OK).send();
         return res.status(HttpStatus.NOT_ACCEPTABLE).send()
+    } catch (err) {
+        console.error(err);
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
+    }
+}
+
+export async function callbackLine(req: express.Request, res: express.Response, next: express.NextFunction) {
+    try {
+        let result = await new Promise<any>(async (resolve, reject) => {
+            try {
+                request.post('https://api.line.me/oauth2/v2.1/token', {
+                    form: {
+                        grant_type: 'authorization_code',
+                        code: req.query.code,
+                        client_id: process.env.line_client_id || Configuration.line.client_id,
+                        client_secret: process.env.line_client_secret || Configuration.line.client_secret,
+                        redirect_uri: process.env.NODE_ENV == 'production' ? 'https://mlffts-api.herokuapp.com/profile/cb-line' : 'http://localhost:8080/profile/cb-line'
+                    }
+                }, async (err, res, body) => {
+                    if (err) console.error(err);
+                    let jsonBody = JSON.parse(body);
+                    console.log(jsonBody);
+                    let payload = jwt.decode(jsonBody.id_token);
+                    console.log(payload);
+                    resolve(payload['sub']);
+                });
+            } catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+        return res.status(HttpStatus.OK).send({ line_id: result });
     } catch (err) {
         console.error(err);
         return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
