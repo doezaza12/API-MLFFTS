@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as helmet from 'helmet';
+import * as cors from 'cors';
 
 import { Configuration } from './util/config';
 import { DAL } from './model/data-access/data-access';
@@ -8,6 +9,11 @@ import { router as Router } from './routes/routes';
 
 const app = express();
 
+var corsOptions = {
+    origin: 'https://mlffts-web.herokuapp.com'
+}
+
+app.use(cors(corsOptions))
 app.use(helmet())
 app.use(bodyParser.urlencoded({ extended: false }));
 

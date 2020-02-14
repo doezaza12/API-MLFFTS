@@ -3,10 +3,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const bodyParser = require("body-parser");
 const helmet = require("helmet");
+const cors = require("cors");
 const config_1 = require("./util/config");
 const data_access_1 = require("./model/data-access/data-access");
 const routes_1 = require("./routes/routes");
 const app = express();
+var corsOptions = {
+    origin: 'https://mlffts-web.herokuapp.com'
+};
+app.use(cors(corsOptions));
 app.use(helmet());
 app.use(bodyParser.urlencoded({ extended: false }));
 // init
