@@ -7,10 +7,10 @@ const bcrypt = require("bcryptjs");
 const uuid = require("uuid");
 const config_1 = require("../util/config");
 const data_access_1 = require("../model/data-access/data-access");
-function tokenGenerator(account_id) {
+function tokenGenerator(account_id, role) {
     let rand_token = uuid.v1();
     data_access_1.DAL.accountDAL.updateTokenById(account_id, rand_token);
-    return jwt.sign({ id: account_id, uuid: rand_token }, config_1.Configuration.token.secret, {
+    return jwt.sign({ id: account_id, role: role, uuid: rand_token }, config_1.Configuration.token.secret, {
         expiresIn: '1h'
     });
 }
@@ -39,7 +39,7 @@ async function callbackLine(req, res, next) {
                             if (err)
                                 reject(err);
                             if (same)
-                                resolve({ isExist: true, token: tokenGenerator(account.id) });
+                                resolve({ isExist: true, token: tokenGenerator(account.id, account.type) });
                         });
                     else
                         resolve({
@@ -78,7 +78,7 @@ async function login(req, res, next) {
                 if (same) {
                     if (account._isVerify === 0)
                         return res.status(HttpStatus.FORBIDDEN).send('Please verify your account.');
-                    return res.status(HttpStatus.OK).send({ token: tokenGenerator(account.id) });
+                    return res.status(HttpStatus.OK).send({ token: tokenGenerator(account.id, account.type) });
                 }
                 return res.status(HttpStatus.NOT_FOUND).send('Wrong username or password.');
             });

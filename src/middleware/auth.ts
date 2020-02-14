@@ -27,3 +27,14 @@ export function authentication(req: express.Request, res: express.Response, next
         return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
     }
 }
+
+export function checkAdminRole(req: express.Request, res: express.Response, next: express.NextFunction) {
+    try {
+        let role = req['payload'].role;
+        if (role == 1) next();
+        else return res.status(HttpStatus.UNAUTHORIZED).send();
+    } catch (err) {
+        console.error(err);
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
+    }
+}

@@ -29,9 +29,9 @@ router.post('/login', LoginCtrl.login);
 router.post('/register', RegisterCtrl.register);
 
 // checkpoint
-router.post('/checkpoint/add', CheckpointCtrl.insertCheckpoint);
+router.post('/checkpoint/add', Middleware.authentication, Middleware.checkAdminRole, CheckpointCtrl.insertCheckpoint);
 
 // charges
-router.post('/charges/add', ChargesCtrl.insertCharges);
+router.post('/charges/add', Middleware.authentication, Middleware.checkAdminRole, ChargesCtrl.insertCharges);
 
 export { router };

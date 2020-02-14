@@ -8,10 +8,10 @@ import * as uuid from 'uuid';
 import { Configuration } from '../util/config';
 import { DAL } from '../model/data-access/data-access';
 
-function tokenGenerator(account_id: number) {
+function tokenGenerator(account_id: number, role: number) {
     let rand_token = uuid.v1();
     DAL.accountDAL.updateTokenById(account_id, rand_token);
-    return jwt.sign({ id: account_id, uuid: rand_token }, Configuration.token.secret, {
+    return jwt.sign({ id: account_id, role: role, uuid: rand_token }, Configuration.token.secret, {
         expiresIn: '1h'
     });
 }
@@ -38,7 +38,7 @@ export async function callbackLine(req: express.Request, res: express.Response, 
                     if (account)
                         bcrypt.compare(payload['sub'], account.password, (err, same) => {
                             if (err) reject(err);
-                            if (same) resolve({ isExist: true, token: tokenGenerator(account.id) });
+                            if (same) resolve({ isExist: true, token: tokenGenerator(account.id, account.type) });
                         });
                     else resolve({
                         isExist: false, payload: {
@@ -70,7 +70,7 @@ export async function login(req: express.Request, res: express.Response, next: e
                 if (err) return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
                 if (same) {
                     if (account._isVerify === 0) return res.status(HttpStatus.FORBIDDEN).send('Please verify your account.');
-                    return res.status(HttpStatus.OK).send({ token: tokenGenerator(account.id) });
+                    return res.status(HttpStatus.OK).send({ token: tokenGenerator(account.id, account.type) });
                 }
                 return res.status(HttpStatus.NOT_FOUND).send('Wrong username or password.');
             });

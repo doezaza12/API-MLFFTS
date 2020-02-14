@@ -30,4 +30,18 @@ function authentication(req, res, next) {
     }
 }
 exports.authentication = authentication;
+function checkAdminRole(req, res, next) {
+    try {
+        let role = req['payload'].role;
+        if (role == 1)
+            next();
+        else
+            return res.status(HttpStatus.UNAUTHORIZED).send();
+    }
+    catch (err) {
+        console.error(err);
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
+    }
+}
+exports.checkAdminRole = checkAdminRole;
 //# sourceMappingURL=auth.js.map
