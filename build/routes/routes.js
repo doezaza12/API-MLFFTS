@@ -24,7 +24,15 @@ router.post('/login', LoginCtrl.login);
 // register
 router.post('/register', RegisterCtrl.register);
 // checkpoint
+router.get('/checkpoint', Middleware.authentication, Middleware.checkAdminRole, CheckpointCtrl.getCheckpoint);
+router.get('/checkpoint/limit=:limit&offset=:offset', Middleware.authentication, Middleware.checkAdminRole, CheckpointCtrl.getCheckpoint);
 router.post('/checkpoint/add', Middleware.authentication, Middleware.checkAdminRole, CheckpointCtrl.insertCheckpoint);
+router.post('/checkpoint/delete', Middleware.authentication, Middleware.checkAdminRole, CheckpointCtrl.deleteCheckpoint);
+router.post('/checkpoint/edit', Middleware.authentication, Middleware.checkAdminRole, CheckpointCtrl.editCheckpoint);
 // charges
+router.get('/charges', Middleware.authentication, Middleware.checkAdminRole, ChargesCtrl.getCharges);
+router.get('/charges/limit=:limit&offset=:offset', Middleware.authentication, Middleware.checkAdminRole, ChargesCtrl.getCharges);
 router.post('/charges/add', Middleware.authentication, Middleware.checkAdminRole, ChargesCtrl.insertCharges);
+router.post('/charges/delete', Middleware.authentication, Middleware.checkAdminRole, ChargesCtrl.deleteCharges);
+router.post('/charges/edit', Middleware.authentication, Middleware.checkAdminRole, ChargesCtrl.editCharges);
 //# sourceMappingURL=routes.js.map

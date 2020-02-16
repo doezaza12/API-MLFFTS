@@ -42,9 +42,8 @@ export async function editUserInfo(req: express.Request, res: express.Response, 
         user_data.firstname = req.body.firstname ;
         user_data.lastname = req.body.lastname ;
         user_data.line_id = req.body.line_id ;
-        let result = await DAL.userInfoDAL.updateUserInfo(user_data, account_id);
-        if(result) return res.status(HttpStatus.OK).send();
-        return res.status(HttpStatus.NOT_ACCEPTABLE).send()
+        await DAL.userInfoDAL.updateUserInfo(user_data, account_id);
+        res.status(HttpStatus.OK).send();
     } catch (err) {
         console.error(err);
         return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();

@@ -40,10 +40,8 @@ async function editUserInfo(req, res, next) {
         user_data.firstname = req.body.firstname;
         user_data.lastname = req.body.lastname;
         user_data.line_id = req.body.line_id;
-        let result = await data_access_1.DAL.userInfoDAL.updateUserInfo(user_data, account_id);
-        if (result)
-            return res.status(HttpStatus.OK).send();
-        return res.status(HttpStatus.NOT_ACCEPTABLE).send();
+        await data_access_1.DAL.userInfoDAL.updateUserInfo(user_data, account_id);
+        res.status(HttpStatus.OK).send();
     }
     catch (err) {
         console.error(err);
