@@ -8,6 +8,7 @@ const LoginCtrl = require("../controller/login");
 const RegisterCtrl = require("../controller/register");
 const CheckpointCtrl = require("../controller/checkpoint");
 const ChargesCtrl = require("../controller/charges");
+const LpinfoCtrl = require("../controller/lp_info");
 const router = express.Router();
 exports.router = router;
 // account
@@ -17,6 +18,11 @@ router.get('/getaccountlist', AccountCtrl.getAccountList); // testing route
 router.get('/profile/cb-line', UserInfoCtrl.callbackLine);
 router.get('/profile', Middleware.authentication, UserInfoCtrl.getUserInfo);
 router.post('/profile/edit', Middleware.authentication, UserInfoCtrl.editUserInfo);
+// lpinfo
+router.get('/lpinfo', Middleware.authentication, LpinfoCtrl.getLpList);
+router.get('/lpinfo/limit=:limit&offset=:offset', Middleware.authentication, LpinfoCtrl.getLpList);
+router.post('/lpinfo/add', Middleware.authentication, LpinfoCtrl.insertLpinfo);
+router.post('/lpinfo/delete', Middleware.authentication, LpinfoCtrl.deleteLpinfo);
 // login
 router.get('/cb-line', LoginCtrl.callbackLine);
 router.get('/logout', Middleware.authentication, LoginCtrl.logout);

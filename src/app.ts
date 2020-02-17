@@ -9,11 +9,7 @@ import { router as Router } from './routes/routes';
 
 const app = express();
 
-var corsOptions = {
-    origin: 'https://mlffts-web.herokuapp.com'
-}
-
-app.use(cors(corsOptions))
+app.use(cors({ origin: 'https://mlffts-web.herokuapp.com' }))
 app.use(helmet())
 app.use(bodyParser.urlencoded({ extended: false }));
 

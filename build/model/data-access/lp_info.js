@@ -14,6 +14,30 @@ class lpInfoDAL {
             }
         });
     }
+    deleteLpInfo(id) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await data_access_1.DAL.mysqlConnector.lp_info.destroy({ where: { id: id } });
+                resolve(true);
+            }
+            catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+    }
+    getLpList(id, limit = 5, offset = 0) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let datas = await data_access_1.DAL.mysqlConnector.lp_info.findAll({ where: { account_id: id }, limit: limit, offset: offset });
+                resolve(datas);
+            }
+            catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+    }
 }
 exports.lpInfoDAL = lpInfoDAL;
 //# sourceMappingURL=lp_info.js.map
