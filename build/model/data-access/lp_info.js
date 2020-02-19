@@ -26,11 +26,27 @@ class lpInfoDAL {
             }
         });
     }
-    getLpList(id, limit = 5, offset = 0) {
+    getLpList(id, limit, offset) {
         return new Promise(async (resolve, reject) => {
             try {
-                let datas = await data_access_1.DAL.mysqlConnector.lp_info.findAll({ where: { account_id: id }, limit: limit, offset: offset });
-                resolve(datas);
+                let condition = {};
+                condition.where = { account_id: id };
+                limit ? condition.limit = limit : '';
+                offset ? condition.offset = offset : '';
+                let lps = await data_access_1.DAL.mysqlConnector.lp_info.findAll(condition);
+                resolve(lps);
+            }
+            catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+    }
+    getLpById(id) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let lp = await data_access_1.DAL.mysqlConnector.lp_info.findOne({ where: { id: id } });
+                resolve(lp);
             }
             catch (err) {
                 console.error(err);

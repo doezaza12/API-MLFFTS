@@ -9,6 +9,7 @@ const RegisterCtrl = require("../controller/register");
 const CheckpointCtrl = require("../controller/checkpoint");
 const ChargesCtrl = require("../controller/charges");
 const LpinfoCtrl = require("../controller/lp_info");
+const TransactionCtrl = require("../controller/transaction");
 const router = express.Router();
 exports.router = router;
 // account
@@ -41,4 +42,6 @@ router.get('/charges/limit=:limit&offset=:offset', Middleware.authentication, Mi
 router.post('/charges/add', Middleware.authentication, Middleware.checkAdminRole, ChargesCtrl.insertCharges);
 router.post('/charges/delete', Middleware.authentication, Middleware.checkAdminRole, ChargesCtrl.deleteCharges);
 router.post('/charges/edit', Middleware.authentication, Middleware.checkAdminRole, ChargesCtrl.editCharges);
+// transaction
+router.get('/transaction', TransactionCtrl.genTransactionPDF);
 //# sourceMappingURL=routes.js.map

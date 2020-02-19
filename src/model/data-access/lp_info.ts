@@ -24,11 +24,26 @@ export class lpInfoDAL {
             }
         });
     }
-    getLpList(id: number , limit = 5, offset = 0) {
+    getLpList(id: number, limit?: number, offset?: number) {
         return new Promise<lp_infoAttribute[]>(async (resolve, reject) => {
             try {
-                let datas = await DAL.mysqlConnector.lp_info.findAll({where: {account_id: id} , limit: limit, offset: offset });
-                resolve(datas);
+                let condition = {} as any;
+                condition.where = { account_id: id };
+                limit ? condition.limit = limit : '';
+                offset ? condition.offset = offset : '';
+                let lps = await DAL.mysqlConnector.lp_info.findAll(condition);
+                resolve(lps);
+            } catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+    }
+    getLpById(id: number) {
+        return new Promise<lp_infoAttribute>(async (resolve, reject) => {
+            try {
+                let lp = await DAL.mysqlConnector.lp_info.findOne({ where: { id: id } });
+                resolve(lp);
             } catch (err) {
                 console.error(err);
                 reject(err);

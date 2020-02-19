@@ -9,6 +9,7 @@ import * as RegisterCtrl from '../controller/register';
 import * as CheckpointCtrl from '../controller/checkpoint';
 import * as ChargesCtrl from '../controller/charges';
 import * as LpinfoCtrl from '../controller/lp_info';
+import * as TransactionCtrl from '../controller/transaction';
 
 const router = express.Router();
 
@@ -48,5 +49,8 @@ router.get('/charges/limit=:limit&offset=:offset', Middleware.authentication, Mi
 router.post('/charges/add', Middleware.authentication, Middleware.checkAdminRole, ChargesCtrl.insertCharges);
 router.post('/charges/delete', Middleware.authentication, Middleware.checkAdminRole, ChargesCtrl.deleteCharges);
 router.post('/charges/edit', Middleware.authentication, Middleware.checkAdminRole, ChargesCtrl.editCharges);
+
+// transaction
+router.get('/transaction', TransactionCtrl.genTransactionPDF);
 
 export { router };

@@ -20,7 +20,7 @@ export async function insertLpinfo(req: express.Request, res: express.Response, 
 
 export async function getLpList(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
-        let lp_list = await DAL.lpInfoDAL.getLpList(req['payload'].id, req.params.limit ? parseInt(req.params.limit) : 5, req.params.offset ? parseInt(req.params.offset) : 0);
+        let lp_list = await DAL.lpInfoDAL.getLpList(req['payload'].id, req.params.limit ? parseInt(req.params.limit) : NaN, req.params.offset ? parseInt(req.params.offset) : NaN);
         return res.status(HttpStatus.OK).send(JSON.stringify(lp_list));
     } catch (err) {
         console.error(err);

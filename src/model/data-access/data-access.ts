@@ -7,6 +7,7 @@ import { userInfoDAL } from './user_info';
 import { lpInfoDAL } from './lp_info';
 import { checkpointDAL } from './checkpoint';
 import { chargesDAL } from './charges';
+import { transactionDAL } from './transaction';
 
 export class DAL {
     static sequelize: Sequelize.Sequelize;
@@ -16,6 +17,7 @@ export class DAL {
     static lpInfoDAL: lpInfoDAL;
     static checkpointDAL: checkpointDAL;
     static chargesDAL: chargesDAL;
+    static transactionDAL: transactionDAL;
 
     constructor(config: MySqlConfig) {
         try {
@@ -36,6 +38,7 @@ export class DAL {
             DAL.lpInfoDAL = new lpInfoDAL();
             DAL.checkpointDAL = new checkpointDAL();
             DAL.chargesDAL = new chargesDAL();
+            DAL.transactionDAL = new transactionDAL();
         } catch (err) {
             console.error(err);
         }

@@ -13,14 +13,27 @@ module.exports = function(sequelize: sequelize.Sequelize, DataTypes: DataTypes) 
 			comment: "null",
 			autoIncrement: true
 		},
+		'account_id': {
+			type: DataTypes.INTEGER(11),
+			allowNull: true,
+			comment: "null",
+			references: {
+				model: 'account',
+				key: 'id'
+			}
+		},
 		'lp_id': {
 			type: DataTypes.INTEGER(11),
-			allowNull: false,
-			comment: "null"
+			allowNull: true,
+			comment: "null",
+			references: {
+				model: 'lp_info',
+				key: 'id'
+			}
 		},
 		'charges_id': {
 			type: DataTypes.INTEGER(11),
-			allowNull: false,
+			allowNull: true,
 			comment: "null",
 			references: {
 				model: 'charges',
@@ -30,6 +43,7 @@ module.exports = function(sequelize: sequelize.Sequelize, DataTypes: DataTypes) 
 		'last_update': {
 			type: DataTypes.DATE,
 			allowNull: true,
+			defaultValue: sequelize.fn('current_timestamp'),
 			comment: "null"
 		}
 	}, {
