@@ -50,4 +50,15 @@ export class chargesDAL {
             }
         });
     }
+    getChargesById(id: number) {
+        return new Promise<chargesAttribute>(async (resolve, reject) => {
+            try {
+                let data = await DAL.mysqlConnector.charges.findOne({ where: { id: id } });
+                resolve(data);
+            } catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+    }
 }

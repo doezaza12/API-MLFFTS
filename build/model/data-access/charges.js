@@ -54,6 +54,18 @@ class chargesDAL {
             }
         });
     }
+    getChargesById(id) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let data = await data_access_1.DAL.mysqlConnector.charges.findOne({ where: { id: id } });
+                resolve(data);
+            }
+            catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+    }
 }
 exports.chargesDAL = chargesDAL;
 //# sourceMappingURL=charges.js.map

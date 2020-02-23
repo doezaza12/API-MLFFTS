@@ -54,6 +54,18 @@ class checkpointDAL {
             }
         });
     }
+    getCheckpointById(id) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let data = await data_access_1.DAL.mysqlConnector.checkpoint.findOne({ where: { id: id } });
+                resolve(data);
+            }
+            catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+    }
 }
 exports.checkpointDAL = checkpointDAL;
 //# sourceMappingURL=checkpoint.js.map

@@ -14,10 +14,10 @@ class userInfoDAL {
             }
         });
     }
-    getUserInfoById(id) {
+    getUserInfoById(account_id) {
         return new Promise(async (resolve, reject) => {
             try {
-                let result = await data_access_1.DAL.mysqlConnector.user_info.findOne({ where: { account_id: id } });
+                let result = await data_access_1.DAL.mysqlConnector.user_info.findOne({ where: { account_id: account_id } });
                 resolve(result);
             }
             catch (err) {
@@ -26,7 +26,7 @@ class userInfoDAL {
             }
         });
     }
-    updateUserInfo(data, id) {
+    updateUserInfo(data, account_id) {
         return new Promise(async (resolve, reject) => {
             try {
                 let update_data = {};
@@ -36,7 +36,7 @@ class userInfoDAL {
                 data.firstname ? update_data.firstname = data.firstname : '';
                 data.lastname ? update_data.lastname = data.lastname : '';
                 data.line_id ? update_data.line_id = data.line_id : '';
-                await data_access_1.DAL.mysqlConnector.user_info.update(update_data, { where: { account_id: id } });
+                await data_access_1.DAL.mysqlConnector.user_info.update(update_data, { where: { account_id: account_id } });
                 resolve(true);
             }
             catch (err) {

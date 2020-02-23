@@ -13,10 +13,10 @@ export class userInfoDAL {
             }
         });
     }
-    getUserInfoById(id: number) {
+    getUserInfoById(account_id: number) {
         return new Promise<user_infoAttribute>(async (resolve, reject) => {
             try {
-                let result = await DAL.mysqlConnector.user_info.findOne({ where: { account_id: id } });
+                let result = await DAL.mysqlConnector.user_info.findOne({ where: { account_id: account_id } });
                 resolve(result);
             } catch (err) {
                 console.error(err);
@@ -24,7 +24,7 @@ export class userInfoDAL {
             }
         });
     }
-    updateUserInfo(data: user_infoAttribute, id: number) {
+    updateUserInfo(data: user_infoAttribute, account_id: number) {
         return new Promise<boolean>(async (resolve, reject) => {
             try {
                 let update_data = {} as user_infoAttribute;
@@ -34,7 +34,7 @@ export class userInfoDAL {
                 data.firstname ? update_data.firstname = data.firstname : '';
                 data.lastname ? update_data.lastname = data.lastname : '';
                 data.line_id ? update_data.line_id = data.line_id : '';
-                await DAL.mysqlConnector.user_info.update(update_data, { where: { account_id: id } });
+                await DAL.mysqlConnector.user_info.update(update_data, { where: { account_id: account_id } });
                 resolve(true);
             } catch (err) {
                 console.error(err);
@@ -42,35 +42,4 @@ export class userInfoDAL {
             }
         });
     }
-
-    // upsertLine(line_id: string) {
-    //     return new Promise<[user_infoInstance, boolean]>(async (resolve, reject) => {
-    //         try {
-    //             let result = await DAL.mysqlConnector.user_info.findOrCreate({
-    //                 where: { line_id: line_id }
-    //             });
-    //             // return ture = insert
-    //             resolve(result);
-    //         } catch (err) {
-    //             console.error(err);
-    //             reject(err);
-    //         }
-    //     });
-    // }
-    // updateUserinfo(instance: user_infoInstance, data: user_infoAttribute) {
-    //     return new Promise<user_infoInstance>(async (resolve, reject) => {
-    //         try {
-    //             // let result = await DAL.mysqlConnector.user_info.update(data);
-    //             let result = await instance.update({
-    //                 firstname: data.firstname,
-    //                 email: data.email,
-    //                 e_code: data.e_code, lp_info_id: data.lp_info_id
-    //             });
-    //             resolve(result);
-    //         } catch (err) {
-    //             console.error(err);
-    //             reject(err);
-    //         }
-    //     });
-    // }
 }

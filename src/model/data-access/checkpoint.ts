@@ -50,4 +50,15 @@ export class checkpointDAL {
             }
         });
     }
+    getCheckpointById(id: number) {
+        return new Promise<checkpointAttribute>(async (resolve, reject) => {
+            try {
+                let data = await DAL.mysqlConnector.checkpoint.findOne({ where: {id: id} });
+                resolve(data);
+            } catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+    }
 }

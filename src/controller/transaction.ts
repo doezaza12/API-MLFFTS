@@ -1,23 +1,55 @@
 import * as express from 'express';
 import * as HttpStatus from 'http-status-codes';
-import * as PDFDocument from 'pdfkit';
+import { PDFDocumentWithTables as PDFDocument } from '../util/pdf';
 
 import { DAL } from '../model/data-access/data-access';
 
 export async function genTransactionPDF(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
         let transactions = await DAL.transactionDAL.getTransaction(1);
-        let lp_datas = [];
+        let userInfo = await DAL.userInfoDAL.getUserInfoById(1);
+        let lpInfo = await DAL.lpInfoDAL.getLpById(1);
+        let charges_info = [];
         for (let i = 0; i < transactions.length; i++) {
-            lp_datas.push(await DAL.lpInfoDAL.getLpById(1));
+            if (charges_info.filter((ele) => { return ele.id == transactions[i].charges_id }).length == 0) {
+                let charge = await DAL.chargesDAL.getChargesById(transactions[i].charges_id);
+                let cpk_1 = await DAL.checkpointDAL.getCheckpointById(charge.cpk_1);
+                let cpk_2 = await DAL.checkpointDAL.getCheckpointById(charge.cpk_2);
+                charges_info.push({ id: transactions[i].charges_id, cpk_1: cpk_1.area_name, cpk_2: cpk_2.area_name, cost: charge.cost });
+            }
         }
+        const tableInfo = {
+            headers: ['ข้อมูลผู้ใช้', ''],
+            rows: [
+                [
+                    `หมายเลข e-code: ${userInfo.e_code}\nชื่อเจ้าของบัตร: ${userInfo.firstname} ${userInfo.lastname}\nเลขที่เบียนรถ: ${lpInfo.license_number} ${lpInfo.province}`,
+                    `เลขบัตรประจำตัว: ${userInfo.citizen_id}\nemail: ${userInfo.email}`
+                ]
+            ]
+        }
+        const tableResult = {
+            headers: ['ลำดับ', 'สถานที่', 'วันที่', 'จำนวนเงิน'],
+            rows: []
+        };
+        let cost = 0;
+        for (let i = 0; i < transactions.length; i++) {
+            let tmp_charges = charges_info.filter((ele) => { return ele.id == transactions[i].charges_id });
+            tableResult.rows.push([`${i + 1}`,
+            `${tmp_charges[0]['cpk_1']} -> ${tmp_charges[0]['cpk_2']}`,
+            `${transactions[i].last_update}`,
+            `${tmp_charges[0]['cost']}`]);
+            cost += tmp_charges[0]['cost'];
+        }
+        tableResult.rows.push([``, ``, `รวมทั้งสิ้น`, `${cost}`]);
+
         const doc = new PDFDocument();
         res.type('application/pdf');
         doc.pipe(res);
-        doc.fontSize(25);
-        for (let i = 0; i < transactions.length; i++) {
-            doc.text(`${transactions[i].last_update}`);
-        }
+        doc.genHeader();
+        doc.fontSize(16);
+        doc.font('fonts/THSarabunNew.ttf');
+        doc.genTable(tableInfo).moveDown();
+        doc.genTable(tableResult).moveDown();
         doc.end();
     } catch (err) {
         console.error(err);
