@@ -93,7 +93,7 @@ async function login(req, res, next) {
 exports.login = login;
 async function logout(req, res, next) {
     try {
-        await data_access_1.DAL.accountDAL.updateTokenById(req.body.payload.id, null);
+        await data_access_1.DAL.accountDAL.updateTokenById(req['payload'].id, null);
         return res.status(HttpStatus.OK).send('Logged out.');
     }
     catch (err) {
