@@ -111,6 +111,18 @@ class accountDAL {
             }
         });
     }
+    verifyAccount(id) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await data_access_1.DAL.mysqlConnector.account.update({ _isVerify: 1 }, { where: { id: id } });
+                resolve(true);
+            }
+            catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+    }
 }
 exports.accountDAL = accountDAL;
 //# sourceMappingURL=account.js.map

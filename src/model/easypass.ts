@@ -2,10 +2,10 @@
 // tslint:disable
 import * as sequelize from 'sequelize';
 import {DataTypes} from 'sequelize';
-import {easy_passInstance, easy_passAttribute} from './db';
+import {easypassInstance, easypassAttribute} from './db';
 
 module.exports = function(sequelize: sequelize.Sequelize, DataTypes: DataTypes) {
-	return sequelize.define<easy_passInstance, easy_passAttribute>('easy_pass', {
+	return sequelize.define<easypassInstance, easypassAttribute>('easypass', {
 		'id': {
 			type: DataTypes.INTEGER(11),
 			allowNull: false,
@@ -14,7 +14,7 @@ module.exports = function(sequelize: sequelize.Sequelize, DataTypes: DataTypes) 
 			autoIncrement: true
 		},
 		'e_code': {
-			type: DataTypes.STRING(50),
+			type: DataTypes.STRING(10),
 			allowNull: true,
 			comment: "null"
 		},
@@ -24,7 +24,7 @@ module.exports = function(sequelize: sequelize.Sequelize, DataTypes: DataTypes) 
 			comment: "null"
 		}
 	}, {
-		tableName: 'easy_pass',
+		tableName: 'easypass',
 		timestamps: false
 	});
 };

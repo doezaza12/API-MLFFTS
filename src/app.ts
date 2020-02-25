@@ -2,6 +2,9 @@ import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as helmet from 'helmet';
 import * as cors from 'cors';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 import { Configuration } from './util/config';
 import { DAL } from './model/data-access/data-access';

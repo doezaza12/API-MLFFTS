@@ -10,6 +10,7 @@ export class MySQLConnector {
     checkpoint: dbModel.checkpointModel;
     charges: dbModel.chargesModel;
     transaction: dbModel.transactionModel;
+    easypass: dbModel.easypassModel;
 
     constructor(sequelize: Sequelize.Sequelize) {
         this.table = dbTables.getModels(sequelize);
@@ -19,5 +20,6 @@ export class MySQLConnector {
         this.checkpoint = this.table.checkpoint;
         this.charges = this.table.charges;
         this.transaction = this.table.transaction;
+        this.easypass = this.table.easypass;
     }
 }

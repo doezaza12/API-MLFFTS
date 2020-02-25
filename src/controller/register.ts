@@ -1,9 +1,12 @@
 import * as express from 'express';
 import * as HttpStatus from 'http-status-codes';
 import * as bcrypt from 'bcryptjs';
+import * as sgMail from '@sendgrid/mail';
 
 import { DAL } from '../model/data-access/data-access';
 import { accountAttribute, lp_infoAttribute, user_infoAttribute } from '../model/db';
+
+sgMail.setApiKey(process.env.sendgrid);
 
 export async function register(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
@@ -22,22 +25,33 @@ export async function register(req: express.Request, res: express.Response, next
             });
         });
         let result = await DAL.accountDAL.insertAccount(account);
+
         // lp-info
-        let lp_data = {} as lp_infoAttribute;
-        lp_data.account_id = result.id;
-        lp_data.license_number = req.body.license_number;
-        lp_data.province = req.body.province;
-        await DAL.lpInfoDAL.insertLpInfo(lp_data);
+        // let lp_data = {} as lp_infoAttribute;
+        // lp_data.account_id = result.id;
+        // lp_data.license_number = req.body.license_number;
+        // lp_data.province = req.body.province;
+        // await DAL.lpInfoDAL.insertLpInfo(lp_data);
         // user-info
+
         let user_data = {} as user_infoAttribute;
         user_data.account_id = result.id;
         user_data.firstname = req.body.firstname;
         user_data.lastname = req.body.lastname;
         user_data.email = req.body.email;
-        user_data.e_code = req.body.e_code;
+        user_data.e_code_id = (await DAL.easypassDAL.getEasyPassBye_code(req.body.e_code)).id;
         user_data.citizen_id = req.body.citizen_id;
         user_data.line_id = req.body.line_id ? req.body.line_id : null;
         await DAL.userInfoDAL.insertUserInfo(user_data);
+        sgMail.send({
+            to: req.body.email,
+            from: '59011449@kmitl.ac.th',
+            subject: '[MLFFTS] Please verify your email.',
+            text: ' ',
+            html: `<a href="${process.env.NODE_ENV ? `https://mlffts-api.herokuapp.com/verify=${result.id}` : `http://localhost:8080/verify=${result.id}`}">SIMPLY CLICK HERE</a>`
+        }, false, (err, result) => {
+            if (err) console.error(err);
+        });
         return res.status(HttpStatus.CREATED).send();
     } catch (err) {
         console.error(err);

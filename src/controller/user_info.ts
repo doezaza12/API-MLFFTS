@@ -21,12 +21,12 @@ export async function editUserInfo(req: express.Request, res: express.Response, 
     try {
         let user_data = {} as user_infoAttribute;
         let account_id = req['payload'].id;
-        user_data.citizen_id = req.body.citizen_id ;
-        user_data.e_code = req.body.e_code ;
-        user_data.email = req.body.email ;
-        user_data.firstname = req.body.firstname ;
-        user_data.lastname = req.body.lastname ;
-        user_data.line_id = req.body.line_id ;
+        user_data.citizen_id = req.body.citizen_id;
+        user_data.e_code_id = (await DAL.easypassDAL.getEasyPassBye_code(req.body.e_code)).id;
+        user_data.email = req.body.email;
+        user_data.firstname = req.body.firstname;
+        user_data.lastname = req.body.lastname;
+        user_data.line_id = req.body.line_id;
         await DAL.userInfoDAL.updateUserInfo(user_data, account_id);
         res.status(HttpStatus.OK).send();
     } catch (err) {

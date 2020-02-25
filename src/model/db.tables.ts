@@ -4,24 +4,24 @@ import * as sequelize from 'sequelize';
 import * as def from './db';
 
 export interface ITables {
-	account:def.accountModel;
-	easy_pass:def.easy_passModel;
 	charges:def.chargesModel;
-	user_info:def.user_infoModel;
+	account:def.accountModel;
 	checkpoint:def.checkpointModel;
-	transaction:def.transactionModel;
+	easypass:def.easypassModel;
+	user_info:def.user_infoModel;
 	lp_info:def.lp_infoModel;
+	transaction:def.transactionModel;
 }
 
 export const getModels = function(seq:sequelize.Sequelize):ITables {
 	const tables:ITables = {
-		account: seq.import(path.join(__dirname, './account')),
-		easy_pass: seq.import(path.join(__dirname, './easy_pass')),
 		charges: seq.import(path.join(__dirname, './charges')),
-		user_info: seq.import(path.join(__dirname, './user_info')),
+		account: seq.import(path.join(__dirname, './account')),
 		checkpoint: seq.import(path.join(__dirname, './checkpoint')),
-		transaction: seq.import(path.join(__dirname, './transaction')),
+		easypass: seq.import(path.join(__dirname, './easypass')),
+		user_info: seq.import(path.join(__dirname, './user_info')),
 		lp_info: seq.import(path.join(__dirname, './lp_info')),
+		transaction: seq.import(path.join(__dirname, './transaction')),
 	};
 	return tables;
 };

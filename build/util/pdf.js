@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const PDFDocument = require("pdfkit");
-class PDFDocumentWithTables extends PDFDocument {
+class PDFDocumentCustom extends PDFDocument {
     constructor(options) {
         super(options);
     }
@@ -101,5 +101,5 @@ class PDFDocumentWithTables extends PDFDocument {
             .moveDown();
     }
 }
-exports.PDFDocumentWithTables = PDFDocumentWithTables;
+exports.PDFDocumentCustom = PDFDocumentCustom;
 //# sourceMappingURL=pdf.js.map

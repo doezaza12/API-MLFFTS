@@ -13,12 +13,12 @@ module.exports = function(sequelize: sequelize.Sequelize, DataTypes: DataTypes) 
 			comment: "null",
 			autoIncrement: true
 		},
-		'account_id': {
+		'e_code_id': {
 			type: DataTypes.INTEGER(11),
 			allowNull: false,
 			comment: "null",
 			references: {
-				model: 'account',
+				model: 'easypass',
 				key: 'id'
 			}
 		},

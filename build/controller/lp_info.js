@@ -5,7 +5,7 @@ const data_access_1 = require("../model/data-access/data-access");
 async function insertLpinfo(req, res, next) {
     try {
         let lp_data = {};
-        lp_data.account_id = req['payload'].id;
+        lp_data.e_code_id = (await data_access_1.DAL.userInfoDAL.getUserInfoById(req['payload'].id)).e_code_id;
         lp_data.license_number = req.body.license_number;
         lp_data.province = req.body.province;
         await data_access_1.DAL.lpInfoDAL.insertLpInfo(lp_data);

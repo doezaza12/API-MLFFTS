@@ -1,6 +1,6 @@
 import * as PDFDocument from 'pdfkit';
 
-export class PDFDocumentWithTables extends PDFDocument {
+export class PDFDocumentCustom extends PDFDocument {
     constructor(options?: any) {
         super(options);
     }

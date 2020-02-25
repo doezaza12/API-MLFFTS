@@ -2,6 +2,17 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const HttpStatus = require("http-status-codes");
 const data_access_1 = require("../model/data-access/data-access");
+async function verifyAccount(req, res, next) {
+    try {
+        await data_access_1.DAL.accountDAL.verifyAccount(parseInt(req['params'].id));
+        return res.status(HttpStatus.OK).send('Your email is verified.');
+    }
+    catch (err) {
+        console.error(err);
+        return res.status(HttpStatus.NOT_FOUND).send();
+    }
+}
+exports.verifyAccount = verifyAccount;
 // export async function insertAccount(req: express.Request, res: express.Response, next: express.NextFunction) {
 //     try {
 //         let data: accountAttribute;
@@ -15,18 +26,16 @@ const data_access_1 = require("../model/data-access/data-access");
 //         return res.status(HttpStatus.NOT_FOUND).send();
 //     }
 // }
-async function getAccountList(req, res, next) {
-    try {
-        let accountList = await data_access_1.DAL.accountDAL.getAccountList();
-        return res.status(HttpStatus.OK).send({
-            code: 'OK',
-            data: accountList
-        });
-    }
-    catch (err) {
-        console.error(err);
-        return res.status(HttpStatus.NOT_FOUND).send();
-    }
-}
-exports.getAccountList = getAccountList;
+// export async function getAccountList(req: express.Request, res: express.Response, next: express.NextFunction) {
+//     try {
+//         let accountList = await DAL.accountDAL.getAccountList();
+//         return res.status(HttpStatus.OK).send({
+//             code: 'OK',
+//             data: accountList
+//         });
+//     } catch (err) {
+//         console.error(err);
+//         return res.status(HttpStatus.NOT_FOUND).send();
+//     }
+// }
 //# sourceMappingURL=account.js.map

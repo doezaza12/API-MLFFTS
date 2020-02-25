@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const nodemailer = require("nodemailer");
 class EmailSender {
     constructor(transporter, mailInfo) {
-        this.transporter = transporter;
+        this.transporter = nodemailer.createTransport(transporter);
         this.mailInfo = mailInfo;
     }
     send() {
@@ -16,7 +17,7 @@ class EmailSender {
             console.log("mailOptions", mailOptions);
             this.transporter.sendMail(mailOptions, function (err, info) {
                 if (err)
-                    console.error(err);
+                    reject(err);
                 resolve(true);
             });
         });

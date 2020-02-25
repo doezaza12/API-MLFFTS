@@ -44,10 +44,14 @@ module.exports = function(sequelize: sequelize.Sequelize, DataTypes: DataTypes) 
 			comment: "null",
 			unique: true
 		},
-		'e_code': {
-			type: DataTypes.STRING(50),
+		'e_code_id': {
+			type: DataTypes.INTEGER(11),
 			allowNull: true,
 			comment: "easy pass code",
+			references: {
+				model: 'easypass',
+				key: 'id'
+			},
 			unique: true
 		}
 	}, {

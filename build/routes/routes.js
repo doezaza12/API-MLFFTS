@@ -13,7 +13,8 @@ const TransactionCtrl = require("../controller/transaction");
 const router = express.Router();
 exports.router = router;
 // account
-router.get('/getaccountlist', AccountCtrl.getAccountList); // testing route
+router.get('/verify=:id', AccountCtrl.verifyAccount);
+// router.get('/getaccountlist', AccountCtrl.getAccountList); // testing route
 // router.post('/addAccount', AccountCtrl.insertAccount);
 // userinfo
 router.get('/profile/cb-line', UserInfoCtrl.callbackLine);

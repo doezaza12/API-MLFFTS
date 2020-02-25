@@ -21,7 +21,7 @@ async function editUserInfo(req, res, next) {
         let user_data = {};
         let account_id = req['payload'].id;
         user_data.citizen_id = req.body.citizen_id;
-        user_data.e_code = req.body.e_code;
+        user_data.e_code_id = (await data_access_1.DAL.easypassDAL.getEasyPassBye_code(req.body.e_code)).id;
         user_data.email = req.body.email;
         user_data.firstname = req.body.firstname;
         user_data.lastname = req.body.lastname;

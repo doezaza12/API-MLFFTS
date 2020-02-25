@@ -1,6 +1,6 @@
 import * as express from 'express';
 import * as HttpStatus from 'http-status-codes';
-import { PDFDocumentWithTables as PDFDocument } from '../util/pdf';
+import { PDFDocumentCustom as PDFDocument } from '../util/pdf';
 
 import { DAL } from '../model/data-access/data-access';
 
@@ -22,7 +22,7 @@ export async function genTransactionPDF(req: express.Request, res: express.Respo
             headers: ['ข้อมูลผู้ใช้', ''],
             rows: [
                 [
-                    `หมายเลข e-code: ${userInfo.e_code}\nชื่อเจ้าของบัตร: ${userInfo.firstname} ${userInfo.lastname}\nเลขที่เบียนรถ: ${lpInfo.license_number} ${lpInfo.province}`,
+                    `หมายเลข e-code: ${await DAL.easypassDAL.getEasyPassById(userInfo.e_code_id)}\nชื่อเจ้าของบัตร: ${userInfo.firstname} ${userInfo.lastname}\nเลขที่เบียนรถ: ${lpInfo.license_number} ${lpInfo.province}`,
                     `เลขบัตรประจำตัว: ${userInfo.citizen_id}\nemail: ${userInfo.email}`
                 ]
             ]

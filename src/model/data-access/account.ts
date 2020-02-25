@@ -102,4 +102,15 @@ export class accountDAL {
             }
         });
     }
+    verifyAccount(id: number) {
+        return new Promise<boolean>(async (resolve, reject) => {
+            try {
+                await DAL.mysqlConnector.account.update({ _isVerify: 1 }, { where: { id: id } });
+                resolve(true);
+            } catch (err) {
+                console.error(err);
+                reject(err)
+            }
+        });
+    }
 }

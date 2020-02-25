@@ -4,6 +4,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const helmet = require("helmet");
 const cors = require("cors");
+const dotenv = require("dotenv");
+dotenv.config();
 const config_1 = require("./util/config");
 const data_access_1 = require("./model/data-access/data-access");
 const routes_1 = require("./routes/routes");

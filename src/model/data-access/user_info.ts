@@ -29,7 +29,7 @@ export class userInfoDAL {
             try {
                 let update_data = {} as user_infoAttribute;
                 data.citizen_id ? update_data.citizen_id = data.citizen_id : '';
-                data.e_code ? update_data.e_code = data.e_code : '';
+                data.e_code_id ? update_data.e_code_id = data.e_code_id : '';
                 data.email ? update_data.email = data.email : '';
                 data.firstname ? update_data.firstname = data.firstname : '';
                 data.lastname ? update_data.lastname = data.lastname : '';

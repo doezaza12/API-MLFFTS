@@ -14,7 +14,8 @@ import * as TransactionCtrl from '../controller/transaction';
 const router = express.Router();
 
 // account
-router.get('/getaccountlist', AccountCtrl.getAccountList); // testing route
+router.get('/verify=:id', AccountCtrl.verifyAccount);
+// router.get('/getaccountlist', AccountCtrl.getAccountList); // testing route
 // router.post('/addAccount', AccountCtrl.insertAccount);
 
 // userinfo

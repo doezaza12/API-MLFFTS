@@ -5,7 +5,7 @@ export class EmailSender {
     mailInfo: MailInfo;
 
     constructor(transporter: nodemailer.Transporter, mailInfo: MailInfo) {
-        this.transporter = transporter;
+        this.transporter = nodemailer.createTransport(transporter);
         this.mailInfo = mailInfo;
     }
 
@@ -19,7 +19,7 @@ export class EmailSender {
             };
             console.log("mailOptions", mailOptions)
             this.transporter.sendMail(mailOptions, function (err, info) {
-                if (err) console.error(err);
+                if (err) reject(err);
                 resolve(true);
             });
         });

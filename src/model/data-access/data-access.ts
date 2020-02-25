@@ -8,6 +8,7 @@ import { lpInfoDAL } from './lp_info';
 import { checkpointDAL } from './checkpoint';
 import { chargesDAL } from './charges';
 import { transactionDAL } from './transaction';
+import { easypassDAL } from './easypass';
 
 export class DAL {
     static sequelize: Sequelize.Sequelize;
@@ -18,6 +19,7 @@ export class DAL {
     static checkpointDAL: checkpointDAL;
     static chargesDAL: chargesDAL;
     static transactionDAL: transactionDAL;
+    static easypassDAL: easypassDAL;
 
     constructor(config: MySqlConfig) {
         try {
@@ -39,6 +41,7 @@ export class DAL {
             DAL.checkpointDAL = new checkpointDAL();
             DAL.chargesDAL = new chargesDAL();
             DAL.transactionDAL = new transactionDAL();
+            DAL.easypassDAL = new easypassDAL();
         } catch (err) {
             console.error(err);
         }

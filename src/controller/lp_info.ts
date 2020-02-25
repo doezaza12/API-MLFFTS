@@ -7,7 +7,7 @@ import { lp_infoAttribute } from '../model/db';
 export async function insertLpinfo(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
         let lp_data = {} as lp_infoAttribute;
-        lp_data.account_id = req['payload'].id;
+        lp_data.e_code_id = (await DAL.userInfoDAL.getUserInfoById(req['payload'].id)).e_code_id;
         lp_data.license_number = req.body.license_number;
         lp_data.province = req.body.province;
         await DAL.lpInfoDAL.insertLpInfo(lp_data)

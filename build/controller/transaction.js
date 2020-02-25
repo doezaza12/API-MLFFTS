@@ -21,7 +21,7 @@ async function genTransactionPDF(req, res, next) {
             headers: ['ข้อมูลผู้ใช้', ''],
             rows: [
                 [
-                    `หมายเลข e-code: ${userInfo.e_code}\nชื่อเจ้าของบัตร: ${userInfo.firstname} ${userInfo.lastname}\nเลขที่เบียนรถ: ${lpInfo.license_number} ${lpInfo.province}`,
+                    `หมายเลข e-code: ${await data_access_1.DAL.easypassDAL.getEasyPassById(userInfo.e_code_id)}\nชื่อเจ้าของบัตร: ${userInfo.firstname} ${userInfo.lastname}\nเลขที่เบียนรถ: ${lpInfo.license_number} ${lpInfo.province}`,
                     `เลขบัตรประจำตัว: ${userInfo.citizen_id}\nemail: ${userInfo.email}`
                 ]
             ]
@@ -40,7 +40,7 @@ async function genTransactionPDF(req, res, next) {
             cost += tmp_charges[0]['cost'];
         }
         tableResult.rows.push([``, ``, `รวมทั้งสิ้น`, `${cost}`]);
-        const doc = new pdf_1.PDFDocumentWithTables();
+        const doc = new pdf_1.PDFDocumentCustom();
         res.type('application/pdf');
         doc.pipe(res);
         doc.genHeader();

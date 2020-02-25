@@ -8,6 +8,7 @@ const lp_info_1 = require("./lp_info");
 const checkpoint_1 = require("./checkpoint");
 const charges_1 = require("./charges");
 const transaction_1 = require("./transaction");
+const easypass_1 = require("./easypass");
 class DAL {
     constructor(config) {
         try {
@@ -31,6 +32,7 @@ class DAL {
             DAL.checkpointDAL = new checkpoint_1.checkpointDAL();
             DAL.chargesDAL = new charges_1.chargesDAL();
             DAL.transactionDAL = new transaction_1.transactionDAL();
+            DAL.easypassDAL = new easypass_1.easypassDAL();
         }
         catch (err) {
             console.error(err);
