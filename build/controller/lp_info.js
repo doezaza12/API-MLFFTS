@@ -19,7 +19,8 @@ async function insertLpinfo(req, res, next) {
 exports.insertLpinfo = insertLpinfo;
 async function getLpList(req, res, next) {
     try {
-        let lp_list = await data_access_1.DAL.lpInfoDAL.getLpList(req['payload'].id, req.params.limit ? parseInt(req.params.limit) : NaN, req.params.offset ? parseInt(req.params.offset) : NaN);
+        let e_code_id = (await data_access_1.DAL.userInfoDAL.getUserInfoById(req['payload'].id)).e_code_id;
+        let lp_list = await data_access_1.DAL.lpInfoDAL.getLpList(e_code_id, req.params.limit ? parseInt(req.params.limit) : NaN, req.params.offset ? parseInt(req.params.offset) : NaN);
         return res.status(HttpStatus.OK).send(JSON.stringify(lp_list));
     }
     catch (err) {

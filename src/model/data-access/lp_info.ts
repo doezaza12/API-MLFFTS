@@ -28,7 +28,7 @@ export class lpInfoDAL {
         return new Promise<lp_infoAttribute[]>(async (resolve, reject) => {
             try {
                 let condition = {} as any;
-                condition.where = { account_id: id };
+                condition.where = { e_code_id: id };
                 limit ? condition.limit = limit : '';
                 offset ? condition.offset = offset : '';
                 let lps = await DAL.mysqlConnector.lp_info.findAll(condition);

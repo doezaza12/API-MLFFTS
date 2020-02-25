@@ -30,7 +30,7 @@ class lpInfoDAL {
         return new Promise(async (resolve, reject) => {
             try {
                 let condition = {};
-                condition.where = { account_id: id };
+                condition.where = { e_code_id: id };
                 limit ? condition.limit = limit : '';
                 offset ? condition.offset = offset : '';
                 let lps = await data_access_1.DAL.mysqlConnector.lp_info.findAll(condition);
