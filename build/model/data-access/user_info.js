@@ -14,7 +14,7 @@ class userInfoDAL {
             }
         });
     }
-    getUserInfoById(account_id) {
+    getUserInfoByAccountId(account_id) {
         return new Promise(async (resolve, reject) => {
             try {
                 let result = await data_access_1.DAL.mysqlConnector.user_info.findOne({ where: { account_id: account_id } });

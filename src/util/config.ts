@@ -4,6 +4,7 @@ export class Configuration {
     static mySql: MySqlConfig;
     static line: LineConfig;
     static token: TokenConfig;
+    static notify: NotifyConfig;
     constructor(path: string) {
         if (fs.existsSync(path)) {
             let config = JSON.parse(fs.readFileSync(path, { encoding: 'utf8' }));
@@ -21,6 +22,10 @@ export class Configuration {
             // token config
             Configuration.token = new TokenConfig();
             Configuration.token.secret = config.token.secret;
+            // notify config
+            Configuration.notify = new NotifyConfig();
+            Configuration.notify.client_id = config.notify.client_id;
+            Configuration.notify.client_secret = config.notify.client_secret;
         }
         else {
             // mysql config
@@ -33,6 +38,10 @@ export class Configuration {
             // token config
             Configuration.token = new TokenConfig();
             Configuration.token.secret = process.env.token_secret;
+            // notify config
+            Configuration.notify = new NotifyConfig();
+            Configuration.notify.client_id = process.env.notify_client_id;
+            Configuration.notify.client_secret = process.env.notify_client_secret;
         }
     }
 }
@@ -53,4 +62,9 @@ export class LineConfig {
 
 export class TokenConfig {
     secret: string;
+}
+
+export class NotifyConfig {
+    client_id: string;
+    client_secret: string;
 }

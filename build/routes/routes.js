@@ -10,6 +10,7 @@ const CheckpointCtrl = require("../controller/checkpoint");
 const ChargesCtrl = require("../controller/charges");
 const LpinfoCtrl = require("../controller/lp_info");
 const TransactionCtrl = require("../controller/transaction");
+const NotifyCtrl = require("../controller/notification");
 const router = express.Router();
 exports.router = router;
 // account
@@ -29,6 +30,9 @@ router.post('/lpinfo/delete', Middleware.authentication, LpinfoCtrl.deleteLpinfo
 router.get('/cb-line', LoginCtrl.callbackLine);
 router.get('/logout', Middleware.authentication, LoginCtrl.logout);
 router.post('/login', LoginCtrl.login);
+// notification
+router.get('/cb-state-notify', NotifyCtrl.callbackStateNotify);
+router.get('/cb-notify', NotifyCtrl.callbackNotify);
 // register
 router.post('/register', RegisterCtrl.register);
 // checkpoint
@@ -44,5 +48,5 @@ router.post('/charges/add', Middleware.authentication, Middleware.checkAdminRole
 router.post('/charges/delete', Middleware.authentication, Middleware.checkAdminRole, ChargesCtrl.deleteCharges);
 router.post('/charges/edit', Middleware.authentication, Middleware.checkAdminRole, ChargesCtrl.editCharges);
 // transaction
-router.get('/transaction', TransactionCtrl.genTransactionPDF);
+router.get('/transaction/:lp_id', TransactionCtrl.genTransactionPDF);
 //# sourceMappingURL=routes.js.map

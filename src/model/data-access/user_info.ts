@@ -13,7 +13,7 @@ export class userInfoDAL {
             }
         });
     }
-    getUserInfoById(account_id: number) {
+    getUserInfoByAccountId(account_id: number) {
         return new Promise<user_infoAttribute>(async (resolve, reject) => {
             try {
                 let result = await DAL.mysqlConnector.user_info.findOne({ where: { account_id: account_id } });

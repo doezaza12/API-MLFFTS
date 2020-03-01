@@ -7,7 +7,7 @@ const config_1 = require("../util/config");
 const data_access_1 = require("../model/data-access/data-access");
 async function getUserInfo(req, res, next) {
     try {
-        let user_data = await data_access_1.DAL.userInfoDAL.getUserInfoById(req['payload'].id);
+        let user_data = await data_access_1.DAL.userInfoDAL.getUserInfoByAccountId(req['payload'].id);
         return res.status(HttpStatus.OK).send(user_data);
     }
     catch (err) {

@@ -9,7 +9,7 @@ import { user_infoAttribute } from '../model/db';
 
 export async function getUserInfo(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
-        let user_data = await DAL.userInfoDAL.getUserInfoById(req['payload'].id);
+        let user_data = await DAL.userInfoDAL.getUserInfoByAccountId(req['payload'].id);
         return res.status(HttpStatus.OK).send(user_data);
     } catch (err) {
         console.error(err);

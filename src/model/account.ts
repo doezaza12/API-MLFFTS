@@ -46,6 +46,11 @@ module.exports = function(sequelize: sequelize.Sequelize, DataTypes: DataTypes) 
 			type: DataTypes.STRING(255),
 			allowNull: true,
 			comment: "null"
+		},
+		'access_token': {
+			type: DataTypes.STRING(255),
+			allowNull: true,
+			comment: "null"
 		}
 	}, {
 		tableName: 'account',

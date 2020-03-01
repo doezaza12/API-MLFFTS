@@ -6,9 +6,9 @@ import { DAL } from '../model/data-access/data-access';
 
 export async function genTransactionPDF(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
-        let transactions = await DAL.transactionDAL.getTransaction(1);
-        let userInfo = await DAL.userInfoDAL.getUserInfoById(1);
-        let lpInfo = await DAL.lpInfoDAL.getLpById(1);
+        let transactions = await DAL.transactionDAL.getTransaction(req['payload'].id);
+        let userInfo = await DAL.userInfoDAL.getUserInfoByAccountId(req['payload'].id);
+        let lpInfo = await DAL.lpInfoDAL.getLpById(parseInt(req['params'].lp_id));
         let charges_info = [];
         for (let i = 0; i < transactions.length; i++) {
             if (charges_info.filter((ele) => { return ele.id == transactions[i].charges_id }).length == 0) {

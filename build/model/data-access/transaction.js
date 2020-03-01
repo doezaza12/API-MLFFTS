@@ -8,6 +8,7 @@ class transactionDAL {
                 let condition = {};
                 condition.account_id = account_id;
                 lp_id ? condition.lp_id = lp_id : '';
+                condition.status = 1;
                 (date_from && date_to) ? condition.from = { $between: [date_from, date_to] } : '';
                 let transactions = await data_access_1.DAL.mysqlConnector.transaction.findAll({ where: condition, order: [['last_update', 'desc']] });
                 resolve(transactions);

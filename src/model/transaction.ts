@@ -45,6 +45,11 @@ module.exports = function(sequelize: sequelize.Sequelize, DataTypes: DataTypes) 
 			allowNull: true,
 			defaultValue: sequelize.fn('current_timestamp'),
 			comment: "null"
+		},
+		'status': {
+			type: DataTypes.INTEGER(1),
+			allowNull: true,
+			comment: "0 : not paid, 1 : paid"
 		}
 	}, {
 		tableName: 'transaction',
