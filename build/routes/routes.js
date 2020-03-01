@@ -32,7 +32,7 @@ router.get('/logout', Middleware.authentication, LoginCtrl.logout);
 router.post('/login', LoginCtrl.login);
 // notification
 router.get('/cb-state-notify', NotifyCtrl.callbackStateNotify);
-router.post('/cb-notify', NotifyCtrl.callbackNotify);
+router.post('/cb-notify', Middleware.authentication, NotifyCtrl.callbackNotify);
 // register
 router.post('/register', RegisterCtrl.register);
 // checkpoint
