@@ -46,6 +46,4 @@ router.post('/charges/delete', Middleware.authentication, Middleware.checkAdminR
 router.post('/charges/edit', Middleware.authentication, Middleware.checkAdminRole, ChargesCtrl.editCharges);
 // transaction
 router.get('/transaction', TransactionCtrl.genTransactionPDF);
-// webhook
-router.post('/webhook', WebhookCtrl.webHook);
 //# sourceMappingURL=routes.js.map
