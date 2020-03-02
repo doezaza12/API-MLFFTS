@@ -10,7 +10,7 @@ import * as CheckpointCtrl from '../controller/checkpoint';
 import * as ChargesCtrl from '../controller/charges';
 import * as LpinfoCtrl from '../controller/lp_info';
 import * as TransactionCtrl from '../controller/transaction';
-import * as NotifyCtrl from '../controller/notification';
+import * as WebhookCtrl from '../controller/webhook';
 
 const router = express.Router();
 
@@ -35,10 +35,6 @@ router.get('/cb-line', LoginCtrl.callbackLine);
 router.get('/logout', Middleware.authentication, LoginCtrl.logout);
 router.post('/login', LoginCtrl.login);
 
-// notification
-router.get('/cb-state-notify', NotifyCtrl.callbackStateNotify);
-router.get('/cb-notify', NotifyCtrl.callbackNotify);
-
 // register
 router.post('/register', RegisterCtrl.register);
 
@@ -57,6 +53,9 @@ router.post('/charges/delete', Middleware.authentication, Middleware.checkAdminR
 router.post('/charges/edit', Middleware.authentication, Middleware.checkAdminRole, ChargesCtrl.editCharges);
 
 // transaction
-router.get('/transaction/:lp_id', TransactionCtrl.genTransactionPDF);
+router.get('/transaction', TransactionCtrl.genTransactionPDF);
+
+// webhook
+router.post('/webhook', WebhookCtrl.webHook);
 
 export { router };

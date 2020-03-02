@@ -30,23 +30,6 @@ class accountDAL {
             }
         });
     }
-    updateAccessTokenById(id, access_token) {
-        return new Promise(async (resolve, reject) => {
-            try {
-                let result = await data_access_1.DAL.mysqlConnector.account.update({
-                    access_token: access_token
-                }, { where: { id: id } });
-                if (result)
-                    resolve(true);
-                else
-                    resolve(false);
-            }
-            catch (err) {
-                console.error(err);
-                reject(err);
-            }
-        });
-    }
     validateToken(id, token) {
         return new Promise(async (resolve, reject) => {
             try {
