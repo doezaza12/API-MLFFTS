@@ -8,7 +8,7 @@ export async function genTransactionPDF(req: express.Request, res: express.Respo
     try {
         let transactions = await DAL.transactionDAL.getTransaction(req['payload'].id);
         let userInfo = await DAL.userInfoDAL.getUserInfoByAccountId(req['payload'].id);
-        let lpInfo = await DAL.lpInfoDAL.getLpById(parseInt(req.body.lp_id));
+        let lpInfo = await DAL.lpInfoDAL.getLpById(parseInt(req['params'].lp_id));
         let charges_info = [];
         for (let i = 0; i < transactions.length; i++) {
             if (charges_info.filter((ele) => { return ele.id == transactions[i].charges_id }).length == 0) {

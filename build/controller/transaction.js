@@ -7,7 +7,7 @@ async function genTransactionPDF(req, res, next) {
     try {
         let transactions = await data_access_1.DAL.transactionDAL.getTransaction(req['payload'].id);
         let userInfo = await data_access_1.DAL.userInfoDAL.getUserInfoByAccountId(req['payload'].id);
-        let lpInfo = await data_access_1.DAL.lpInfoDAL.getLpById(parseInt(req.body.lp_id));
+        let lpInfo = await data_access_1.DAL.lpInfoDAL.getLpById(parseInt(req['params'].lp_id));
         let charges_info = [];
         for (let i = 0; i < transactions.length; i++) {
             if (charges_info.filter((ele) => { return ele.id == transactions[i].charges_id; }).length == 0) {
