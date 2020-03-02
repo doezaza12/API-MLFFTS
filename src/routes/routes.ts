@@ -37,7 +37,7 @@ router.post('/login', LoginCtrl.login);
 
 // notification
 router.get('/cb-state-notify', NotifyCtrl.callbackStateNotify);
-router.get('/cb-notify', NotifyCtrl.callbackNotify);
+router.post('/cb-notify', NotifyCtrl.callbackNotify);
 
 // register
 router.post('/register', RegisterCtrl.register);

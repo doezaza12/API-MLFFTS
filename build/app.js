@@ -10,7 +10,7 @@ const config_1 = require("./util/config");
 const data_access_1 = require("./model/data-access/data-access");
 const routes_1 = require("./routes/routes");
 const app = express();
-app.use(cors({ origin: 'https://mlffts-web.herokuapp.com' }));
+app.use(cors({ origin: ['https://mlffts-web.herokuapp.com', 'http://localhost:8080'] }));
 app.use(helmet());
 app.use(bodyParser.urlencoded({ extended: false }));
 // init
