@@ -2,6 +2,26 @@
 import * as Sequelize from 'sequelize';
 
 
+// table: charges
+export interface chargesAttribute {
+	id:any;
+	cpk_1?:any;
+	cpk_2?:any;
+	cost?:any;
+}
+export interface chargesInstance extends Sequelize.Instance<chargesAttribute>, chargesAttribute { }
+export interface chargesModel extends Sequelize.Model<chargesInstance, chargesAttribute> { }
+
+// table: lp_info
+export interface lp_infoAttribute {
+	id:any;
+	e_code_id:any;
+	license_number?:any;
+	province?:any;
+}
+export interface lp_infoInstance extends Sequelize.Instance<lp_infoAttribute>, lp_infoAttribute { }
+export interface lp_infoModel extends Sequelize.Model<lp_infoInstance, lp_infoAttribute> { }
+
 // table: account
 export interface accountAttribute {
 	id:any;
@@ -16,25 +36,6 @@ export interface accountAttribute {
 export interface accountInstance extends Sequelize.Instance<accountAttribute>, accountAttribute { }
 export interface accountModel extends Sequelize.Model<accountInstance, accountAttribute> { }
 
-// table: lp_info
-export interface lp_infoAttribute {
-	id:any;
-	e_code_id:any;
-	license_number?:any;
-	province?:any;
-}
-export interface lp_infoInstance extends Sequelize.Instance<lp_infoAttribute>, lp_infoAttribute { }
-export interface lp_infoModel extends Sequelize.Model<lp_infoInstance, lp_infoAttribute> { }
-
-// table: easypass
-export interface easypassAttribute {
-	id:any;
-	e_code?:any;
-	wallet?:any;
-}
-export interface easypassInstance extends Sequelize.Instance<easypassAttribute>, easypassAttribute { }
-export interface easypassModel extends Sequelize.Model<easypassInstance, easypassAttribute> { }
-
 // table: checkpoint
 export interface checkpointAttribute {
 	id:any;
@@ -44,6 +45,15 @@ export interface checkpointAttribute {
 }
 export interface checkpointInstance extends Sequelize.Instance<checkpointAttribute>, checkpointAttribute { }
 export interface checkpointModel extends Sequelize.Model<checkpointInstance, checkpointAttribute> { }
+
+// table: easypass
+export interface easypassAttribute {
+	id:any;
+	e_code?:any;
+	wallet?:any;
+}
+export interface easypassInstance extends Sequelize.Instance<easypassAttribute>, easypassAttribute { }
+export interface easypassModel extends Sequelize.Model<easypassInstance, easypassAttribute> { }
 
 // table: transaction
 export interface transactionAttribute {

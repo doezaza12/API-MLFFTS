@@ -48,5 +48,5 @@ router.post('/charges/add', Middleware.authentication, Middleware.checkAdminRole
 router.post('/charges/delete', Middleware.authentication, Middleware.checkAdminRole, ChargesCtrl.deleteCharges);
 router.post('/charges/edit', Middleware.authentication, Middleware.checkAdminRole, ChargesCtrl.editCharges);
 // transaction
-router.get('/transaction/:lp_id', TransactionCtrl.genTransactionPDF);
+router.get('/transaction', TransactionCtrl.genTransactionPDF);
 //# sourceMappingURL=routes.js.map
