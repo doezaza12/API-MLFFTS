@@ -14,6 +14,7 @@ export async function getUserInfo(req: express.Request, res: express.Response, n
         let data = {}
         data = JSON.parse(JSON.stringify(user_data));
         data['type'] = account_data.type;
+        data['access_token'] = account_data.access_token;
         return res.status(HttpStatus.OK).send(data);
     } catch (err) {
         console.error(err);
