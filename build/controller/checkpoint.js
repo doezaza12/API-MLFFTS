@@ -31,11 +31,12 @@ exports.deleteCheckpoint = deleteCheckpoint;
 async function editCheckpoint(req, res, next) {
     try {
         let data = {};
+        data.id = req.body.id;
         data.lat = req.body.lat;
         data.lng = req.body.lng;
         data.area_name = req.body.area_name;
         await data_access_1.DAL.checkpointDAL.editCheckpoint(data);
-        return res.status(HttpStatus.CREATED).send();
+        return res.status(HttpStatus.OK).send();
     }
     catch (err) {
         console.error(err);
