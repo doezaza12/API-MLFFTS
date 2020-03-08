@@ -23,7 +23,7 @@ async function callbackNotify(req, res, next) {
                     code: req.body.code,
                     client_id: process.env.notify_client_id || config_1.Configuration.notify.client_id,
                     client_secret: process.env.notify_client_secret || config_1.Configuration.notify.client_secret,
-                    redirect_uri: process.env.NODE_ENV == 'production' ? 'https://mlffts-api.herokuapp.com/cb-notify' : 'http://localhost:8080/cb-notify'
+                    redirect_uri: process.env.NODE_ENV == 'production' ? 'https://mlffts-api.herokuapp.com/cb-state-notify' : 'http://localhost:8080/cb-state-notify'
                 }
             }, async (err, res, body) => {
                 if (err) {
