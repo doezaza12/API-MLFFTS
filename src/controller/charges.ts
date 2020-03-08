@@ -46,8 +46,8 @@ export async function editCharges(req: express.Request, res: express.Response, n
 export async function getCharges(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
         let datas = await DAL.chargesDAL.getCharges(req.params.limit ? parseInt(req.params.limit) : 10, req.params.offset ? parseInt(req.params.offset) : 0);
-        if (datas.length == 0) return res.status(HttpStatus.NOT_FOUND).send();
-        return res.status(HttpStatus.OK).send(datas);
+        if (datas.count == 0) return res.status(HttpStatus.NOT_FOUND).send();
+        return res.status(HttpStatus.OK).send({data: datas.data, count: datas.count});
     } catch (err) {
         console.error(err);
         return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();

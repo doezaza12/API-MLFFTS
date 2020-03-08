@@ -45,8 +45,8 @@ class chargesDAL {
     getCharges(limit = 10, offset = 0) {
         return new Promise(async (resolve, reject) => {
             try {
-                let data = await data_access_1.DAL.mysqlConnector.charges.findAll({ limit: limit, offset: offset });
-                resolve(data);
+                let data = await data_access_1.DAL.mysqlConnector.charges.findAndCountAll({ limit: limit, offset: offset });
+                resolve({ data: data.rows, count: data.count });
             }
             catch (err) {
                 console.error(err);
