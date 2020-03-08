@@ -26,7 +26,7 @@ export async function callbackLine(req: express.Request, res: express.Response, 
                         code: req.query.code,
                         client_id: process.env.line_client_id || Configuration.line.client_id,
                         client_secret: process.env.line_client_secret || Configuration.line.client_secret,
-                        redirect_uri: process.env.NODE_ENV == 'production' ? 'https://mlffts-api.herokuapp.com/cb-line' : 'http://localhost:8080/cb-line'
+                        redirect_uri: process.env.cb_line 
                     }
                 }, async (err, res, body) => {
                     if (err) console.error(err);
