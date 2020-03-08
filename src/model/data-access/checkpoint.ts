@@ -40,10 +40,10 @@ export class checkpointDAL {
         });
     }
     getCheckpoints(limit = 10, offset = 0) {
-        return new Promise<checkpointAttribute[]>(async (resolve, reject) => {
+        return new Promise<any>(async (resolve, reject) => {
             try {
-                let data = await DAL.mysqlConnector.checkpoint.findAll({ limit: limit, offset: offset });
-                resolve(data);
+                let data = await DAL.mysqlConnector.checkpoint.findAndCountAll({ limit: limit, offset: offset });
+                resolve({data: data.rows, count: data.count});
             } catch (err) {
                 console.error(err);
                 reject(err);

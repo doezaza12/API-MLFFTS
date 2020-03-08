@@ -81,23 +81,20 @@ class accountDAL {
             }
         });
     }
-    // validateAccount(username: string, password: string) {
-    //     return new Promise<accountAttribute>(async (resolve, reject) => {
-    //         try {
-    //             let result = await DAL.mysqlConnector.account.findOne({
-    //                 where: {
-    //                     username: username,
-    //                     password: password
-    //                 }
-    //             });
-    //             if (result) resolve(result);
-    //             resolve(null);
-    //         } catch (err) {
-    //             console.error(err);
-    //             reject(err);
-    //         }
-    //     });
-    // }
+    getAccountById(id) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let result = await data_access_1.DAL.mysqlConnector.account.findOne({ where: { id: id } });
+                if (result)
+                    resolve(result);
+                resolve(null);
+            }
+            catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+    }
     getAccountByUsername(username) {
         return new Promise(async (resolve, reject) => {
             try {

@@ -49,7 +49,7 @@ async function getCharges(req, res, next) {
         let datas = await data_access_1.DAL.chargesDAL.getCharges(req.params.limit ? parseInt(req.params.limit) : 10, req.params.offset ? parseInt(req.params.offset) : 0);
         if (datas.length == 0)
             return res.status(HttpStatus.NOT_FOUND).send();
-        return res.status(HttpStatus.OK).send(JSON.stringify(datas));
+        return res.status(HttpStatus.OK).send(datas);
     }
     catch (err) {
         console.error(err);

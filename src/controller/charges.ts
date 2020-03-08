@@ -47,7 +47,7 @@ export async function getCharges(req: express.Request, res: express.Response, ne
     try {
         let datas = await DAL.chargesDAL.getCharges(req.params.limit ? parseInt(req.params.limit) : 10, req.params.offset ? parseInt(req.params.offset) : 0);
         if (datas.length == 0) return res.status(HttpStatus.NOT_FOUND).send();
-        return res.status(HttpStatus.OK).send(JSON.stringify(datas));
+        return res.status(HttpStatus.OK).send(datas);
     } catch (err) {
         console.error(err);
         return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();

@@ -45,8 +45,8 @@ class checkpointDAL {
     getCheckpoints(limit = 10, offset = 0) {
         return new Promise(async (resolve, reject) => {
             try {
-                let data = await data_access_1.DAL.mysqlConnector.checkpoint.findAll({ limit: limit, offset: offset });
-                resolve(data);
+                let data = await data_access_1.DAL.mysqlConnector.checkpoint.findAndCountAll({ limit: limit, offset: offset });
+                resolve({ data: data.rows, count: data.count });
             }
             catch (err) {
                 console.error(err);

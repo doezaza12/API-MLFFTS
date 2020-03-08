@@ -35,7 +35,10 @@ async function register(req, res, next) {
         user_data.firstname = req.body.firstname;
         user_data.lastname = req.body.lastname;
         user_data.email = req.body.email;
-        user_data.e_code_id = (await data_access_1.DAL.easypassDAL.getEasyPassBye_code(req.body.e_code)).id;
+        let e_code = await data_access_1.DAL.easypassDAL.getEasyPassBye_code(req.body.e_code);
+        if (!e_code)
+            return res.status(HttpStatus.NOT_FOUND).send("Ecode was not found.");
+        user_data.e_code_id = e_code.id;
         user_data.citizen_id = req.body.citizen_id;
         user_data.line_id = req.body.line_id ? req.body.line_id : null;
         await data_access_1.DAL.userInfoDAL.insertUserInfo(user_data);

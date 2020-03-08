@@ -72,23 +72,18 @@ export class accountDAL {
             }
         });
     }
-    // validateAccount(username: string, password: string) {
-    //     return new Promise<accountAttribute>(async (resolve, reject) => {
-    //         try {
-    //             let result = await DAL.mysqlConnector.account.findOne({
-    //                 where: {
-    //                     username: username,
-    //                     password: password
-    //                 }
-    //             });
-    //             if (result) resolve(result);
-    //             resolve(null);
-    //         } catch (err) {
-    //             console.error(err);
-    //             reject(err);
-    //         }
-    //     });
-    // }
+    getAccountById(id: number) {
+        return new Promise<accountAttribute>(async (resolve, reject) => {
+            try {
+                let result = await DAL.mysqlConnector.account.findOne({where: {id: id}});
+                if (result) resolve(result);
+                resolve(null)
+            } catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+    }
     getAccountByUsername(username: string) {
         return new Promise<accountAttribute>(async (resolve, reject) => {
             try {

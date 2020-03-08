@@ -8,7 +8,11 @@ const data_access_1 = require("../model/data-access/data-access");
 async function getUserInfo(req, res, next) {
     try {
         let user_data = await data_access_1.DAL.userInfoDAL.getUserInfoByAccountId(req['payload'].id);
-        return res.status(HttpStatus.OK).send(user_data);
+        let account_data = await data_access_1.DAL.accountDAL.getAccountById(req['payload'].id);
+        let data = {};
+        data = JSON.parse(JSON.stringify(user_data));
+        data['type'] = account_data.type;
+        return res.status(HttpStatus.OK).send(data);
     }
     catch (err) {
         console.error(err);
