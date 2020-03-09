@@ -16,8 +16,9 @@ const router = express.Router();
 
 // account
 router.get('/verify=:id', AccountCtrl.verifyAccount);
-// router.get('/getaccountlist', AccountCtrl.getAccountList); // testing route
-// router.post('/addAccount', AccountCtrl.insertAccount);
+router.get('/account', Middleware.authentication, Middleware.checkAdminRole, AccountCtrl.getAccountList);
+router.get('/account/limit=:limit&offset=:offset', Middleware.authentication, Middleware.checkAdminRole, AccountCtrl.getAccountList);
+router.post('/account/edit', Middleware.authentication, Middleware.checkAdminRole, AccountCtrl.editAccountStatus);
 
 // userinfo
 router.get('/profile/cb-line', UserInfoCtrl.callbackLine);
@@ -57,6 +58,9 @@ router.post('/charges/delete', Middleware.authentication, Middleware.checkAdminR
 router.post('/charges/edit', Middleware.authentication, Middleware.checkAdminRole, ChargesCtrl.editCharges);
 
 // transaction
-router.get('/transaction', TransactionCtrl.genTransactionPDF);
+router.get('/transaction/gen', Middleware.authentication, TransactionCtrl.genTransactionPDF);
+router.get('/transaction', Middleware.authentication, TransactionCtrl.getTransactions);
+router.get('/transaction/limit=:limit&offset=:offset&status=:status', Middleware.authentication, TransactionCtrl.getTransactions);
+router.get('/transaction/limit=:limit&offset=:offset', Middleware.authentication, TransactionCtrl.getTransactions);
 
 export { router };

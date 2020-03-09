@@ -75,7 +75,7 @@ export class accountDAL {
     getAccountById(id: number) {
         return new Promise<accountAttribute>(async (resolve, reject) => {
             try {
-                let result = await DAL.mysqlConnector.account.findOne({where: {id: id}});
+                let result = await DAL.mysqlConnector.account.findOne({ where: { id: id } });
                 if (result) resolve(result);
                 resolve(null)
             } catch (err) {
@@ -100,14 +100,14 @@ export class accountDAL {
             }
         });
     }
-    getAccountList() {
-        return new Promise<accountAttribute[]>(async (resolve, reject) => {
+    getAccountList(limit = 10, offset = 0) {
+        return new Promise<any>(async (resolve, reject) => {
             try {
-                let accountList = await DAL.mysqlConnector.account.findAll();
-                resolve(accountList);
+                let data = await DAL.mysqlConnector.account.findAndCountAll({ limit: limit, offset: offset });
+                resolve({data: data.rows, count: data.count});
             } catch (err) {
                 console.error(err);
-                reject(err)
+                reject(err);
             }
         });
     }
@@ -118,7 +118,21 @@ export class accountDAL {
                 resolve(true);
             } catch (err) {
                 console.error(err);
-                reject(err)
+                reject(err);
+            }
+        });
+    }
+    editAccountTypeAndActive(data: accountAttribute) {
+        return new Promise<boolean>(async (resolve, reject) => {
+            try {
+                let account_data = {} as accountAttribute;
+                data.type ? account_data.type = data.type : '';
+                data._isActive ? account_data._isActive = data._isActive : '';
+                await DAL.mysqlConnector.account.update(account_data, { where: { id: data.id } })
+                resolve(true);
+            } catch (err) {
+                console.error(err);
+                reject(err);
             }
         });
     }

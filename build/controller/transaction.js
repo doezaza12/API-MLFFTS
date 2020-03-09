@@ -56,4 +56,17 @@ async function genTransactionPDF(req, res, next) {
     }
 }
 exports.genTransactionPDF = genTransactionPDF;
+async function getTransactions(req, res, next) {
+    try {
+        let datas = await data_access_1.DAL.transactionDAL.getTransactionList(req.params.limit ? parseInt(req.params.limit) : 10, req.params.offset ? parseInt(req.params.offset) : 0, req.params.status ? parseInt(req.params.status) : 1);
+        if (datas.count == 0)
+            return res.status(HttpStatus.NOT_FOUND).send();
+        return res.status(HttpStatus.OK).send({ data: datas.data, count: datas.count });
+    }
+    catch (err) {
+        console.error(err);
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
+    }
+}
+exports.getTransactions = getTransactions;
 //# sourceMappingURL=transaction.js.map

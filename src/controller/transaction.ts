@@ -56,3 +56,15 @@ export async function genTransactionPDF(req: express.Request, res: express.Respo
         return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
     }
 }
+
+export async function getTransactions(req: express.Request, res: express.Response, next: express.NextFunction) {
+    try {
+        let datas = await DAL.transactionDAL.getTransactionList(req.params.limit ? parseInt(req.params.limit) : 10,
+            req.params.offset ? parseInt(req.params.offset) : 0, req.params.status ? parseInt(req.params.status) : 1);
+        if (datas.count == 0) return res.status(HttpStatus.NOT_FOUND).send();
+        return res.status(HttpStatus.OK).send({ data: datas.data, count: datas.count });
+    } catch (err) {
+        console.error(err);
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
+    }
+}

@@ -19,6 +19,37 @@ class transactionDAL {
             }
         });
     }
+    getTransactionList(limit = 10, offset = 0, status) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let data = await data_access_1.DAL.mysqlConnector.transaction.findAndCountAll({
+                    limit: limit, offset: offset,
+                    where: { status: status },
+                    order: [['last_update', 'desc']]
+                });
+                resolve({ data: data.rows, count: data.count });
+            }
+            catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+    }
+    getTransactionById(id) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let data = await data_access_1.DAL.mysqlConnector.transaction.findOne({ where: { id: id } });
+                if (data)
+                    resolve(data);
+                else
+                    resolve(null);
+            }
+            catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+    }
 }
 exports.transactionDAL = transactionDAL;
 //# sourceMappingURL=transaction.js.map

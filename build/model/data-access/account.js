@@ -113,11 +113,11 @@ class accountDAL {
             }
         });
     }
-    getAccountList() {
+    getAccountList(limit = 10, offset = 0) {
         return new Promise(async (resolve, reject) => {
             try {
-                let accountList = await data_access_1.DAL.mysqlConnector.account.findAll();
-                resolve(accountList);
+                let data = await data_access_1.DAL.mysqlConnector.account.findAndCountAll({ limit: limit, offset: offset });
+                resolve({ data: data.rows, count: data.count });
             }
             catch (err) {
                 console.error(err);
@@ -129,6 +129,21 @@ class accountDAL {
         return new Promise(async (resolve, reject) => {
             try {
                 await data_access_1.DAL.mysqlConnector.account.update({ _isVerify: 1 }, { where: { id: id } });
+                resolve(true);
+            }
+            catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+    }
+    editAccountTypeAndActive(data) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let account_data = {};
+                data.type ? account_data.type = data.type : '';
+                data._isActive ? account_data._isActive = data._isActive : '';
+                await data_access_1.DAL.mysqlConnector.account.update(account_data, { where: { id: data.id } });
                 resolve(true);
             }
             catch (err) {
