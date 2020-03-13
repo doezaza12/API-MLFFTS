@@ -66,6 +66,18 @@ class chargesDAL {
             }
         });
     }
+    getChargesByCpkid(cpk_1, cpk_2) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let data = await data_access_1.DAL.mysqlConnector.charges.findOne({ where: { cpk_1: cpk_1, cpk_2: cpk_2 } });
+                resolve(data);
+            }
+            catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+    }
 }
 exports.chargesDAL = chargesDAL;
 //# sourceMappingURL=charges.js.map

@@ -50,6 +50,20 @@ class transactionDAL {
             }
         });
     }
+    insertTransaction(data) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let result = await data_access_1.DAL.mysqlConnector.transaction.create(data);
+                if (result)
+                    resolve(true);
+                resolve(false);
+            }
+            catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+    }
 }
 exports.transactionDAL = transactionDAL;
 //# sourceMappingURL=transaction.js.map

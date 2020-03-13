@@ -11,6 +11,7 @@ import * as ChargesCtrl from '../controller/charges';
 import * as LpinfoCtrl from '../controller/lp_info';
 import * as TransactionCtrl from '../controller/transaction';
 import * as NotifyCtrl from '../controller/notification';
+import * as HistoryCtrl from '../controller/history';
 
 const router = express.Router();
 
@@ -58,9 +59,14 @@ router.post('/charges/delete', Middleware.authentication, Middleware.checkAdminR
 router.post('/charges/edit', Middleware.authentication, Middleware.checkAdminRole, ChargesCtrl.editCharges);
 
 // transaction
+router.post('/transaction/add', Middleware.authentication, Middleware.checkAdminRole, TransactionCtrl.insertTransactions);
 router.get('/transaction/gen', Middleware.authentication, TransactionCtrl.genTransactionPDF);
 router.get('/transaction', Middleware.authentication, TransactionCtrl.getTransactions);
 router.get('/transaction/limit=:limit&offset=:offset&status=:status', Middleware.authentication, TransactionCtrl.getTransactions);
 router.get('/transaction/limit=:limit&offset=:offset', Middleware.authentication, TransactionCtrl.getTransactions);
+
+// admin
+router.get('/invalid/info', Middleware.authentication, Middleware.checkAdminRole, HistoryCtrl.getDataLostInfo);
+router.get('/invalid/limit=:limit&offset=:offset&cpkid=:cpk_id', Middleware.authentication, Middleware.checkAdminRole, HistoryCtrl.getDataLostList);
 
 export { router };

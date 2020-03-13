@@ -50,4 +50,15 @@ export class lpInfoDAL {
             }
         });
     }
+    getLpByLpnumAndProvince(lp_num: string, prov: string) {
+        return new Promise<lp_infoAttribute>(async (resolve, reject) => {
+            try {
+                let lp = await DAL.mysqlConnector.lp_info.findOne({ where: { license_number: lp_num, province: prov } });
+                resolve(lp);
+            } catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+    }
 }

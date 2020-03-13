@@ -43,7 +43,7 @@ export class chargesDAL {
         return new Promise<any>(async (resolve, reject) => {
             try {
                 let data = await DAL.mysqlConnector.charges.findAndCountAll({ limit: limit, offset: offset });
-                resolve({data: data.rows, count: data.count});
+                resolve({ data: data.rows, count: data.count });
             } catch (err) {
                 console.error(err);
                 reject(err);
@@ -54,6 +54,17 @@ export class chargesDAL {
         return new Promise<chargesAttribute>(async (resolve, reject) => {
             try {
                 let data = await DAL.mysqlConnector.charges.findOne({ where: { id: id } });
+                resolve(data);
+            } catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+    }
+    getChargesByCpkid(cpk_1: number, cpk_2: number) {
+        return new Promise<chargesAttribute>(async (resolve, reject) => {
+            try {
+                let data = await DAL.mysqlConnector.charges.findOne({ where: { cpk_1: cpk_1, cpk_2: cpk_2 } });
                 resolve(data);
             } catch (err) {
                 console.error(err);

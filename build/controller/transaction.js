@@ -5,9 +5,9 @@ const pdf_1 = require("../util/pdf");
 const data_access_1 = require("../model/data-access/data-access");
 async function genTransactionPDF(req, res, next) {
     try {
-        let transactions = await data_access_1.DAL.transactionDAL.getTransaction(req['payload'].id);
+        let transactions = await data_access_1.DAL.transactionDAL.getTransaction(req['payload'].id, req.query.lp_id, req.query.date_from ? req.query.date_from : null, req.query.date_to ? req.query.date_to : null);
         let userInfo = await data_access_1.DAL.userInfoDAL.getUserInfoByAccountId(req['payload'].id);
-        let lpInfo = await data_access_1.DAL.lpInfoDAL.getLpById(parseInt(req.body.lp_id));
+        let lpInfo = await data_access_1.DAL.lpInfoDAL.getLpById(parseInt(req.query.lp_id));
         let charges_info = [];
         for (let i = 0; i < transactions.length; i++) {
             if (charges_info.filter((ele) => { return ele.id == transactions[i].charges_id; }).length == 0) {
@@ -69,4 +69,33 @@ async function getTransactions(req, res, next) {
     }
 }
 exports.getTransactions = getTransactions;
+async function insertTransactions(req, res, next) {
+    try {
+        let transaction_data = {};
+        let lp_info = (await data_access_1.DAL.lpInfoDAL.getLpByLpnumAndProvince(req.body.lp_num, req.body.province));
+        if (!lp_info)
+            return res.status(HttpStatus.NOT_FOUND).send('License plate number was not found on the server.');
+        let account_id = (await data_access_1.DAL.userInfoDAL.getUserInfoIdByEcodeId(lp_info.e_code_id)).account_id;
+        transaction_data.account_id = account_id;
+        transaction_data.charges_id = req.body.charges_id;
+        transaction_data.lp_id = lp_info.id;
+        let wallet = (await data_access_1.DAL.easypassDAL.getEasyPassById(lp_info.e_code_id)).wallet;
+        let cost = (await data_access_1.DAL.chargesDAL.getChargesById(transaction_data.charges_id)).cost;
+        if (wallet - cost >= 0) {
+            await data_access_1.DAL.easypassDAL.updateWallet(lp_info.e_code_id, wallet - cost);
+            transaction_data.status = 1;
+        }
+        else
+            transaction_data.status = 0;
+        let result = await data_access_1.DAL.transactionDAL.insertTransaction(transaction_data);
+        if (result)
+            return res.status(HttpStatus.CREATED).send();
+        return res.status(HttpStatus.NOT_ACCEPTABLE);
+    }
+    catch (err) {
+        console.error(err);
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
+    }
+}
+exports.insertTransactions = insertTransactions;
 //# sourceMappingURL=transaction.js.map

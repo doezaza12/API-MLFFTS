@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Sequelize = require("sequelize");
+const Mongoose = require("mongoose");
 const mysql_connector_1 = require("../mysql-connector");
 const account_1 = require("./account");
 const user_info_1 = require("./user_info");
@@ -9,6 +10,7 @@ const checkpoint_1 = require("./checkpoint");
 const charges_1 = require("./charges");
 const transaction_1 = require("./transaction");
 const easypass_1 = require("./easypass");
+const history_1 = require("./history");
 class DAL {
     constructor(config) {
         try {
@@ -33,6 +35,9 @@ class DAL {
             DAL.chargesDAL = new charges_1.chargesDAL();
             DAL.transactionDAL = new transaction_1.transactionDAL();
             DAL.easypassDAL = new easypass_1.easypassDAL();
+            // MongoDB
+            DAL.mongoConnector = Mongoose.createConnection(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true, dbName: 'mlffts' });
+            DAL.historyDAL = new history_1.historyDAL();
         }
         catch (err) {
             console.error(err);

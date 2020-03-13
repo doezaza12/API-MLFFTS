@@ -3,12 +3,14 @@ import * as HttpStatus from 'http-status-codes';
 import { PDFDocumentCustom as PDFDocument } from '../util/pdf';
 
 import { DAL } from '../model/data-access/data-access';
+import { transactionAttribute } from '../model/db';
 
 export async function genTransactionPDF(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
-        let transactions = await DAL.transactionDAL.getTransaction(req['payload'].id);
+        let transactions = await DAL.transactionDAL.getTransaction(req['payload'].id, req.query.lp_id,
+            req.query.date_from ? req.query.date_from : null, req.query.date_to ? req.query.date_to : null);
         let userInfo = await DAL.userInfoDAL.getUserInfoByAccountId(req['payload'].id);
-        let lpInfo = await DAL.lpInfoDAL.getLpById(parseInt(req.body.lp_id));
+        let lpInfo = await DAL.lpInfoDAL.getLpById(parseInt(req.query.lp_id));
         let charges_info = [];
         for (let i = 0; i < transactions.length; i++) {
             if (charges_info.filter((ele) => { return ele.id == transactions[i].charges_id }).length == 0) {
@@ -63,6 +65,31 @@ export async function getTransactions(req: express.Request, res: express.Respons
             req.params.offset ? parseInt(req.params.offset) : 0, req.params.status ? parseInt(req.params.status) : 1);
         if (datas.count == 0) return res.status(HttpStatus.NOT_FOUND).send();
         return res.status(HttpStatus.OK).send({ data: datas.data, count: datas.count });
+    } catch (err) {
+        console.error(err);
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
+    }
+}
+
+export async function insertTransactions(req: express.Request, res: express.Response, next: express.NextFunction) {
+    try {
+        let transaction_data = {} as transactionAttribute;
+        let lp_info = (await DAL.lpInfoDAL.getLpByLpnumAndProvince(req.body.lp_num, req.body.province));
+        if (!lp_info) return res.status(HttpStatus.NOT_FOUND).send('License plate number was not found on the server.');
+        let account_id = (await DAL.userInfoDAL.getUserInfoIdByEcodeId(lp_info.e_code_id)).account_id;
+        transaction_data.account_id = account_id;
+        transaction_data.charges_id = req.body.charges_id;
+        transaction_data.lp_id = lp_info.id;
+        let wallet = (await DAL.easypassDAL.getEasyPassById(lp_info.e_code_id)).wallet;
+        let cost = (await DAL.chargesDAL.getChargesById(transaction_data.charges_id)).cost;
+        if (wallet - cost >= 0) {
+            await DAL.easypassDAL.updateWallet(lp_info.e_code_id, wallet - cost);
+            transaction_data.status = 1;
+        }
+        else transaction_data.status = 0;
+        let result = await DAL.transactionDAL.insertTransaction(transaction_data);
+        if (result) return res.status(HttpStatus.CREATED).send();
+        return res.status(HttpStatus.NOT_ACCEPTABLE)
     } catch (err) {
         console.error(err);
         return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();

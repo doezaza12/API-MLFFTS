@@ -24,4 +24,15 @@ export class easypassDAL {
             }
         });
     }
+    updateWallet(e_code_id: number, wallet: number) {
+        return new Promise<boolean>(async (resolve, reject) => {
+            try {
+                await DAL.mysqlConnector.easypass.update({ wallet: wallet }, { where: { id: e_code_id } });
+                resolve(true);
+            } catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+    }
 }

@@ -54,6 +54,18 @@ class lpInfoDAL {
             }
         });
     }
+    getLpByLpnumAndProvince(lp_num, prov) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let lp = await data_access_1.DAL.mysqlConnector.lp_info.findOne({ where: { license_number: lp_num, province: prov } });
+                resolve(lp);
+            }
+            catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+    }
 }
 exports.lpInfoDAL = lpInfoDAL;
 //# sourceMappingURL=lp_info.js.map

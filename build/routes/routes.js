@@ -11,6 +11,7 @@ const ChargesCtrl = require("../controller/charges");
 const LpinfoCtrl = require("../controller/lp_info");
 const TransactionCtrl = require("../controller/transaction");
 const NotifyCtrl = require("../controller/notification");
+const HistoryCtrl = require("../controller/history");
 const router = express.Router();
 exports.router = router;
 // account
@@ -49,8 +50,12 @@ router.post('/charges/add', Middleware.authentication, Middleware.checkAdminRole
 router.post('/charges/delete', Middleware.authentication, Middleware.checkAdminRole, ChargesCtrl.deleteCharges);
 router.post('/charges/edit', Middleware.authentication, Middleware.checkAdminRole, ChargesCtrl.editCharges);
 // transaction
+router.post('/transaction/add', Middleware.authentication, Middleware.checkAdminRole, TransactionCtrl.insertTransactions);
 router.get('/transaction/gen', Middleware.authentication, TransactionCtrl.genTransactionPDF);
 router.get('/transaction', Middleware.authentication, TransactionCtrl.getTransactions);
 router.get('/transaction/limit=:limit&offset=:offset&status=:status', Middleware.authentication, TransactionCtrl.getTransactions);
 router.get('/transaction/limit=:limit&offset=:offset', Middleware.authentication, TransactionCtrl.getTransactions);
+// admin
+router.get('/invalid/info', Middleware.authentication, Middleware.checkAdminRole, HistoryCtrl.getDataLostInfo);
+router.get('/invalid/limit=:limit&offset=:offset&cpkid=:cpk_id', Middleware.authentication, Middleware.checkAdminRole, HistoryCtrl.getDataLostList);
 //# sourceMappingURL=routes.js.map

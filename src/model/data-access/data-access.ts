@@ -1,4 +1,5 @@
 import * as Sequelize from 'sequelize';
+import * as Mongoose from 'mongoose';
 
 import { MySqlConfig } from '../../util/config';
 import { MySQLConnector } from '../mysql-connector';
@@ -9,6 +10,7 @@ import { checkpointDAL } from './checkpoint';
 import { chargesDAL } from './charges';
 import { transactionDAL } from './transaction';
 import { easypassDAL } from './easypass';
+import { historyDAL } from './history';
 
 export class DAL {
     static sequelize: Sequelize.Sequelize;
@@ -20,6 +22,8 @@ export class DAL {
     static chargesDAL: chargesDAL;
     static transactionDAL: transactionDAL;
     static easypassDAL: easypassDAL;
+    static historyDAL: historyDAL;
+    static mongoConnector: Mongoose.Connection
 
     constructor(config: MySqlConfig) {
         try {
@@ -42,6 +46,11 @@ export class DAL {
             DAL.chargesDAL = new chargesDAL();
             DAL.transactionDAL = new transactionDAL();
             DAL.easypassDAL = new easypassDAL();
+
+            // MongoDB
+            DAL.mongoConnector = Mongoose.createConnection(process.env.MONGO_URI,
+                { useNewUrlParser: true, useUnifiedTopology: true, dbName: 'mlffts' });
+            DAL.historyDAL = new historyDAL();
         } catch (err) {
             console.error(err);
         }

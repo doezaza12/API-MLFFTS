@@ -46,4 +46,16 @@ export class transactionDAL {
             }
         });
     }
+    insertTransaction(data: transactionAttribute) {
+        return new Promise<boolean>(async (resolve, reject) => {
+            try {
+                let result = await DAL.mysqlConnector.transaction.create(data);
+                if (result) resolve(true);
+                resolve(false);
+            } catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+    }
 }
