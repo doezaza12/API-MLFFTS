@@ -38,3 +38,19 @@ export async function deleteLpinfo(req: express.Request, res: express.Response, 
         return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
     }
 }
+
+export async function searchWildcardLpNum(req: express.Request, res: express.Response, next: express.NextFunction) {
+    try {
+        let lp_list = null;
+        if (req.query.type == 'lp_num') lp_list = await DAL.lpInfoDAL.getLpNumByWildcard(req.query.wildcard);
+        else {
+            lp_list = (await DAL.lpInfoDAL.getProvByWildcard(req.query.wildcard)).filter((value, index, self) => {
+                return self.indexOf(value) === index;
+            });
+        }
+        return res.status(HttpStatus.OK).send({ data: lp_list });
+    } catch (err) {
+        console.error(err);
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
+    }
+}

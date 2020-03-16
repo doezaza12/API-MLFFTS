@@ -40,4 +40,22 @@ async function deleteLpinfo(req, res, next) {
     }
 }
 exports.deleteLpinfo = deleteLpinfo;
+async function searchWildcardLpNum(req, res, next) {
+    try {
+        let lp_list = null;
+        if (req.query.type == 'lp_num')
+            lp_list = await data_access_1.DAL.lpInfoDAL.getLpNumByWildcard(req.query.wildcard);
+        else {
+            lp_list = (await data_access_1.DAL.lpInfoDAL.getProvByWildcard(req.query.wildcard)).filter((value, index, self) => {
+                return self.indexOf(value) === index;
+            });
+        }
+        return res.status(HttpStatus.OK).send({ data: lp_list });
+    }
+    catch (err) {
+        console.error(err);
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
+    }
+}
+exports.searchWildcardLpNum = searchWildcardLpNum;
 //# sourceMappingURL=lp_info.js.map

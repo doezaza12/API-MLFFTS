@@ -61,7 +61,23 @@ async function getTransactions(req, res, next) {
         let datas = await data_access_1.DAL.transactionDAL.getTransactionList(req.params.limit ? parseInt(req.params.limit) : 10, req.params.offset ? parseInt(req.params.offset) : 0, req.params.status ? parseInt(req.params.status) : 1);
         if (datas.count == 0)
             return res.status(HttpStatus.NOT_FOUND).send();
-        return res.status(HttpStatus.OK).send({ data: datas.data, count: datas.count });
+        let transaction_data = [];
+        for (let i = 0; i < parseInt(req.params.limit); i++) {
+            let template_data = {};
+            let lp_info = await data_access_1.DAL.lpInfoDAL.getLpById(datas.data[i].lp_id);
+            let charge_info = await data_access_1.DAL.chargesDAL.getChargesById(datas.data[i].charges_id);
+            let cpk_1 = await data_access_1.DAL.checkpointDAL.getCheckpointById(charge_info.cpk_1);
+            let cpk_2 = await data_access_1.DAL.checkpointDAL.getCheckpointById(charge_info.cpk_2);
+            template_data.lp_info = lp_info.license_number + ' ' + lp_info.province;
+            template_data.from_th = cpk_1.area_name;
+            template_data.from_en = cpk_1.area_name_en;
+            template_data.to_th = cpk_2.area_name;
+            template_data.to_en = cpk_2.area_name_en;
+            template_data.cost = charge_info.cost;
+            template_data.last_update = datas.data[i].last_update;
+            transaction_data.push(template_data);
+        }
+        return res.status(HttpStatus.OK).send({ data: transaction_data, count: datas.count });
     }
     catch (err) {
         console.error(err);
@@ -90,6 +106,7 @@ async function insertTransactions(req, res, next) {
         else
             transaction_data.status = 0;
         let result = await data_access_1.DAL.transactionDAL.insertTransaction(transaction_data);
+        await data_access_1.DAL.historyDAL.updateExistHistory(req.body.history);
         if (result)
             return res.status(HttpStatus.CREATED).send();
         return res.status(HttpStatus.NOT_ACCEPTABLE);

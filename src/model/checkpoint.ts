@@ -27,6 +27,11 @@ module.exports = function(sequelize: sequelize.Sequelize, DataTypes: DataTypes) 
 			type: DataTypes.STRING(100),
 			allowNull: true,
 			comment: "null"
+		},
+		'area_name_en': {
+			type: DataTypes.STRING(100),
+			allowNull: true,
+			comment: "null"
 		}
 	}, {
 		tableName: 'checkpoint',

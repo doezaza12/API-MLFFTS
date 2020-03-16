@@ -26,6 +26,7 @@ router.post('/profile/edit', Middleware.authentication, UserInfoCtrl.editUserInf
 // lpinfo
 router.get('/lpinfo', Middleware.authentication, LpinfoCtrl.getLpList);
 router.get('/lpinfo/limit=:limit&offset=:offset', Middleware.authentication, LpinfoCtrl.getLpList);
+router.get('/lpinfo/wc', Middleware.authentication, Middleware.checkAdminRole, LpinfoCtrl.searchWildcardLpNum);
 router.post('/lpinfo/add', Middleware.authentication, LpinfoCtrl.insertLpinfo);
 router.post('/lpinfo/delete', Middleware.authentication, LpinfoCtrl.deleteLpinfo);
 // login

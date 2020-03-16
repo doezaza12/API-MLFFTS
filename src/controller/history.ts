@@ -29,7 +29,7 @@ export async function getDataLostInfo(req: express.Request, res: express.Respons
                 // console.log(data)
                 return res.status(HttpStatus.OK).send({
                     charge_id: (await DAL.chargesDAL.getChargesByCpkid(parseInt(req.query.cpk_1), parseInt(req.query.cpk_2))).id,
-                    image: data.Body.toString('base64'),
+                    image: 'data:image/png;base64,' + data.Body.toString('base64')
                 });
             });
     } catch (err) {

@@ -61,4 +61,42 @@ export class lpInfoDAL {
             }
         });
     }
+    getLpNumByWildcard(lp_num: string) {
+        return new Promise<string[]>(async (resolve, reject) => {
+            try {
+                let lp_list = await DAL.mysqlConnector.lp_info.findAll({
+                    attributes: ['license_number'],
+                    where: { license_number: { $like: `${lp_num}%` } },
+                    limit: 10
+                });
+                let list = [];
+                for (let i = 0; i < lp_list.length; i++) {
+                    list.push(lp_list[i].license_number);
+                }
+                resolve(list);
+            } catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+    }
+    getProvByWildcard(prov: string) {
+        return new Promise<string[]>(async (resolve, reject) => {
+            try {
+                let lp_list = await DAL.mysqlConnector.lp_info.findAll({
+                    attributes: ['province'],
+                    where: { license_number: { $like: `${prov}%` } },
+                    limit: 10
+                });
+                let list = [];
+                for (let i = 0; i < lp_list.length; i++) {
+                    list.push(lp_list[i].province);
+                }
+                resolve(list);
+            } catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+    }
 }

@@ -24,6 +24,18 @@ class historyDAL {
             }
         });
     }
+    updateExistHistory(history_data) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await data_access_1.DAL.mongoConnector.collection('history').updateOne(history_data, { '$set': { isExist: 1 } });
+                resolve(true);
+            }
+            catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+    }
 }
 exports.historyDAL = historyDAL;
 //# sourceMappingURL=history.js.map
