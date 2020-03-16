@@ -39,11 +39,15 @@ export class checkpointDAL {
             }
         });
     }
-    getCheckpoints(limit = 10, offset = 0) {
+    getCheckpoints(limit: number, offset: number) {
         return new Promise<any>(async (resolve, reject) => {
             try {
-                let data = await DAL.mysqlConnector.checkpoint.findAndCountAll({ limit: limit, offset: offset });
-                resolve({data: data.rows, count: data.count});
+                let data = null;
+                if (!limit)
+                    data = await DAL.mysqlConnector.checkpoint.findAndCountAll();
+                else
+                    data = await DAL.mysqlConnector.checkpoint.findAndCountAll({ limit: limit, offset: offset });
+                resolve({ data: data.rows, count: data.count });
             } catch (err) {
                 console.error(err);
                 reject(err);
@@ -53,7 +57,7 @@ export class checkpointDAL {
     getCheckpointById(id: number) {
         return new Promise<checkpointAttribute>(async (resolve, reject) => {
             try {
-                let data = await DAL.mysqlConnector.checkpoint.findOne({ where: {id: id} });
+                let data = await DAL.mysqlConnector.checkpoint.findOne({ where: { id: id } });
                 resolve(data);
             } catch (err) {
                 console.error(err);

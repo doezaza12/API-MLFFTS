@@ -45,7 +45,7 @@ export async function editCheckpoint(req: express.Request, res: express.Response
 
 export async function getCheckpoint(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
-        let datas = await DAL.checkpointDAL.getCheckpoints(req.params.limit ? parseInt(req.params.limit) : 10, req.params.offset ? parseInt(req.params.offset) : 0);
+        let datas = await DAL.checkpointDAL.getCheckpoints(req.params.limit ? parseInt(req.params.limit) : null, req.params.offset ? parseInt(req.params.offset) : null);
         if (datas.count == 0) return res.status(HttpStatus.NOT_FOUND).send();
         return res.status(HttpStatus.OK).send({data: datas.data, count: datas.count});
     } catch (err) {

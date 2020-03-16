@@ -42,10 +42,14 @@ class checkpointDAL {
             }
         });
     }
-    getCheckpoints(limit = 10, offset = 0) {
+    getCheckpoints(limit, offset) {
         return new Promise(async (resolve, reject) => {
             try {
-                let data = await data_access_1.DAL.mysqlConnector.checkpoint.findAndCountAll({ limit: limit, offset: offset });
+                let data = null;
+                if (!limit)
+                    data = await data_access_1.DAL.mysqlConnector.checkpoint.findAndCountAll();
+                else
+                    data = await data_access_1.DAL.mysqlConnector.checkpoint.findAndCountAll({ limit: limit, offset: offset });
                 resolve({ data: data.rows, count: data.count });
             }
             catch (err) {
