@@ -79,6 +79,8 @@ async function insertTransactions(req, res, next) {
         transaction_data.account_id = account_id;
         transaction_data.charges_id = req.body.charges_id;
         transaction_data.lp_id = lp_info.id;
+        let recipient_info = await data_access_1.DAL.userInfoDAL.getUserInfoByAccountId(req['payload'].id);
+        transaction_data.recipient = recipient_info.firstname + ' ' + (recipient_info.lastname ? recipient_info.lastname : '');
         let wallet = (await data_access_1.DAL.easypassDAL.getEasyPassById(lp_info.e_code_id)).wallet;
         let cost = (await data_access_1.DAL.chargesDAL.getChargesById(transaction_data.charges_id)).cost;
         if (wallet - cost >= 0) {

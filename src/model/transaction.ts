@@ -50,6 +50,11 @@ module.exports = function(sequelize: sequelize.Sequelize, DataTypes: DataTypes) 
 			type: DataTypes.INTEGER(1),
 			allowNull: true,
 			comment: "0 : not paid, 1 : paid"
+		},
+		'recipient': {
+			type: DataTypes.STRING(255),
+			allowNull: true,
+			comment: "null"
 		}
 	}, {
 		tableName: 'transaction',

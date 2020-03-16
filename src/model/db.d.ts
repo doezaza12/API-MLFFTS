@@ -2,6 +2,16 @@
 import * as Sequelize from 'sequelize';
 
 
+// table: checkpoint
+export interface checkpointAttribute {
+	id:any;
+	lat?:any;
+	lng?:any;
+	area_name?:any;
+}
+export interface checkpointInstance extends Sequelize.Instance<checkpointAttribute>, checkpointAttribute { }
+export interface checkpointModel extends Sequelize.Model<checkpointInstance, checkpointAttribute> { }
+
 // table: charges
 export interface chargesAttribute {
 	id:any;
@@ -11,16 +21,6 @@ export interface chargesAttribute {
 }
 export interface chargesInstance extends Sequelize.Instance<chargesAttribute>, chargesAttribute { }
 export interface chargesModel extends Sequelize.Model<chargesInstance, chargesAttribute> { }
-
-// table: lp_info
-export interface lp_infoAttribute {
-	id:any;
-	e_code_id:any;
-	license_number?:any;
-	province?:any;
-}
-export interface lp_infoInstance extends Sequelize.Instance<lp_infoAttribute>, lp_infoAttribute { }
-export interface lp_infoModel extends Sequelize.Model<lp_infoInstance, lp_infoAttribute> { }
 
 // table: account
 export interface accountAttribute {
@@ -36,16 +36,6 @@ export interface accountAttribute {
 export interface accountInstance extends Sequelize.Instance<accountAttribute>, accountAttribute { }
 export interface accountModel extends Sequelize.Model<accountInstance, accountAttribute> { }
 
-// table: checkpoint
-export interface checkpointAttribute {
-	id:any;
-	lat?:any;
-	lng?:any;
-	area_name?:any;
-}
-export interface checkpointInstance extends Sequelize.Instance<checkpointAttribute>, checkpointAttribute { }
-export interface checkpointModel extends Sequelize.Model<checkpointInstance, checkpointAttribute> { }
-
 // table: easypass
 export interface easypassAttribute {
 	id:any;
@@ -55,6 +45,16 @@ export interface easypassAttribute {
 export interface easypassInstance extends Sequelize.Instance<easypassAttribute>, easypassAttribute { }
 export interface easypassModel extends Sequelize.Model<easypassInstance, easypassAttribute> { }
 
+// table: lp_info
+export interface lp_infoAttribute {
+	id:any;
+	e_code_id:any;
+	license_number?:any;
+	province?:any;
+}
+export interface lp_infoInstance extends Sequelize.Instance<lp_infoAttribute>, lp_infoAttribute { }
+export interface lp_infoModel extends Sequelize.Model<lp_infoInstance, lp_infoAttribute> { }
+
 // table: transaction
 export interface transactionAttribute {
 	id:any;
@@ -63,6 +63,7 @@ export interface transactionAttribute {
 	charges_id?:any;
 	last_update?:any;
 	status?:any;
+	recipient?:any;
 }
 export interface transactionInstance extends Sequelize.Instance<transactionAttribute>, transactionAttribute { }
 export interface transactionModel extends Sequelize.Model<transactionInstance, transactionAttribute> { }

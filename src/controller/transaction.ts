@@ -80,6 +80,8 @@ export async function insertTransactions(req: express.Request, res: express.Resp
         transaction_data.account_id = account_id;
         transaction_data.charges_id = req.body.charges_id;
         transaction_data.lp_id = lp_info.id;
+        let recipient_info = await DAL.userInfoDAL.getUserInfoByAccountId(req['payload'].id);
+        transaction_data.recipient = recipient_info.firstname + ' ' + (recipient_info.lastname ? recipient_info.lastname : '');
         let wallet = (await DAL.easypassDAL.getEasyPassById(lp_info.e_code_id)).wallet;
         let cost = (await DAL.chargesDAL.getChargesById(transaction_data.charges_id)).cost;
         if (wallet - cost >= 0) {
