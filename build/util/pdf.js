@@ -25,9 +25,9 @@ class PDFDocumentCustom extends PDFDocument {
         const prepareRow = options.prepareRow || (() => { });
         const computeRowHeight = (row) => {
             let result = 0;
-            row.forEach((cell) => {
+            row.forEach((cell, i) => {
                 const cellHeight = this.heightOfString(cell, {
-                    width: columnWidth,
+                    width: columnSpacingList[i],
                     align: 'left'
                 });
                 result = Math.max(result, cellHeight);
@@ -37,6 +37,8 @@ class PDFDocumentCustom extends PDFDocument {
         const columnContainerWidth = usableWidth / columnCount;
         const columnWidth = columnContainerWidth - columnSpacing;
         const maxY = this.page.height - this.page.margins.bottom;
+        let columnSpacingList = [columnWidth, columnWidth, columnWidth + 50, columnWidth];
+        let columnWidthList = [columnContainerWidth, columnContainerWidth - 50, columnContainerWidth - 20, columnContainerWidth + 20];
         let rowBottomY = 0;
         this.on('pageAdded', () => {
             startY = this.page.margins.top;
@@ -49,8 +51,8 @@ class PDFDocumentCustom extends PDFDocument {
             this.addPage();
         // Print all headers
         table.headers.forEach((header, i) => {
-            this.font('fonts/THSarabunNew Bold.ttf').text(header, startX + i * columnContainerWidth, startY, {
-                width: columnWidth,
+            this.font('fonts/THSarabunNew Bold.ttf').text(header, startX + i * columnWidthList[i], startY, {
+                width: columnSpacingList[i],
                 align: 'left'
             });
             // Revert
@@ -75,8 +77,8 @@ class PDFDocumentCustom extends PDFDocument {
             prepareRow(row, i);
             // Print all cells of the current row
             row.forEach((cell, i) => {
-                this.text(cell, startX + i * columnContainerWidth, startY, {
-                    width: columnWidth,
+                this.text(cell, startX + i * columnWidthList[i], startY, {
+                    width: columnSpacingList[i],
                     align: 'left'
                 });
             });

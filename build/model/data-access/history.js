@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const Mongoose = require("mongoose");
 const data_access_1 = require("./data-access");
 class historyDAL {
     getHistoryList(cpk_id, limit, offset) {
@@ -24,10 +25,10 @@ class historyDAL {
             }
         });
     }
-    updateExistHistory(history_data) {
+    updateExistHistory(history_id) {
         return new Promise(async (resolve, reject) => {
             try {
-                await data_access_1.DAL.mongoConnector.collection('history').updateOne(history_data, { '$set': { isExist: 1 } });
+                await data_access_1.DAL.mongoConnector.collection('history').updateOne({ _id: Mongoose.Types.ObjectId(history_id) }, { '$set': { isExist: 1 } });
                 resolve(true);
             }
             catch (err) {

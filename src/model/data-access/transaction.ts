@@ -35,7 +35,7 @@ export class transactionDAL {
         });
     }
     getTransactionById(id: number) {
-        return new Promise<any>(async (resolve, reject) => {
+        return new Promise<transactionAttribute>(async (resolve, reject) => {
             try {
                 let data = await DAL.mysqlConnector.transaction.findOne({ where: { id: id } });
                 if (data) resolve(data);

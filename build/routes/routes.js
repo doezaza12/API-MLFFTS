@@ -52,6 +52,7 @@ router.post('/charges/delete', Middleware.authentication, Middleware.checkAdminR
 router.post('/charges/edit', Middleware.authentication, Middleware.checkAdminRole, ChargesCtrl.editCharges);
 // transaction
 router.post('/transaction/add', Middleware.authentication, Middleware.checkAdminRole, TransactionCtrl.insertTransactions);
+router.get('/transaction/single-gen', Middleware.authentication, TransactionCtrl.genSingleTransactionPDF);
 router.get('/transaction/gen', Middleware.authentication, TransactionCtrl.genTransactionPDF);
 router.get('/transaction', Middleware.authentication, TransactionCtrl.getTransactions);
 router.get('/transaction/limit=:limit&offset=:offset&status=:status', Middleware.authentication, TransactionCtrl.getTransactions);

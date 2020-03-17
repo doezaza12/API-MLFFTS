@@ -1,3 +1,4 @@
+import * as Mongoose from 'mongoose';
 import { DAL } from './data-access'
 
 export class historyDAL {
@@ -20,10 +21,10 @@ export class historyDAL {
             }
         });
     }
-    updateExistHistory(history_data: any) {
+    updateExistHistory(history_id: any) {
         return new Promise<boolean>(async (resolve, reject) => {
             try {
-                await DAL.mongoConnector.collection('history').updateOne(history_data, {'$set': {isExist: 1}});
+                await DAL.mongoConnector.collection('history').updateOne({ _id: Mongoose.Types.ObjectId(history_id) }, { '$set': { isExist: 1 } });
                 resolve(true);
             } catch (err) {
                 console.error(err);

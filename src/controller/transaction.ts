@@ -4,6 +4,52 @@ import { PDFDocumentCustom as PDFDocument } from '../util/pdf';
 
 import { DAL } from '../model/data-access/data-access';
 import { transactionAttribute } from '../model/db';
+export async function genSingleTransactionPDF(req: express.Request, res: express.Response, next: express.NextFunction) {
+    try {
+        let transactions = await DAL.transactionDAL.getTransactionById(req.query.transaction_id);
+        let userInfo = await DAL.userInfoDAL.getUserInfoByAccountId(req['payload'].id);
+        let lpInfo = await DAL.lpInfoDAL.getLpById(transactions.lp_id);
+        let charge = await DAL.chargesDAL.getChargesById(transactions.charges_id);
+        let cpk_1 = await DAL.checkpointDAL.getCheckpointById(charge.cpk_1);
+        let cpk_2 = await DAL.checkpointDAL.getCheckpointById(charge.cpk_2);
+        let charges_info = { id: transactions.charges_id, cpk_1: cpk_1.area_name, cpk_2: cpk_2.area_name, cost: charge.cost };
+        const tableInfo = {
+            headers: ['ข้อมูลผู้ใช้', ''],
+            rows: [
+                [
+                    `หมายเลข e-code: ${(await DAL.easypassDAL.getEasyPassById(userInfo.e_code_id)).e_code}\nชื่อเจ้าของบัตร: ${userInfo.firstname} ${userInfo.lastname}\nเลขที่เบียนรถ: ${lpInfo.license_number} ${lpInfo.province}`,
+                    `เลขบัตรประจำตัว: ${userInfo.citizen_id}\nemail: ${userInfo.email}`
+                ]
+            ]
+        }
+        const tableResult = {
+            headers: ['ลำดับ', 'สถานที่', 'วันที่', 'จำนวนเงิน'],
+            rows: []
+        };
+        let cost = 0;
+        let in_datetime = new Date((new Date(transactions.in_datetime)).setHours(new Date(transactions.in_datetime).getHours()-7));
+        let out_datetime = new Date((new Date(transactions.out_datetime)).setHours(new Date(transactions.out_datetime).getHours()-7))
+        tableResult.rows.push([`${1}`,
+        `${charges_info['cpk_1']} -> ${charges_info['cpk_2']}`,
+        `${in_datetime} -> ${out_datetime}`,
+        `${charges_info['cost']}`]);
+        cost += charges_info['cost'];
+        tableResult.rows.push([``, ``, `รวมทั้งสิ้น`, `${cost}`]);
+
+        const doc = new PDFDocument();
+        res.type('application/pdf');
+        doc.pipe(res);
+        doc.genHeader();
+        doc.fontSize(16);
+        doc.font('fonts/THSarabunNew.ttf');
+        doc.genTable(tableInfo).moveDown();
+        doc.genTable(tableResult).moveDown();
+        doc.end();
+    } catch (err) {
+        console.error(err);
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
+    }
+}
 
 export async function genTransactionPDF(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
@@ -24,7 +70,7 @@ export async function genTransactionPDF(req: express.Request, res: express.Respo
             headers: ['ข้อมูลผู้ใช้', ''],
             rows: [
                 [
-                    `หมายเลข e-code: ${await DAL.easypassDAL.getEasyPassById(userInfo.e_code_id)}\nชื่อเจ้าของบัตร: ${userInfo.firstname} ${userInfo.lastname}\nเลขที่เบียนรถ: ${lpInfo.license_number} ${lpInfo.province}`,
+                    `หมายเลข e-code: ${(await DAL.easypassDAL.getEasyPassById(userInfo.e_code_id)).e_code}\nชื่อเจ้าของบัตร: ${userInfo.firstname} ${userInfo.lastname}\nเลขที่เบียนรถ: ${lpInfo.license_number} ${lpInfo.province}`,
                     `เลขบัตรประจำตัว: ${userInfo.citizen_id}\nemail: ${userInfo.email}`
                 ]
             ]
@@ -38,7 +84,7 @@ export async function genTransactionPDF(req: express.Request, res: express.Respo
             let tmp_charges = charges_info.filter((ele) => { return ele.id == transactions[i].charges_id });
             tableResult.rows.push([`${i + 1}`,
             `${tmp_charges[0]['cpk_1']} -> ${tmp_charges[0]['cpk_2']}`,
-            `${transactions[i].last_update}`,
+            `${transactions[i].in_datetime} -> ${transactions[i].out_datetime}`,
             `${tmp_charges[0]['cost']}`]);
             cost += tmp_charges[0]['cost'];
         }
@@ -96,6 +142,8 @@ export async function insertTransactions(req: express.Request, res: express.Resp
         transaction_data.account_id = account_id;
         transaction_data.charges_id = req.body.charges_id;
         transaction_data.lp_id = lp_info.id;
+        transaction_data.in_datetime = req.body.in_datetime;
+        transaction_data.out_datetime = req.body.out_datetime;
         let recipient_info = await DAL.userInfoDAL.getUserInfoByAccountId(req['payload'].id);
         transaction_data.recipient = recipient_info.firstname + ' ' + (recipient_info.lastname ? recipient_info.lastname : '');
         let wallet = (await DAL.easypassDAL.getEasyPassById(lp_info.e_code_id)).wallet;
@@ -106,7 +154,7 @@ export async function insertTransactions(req: express.Request, res: express.Resp
         }
         else transaction_data.status = 0;
         let result = await DAL.transactionDAL.insertTransaction(transaction_data);
-        await DAL.historyDAL.updateExistHistory(req.body.history);
+        await DAL.historyDAL.updateExistHistory(req.body.history_id);
         if (result) return res.status(HttpStatus.CREATED).send();
         return res.status(HttpStatus.NOT_ACCEPTABLE)
     } catch (err) {

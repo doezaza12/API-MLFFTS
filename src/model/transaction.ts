@@ -55,6 +55,16 @@ module.exports = function(sequelize: sequelize.Sequelize, DataTypes: DataTypes) 
 			type: DataTypes.STRING(255),
 			allowNull: true,
 			comment: "null"
+		},
+		'in_datetime': {
+			type: DataTypes.DATE,
+			allowNull: true,
+			comment: "null"
+		},
+		'out_datetime': {
+			type: DataTypes.DATE,
+			allowNull: true,
+			comment: "null"
 		}
 	}, {
 		tableName: 'transaction',
