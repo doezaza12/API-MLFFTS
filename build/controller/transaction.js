@@ -115,6 +115,7 @@ async function getTransactions(req, res, next) {
             let charge_info = await data_access_1.DAL.chargesDAL.getChargesById(datas.data[i].charges_id);
             let cpk_1 = await data_access_1.DAL.checkpointDAL.getCheckpointById(charge_info.cpk_1);
             let cpk_2 = await data_access_1.DAL.checkpointDAL.getCheckpointById(charge_info.cpk_2);
+            template_data.id = datas.data[i].id;
             template_data.lp_info = lp_info.license_number + ' ' + lp_info.province;
             template_data.from_th = cpk_1.area_name;
             template_data.from_en = cpk_1.area_name_en;
