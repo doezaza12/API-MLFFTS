@@ -9,7 +9,7 @@ class transactionDAL {
                 condition.account_id = account_id;
                 lp_id ? condition.lp_id = lp_id : '';
                 condition.status = 1;
-                (date_from && date_to) ? condition.from = { $between: [date_from, date_to] } : '';
+                (date_from && date_to) ? condition.last_update = { $between: [date_from, date_to] } : '';
                 let transactions = await data_access_1.DAL.mysqlConnector.transaction.findAll({ where: condition, order: [['last_update', 'desc']] });
                 resolve(transactions);
             }
@@ -19,14 +19,20 @@ class transactionDAL {
             }
         });
     }
-    getTransactionList(limit = 10, offset = 0, status) {
+    getTransactionList(limit, offset, date_from, date_to, status) {
         return new Promise(async (resolve, reject) => {
             try {
-                let data = await data_access_1.DAL.mysqlConnector.transaction.findAndCountAll({
-                    limit: limit, offset: offset,
-                    where: { status: status },
-                    order: [['last_update', 'desc']]
-                });
+                let condition = {};
+                condition.status = status;
+                condition.order = [['last_update', 'desc']];
+                (limit && offset) ? (condition.limit = limit, condition.offset = offset) : '';
+                (date_from && date_to) ? (condition.where = { last_update: { $between: [date_from, date_to] } }) : '';
+                let data = await data_access_1.DAL.mysqlConnector.transaction.findAndCountAll(condition);
+                // let data = await DAL.mysqlConnector.transaction.findAndCountAll({
+                //     limit: limit, offset: offset,
+                //     where: { status: status },
+                //     order: [['last_update', 'desc']]
+                // });
                 resolve({ data: data.rows, count: data.count });
             }
             catch (err) {

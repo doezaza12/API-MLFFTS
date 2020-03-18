@@ -105,11 +105,11 @@ async function genTransactionPDF(req, res, next) {
 exports.genTransactionPDF = genTransactionPDF;
 async function getTransactions(req, res, next) {
     try {
-        let datas = await data_access_1.DAL.transactionDAL.getTransactionList(req.params.limit ? parseInt(req.params.limit) : 10, req.params.offset ? parseInt(req.params.offset) : 0, req.params.status ? parseInt(req.params.status) : 1);
+        let datas = await data_access_1.DAL.transactionDAL.getTransactionList(req.query.limit ? parseInt(req.query.limit) : null, req.query.offset ? parseInt(req.query.offset) : null, req.query.date_from ? req.query.date_from : null, req.query.date_to ? req.query.date_to : null, req.query.status ? parseInt(req.query.status) : 1);
         if (datas.count == 0)
             return res.status(HttpStatus.NOT_FOUND).send();
         let transaction_data = [];
-        for (let i = 0; i < parseInt(req.params.limit); i++) {
+        for (let i = 0; i < parseInt(datas.data.length); i++) {
             let template_data = {};
             let lp_info = await data_access_1.DAL.lpInfoDAL.getLpById(datas.data[i].lp_id);
             let charge_info = await data_access_1.DAL.chargesDAL.getChargesById(datas.data[i].charges_id);

@@ -64,8 +64,8 @@ router.post('/transaction/add', Middleware.authentication, Middleware.checkAdmin
 router.get('/transaction/single-gen', Middleware.authentication, TransactionCtrl.genSingleTransactionPDF);
 router.get('/transaction/gen', Middleware.authentication, TransactionCtrl.genTransactionPDF);
 router.get('/transaction', Middleware.authentication, TransactionCtrl.getTransactions);
-router.get('/transaction/limit=:limit&offset=:offset&status=:status', Middleware.authentication, TransactionCtrl.getTransactions);
-router.get('/transaction/limit=:limit&offset=:offset', Middleware.authentication, TransactionCtrl.getTransactions);
+// router.get('/transaction/limit=:limit&offset=:offset&status=:status', Middleware.authentication, TransactionCtrl.getTransactions);
+// router.get('/transaction/limit=:limit&offset=:offset', Middleware.authentication, TransactionCtrl.getTransactions);
 
 // admin
 router.get('/invalid/info', Middleware.authentication, Middleware.checkAdminRole, HistoryCtrl.getDataLostInfo);

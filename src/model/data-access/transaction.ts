@@ -9,7 +9,7 @@ export class transactionDAL {
                 condition.account_id = account_id;
                 lp_id ? condition.lp_id = lp_id : '';
                 condition.status = 1;
-                (date_from && date_to) ? condition.from = { $between: [date_from, date_to] } : '';
+                (date_from && date_to) ? condition.last_update = { $between: [date_from, date_to] } : '';
                 let transactions = await DAL.mysqlConnector.transaction.findAll({ where: condition, order: [['last_update', 'desc']] });
                 resolve(transactions);
             }
@@ -19,14 +19,20 @@ export class transactionDAL {
             }
         });
     }
-    getTransactionList(limit = 10, offset = 0, status: number) {
+    getTransactionList(limit?: number, offset?: number, date_from?: Date, date_to?: Date, status?: number) {
         return new Promise<any>(async (resolve, reject) => {
             try {
-                let data = await DAL.mysqlConnector.transaction.findAndCountAll({
-                    limit: limit, offset: offset,
-                    where: { status: status },
-                    order: [['last_update', 'desc']]
-                });
+                let condition = {} as any;
+                condition.status = status;
+                condition.order = [['last_update', 'desc']];
+                (limit && offset) ? (condition.limit = limit, condition.offset = offset) : '';
+                (date_from && date_to) ? (condition.where = { last_update: { $between: [date_from, date_to] } }) : '';
+                let data = await DAL.mysqlConnector.transaction.findAndCountAll(condition);
+                // let data = await DAL.mysqlConnector.transaction.findAndCountAll({
+                //     limit: limit, offset: offset,
+                //     where: { status: status },
+                //     order: [['last_update', 'desc']]
+                // });
                 resolve({ data: data.rows, count: data.count });
             } catch (err) {
                 console.error(err);

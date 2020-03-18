@@ -27,8 +27,8 @@ export async function genSingleTransactionPDF(req: express.Request, res: express
             rows: []
         };
         let cost = 0;
-        let in_datetime = new Date((new Date(transactions.in_datetime)).setHours(new Date(transactions.in_datetime).getHours()-7));
-        let out_datetime = new Date((new Date(transactions.out_datetime)).setHours(new Date(transactions.out_datetime).getHours()-7))
+        let in_datetime = new Date((new Date(transactions.in_datetime)).setHours(new Date(transactions.in_datetime).getHours() - 7));
+        let out_datetime = new Date((new Date(transactions.out_datetime)).setHours(new Date(transactions.out_datetime).getHours() - 7))
         tableResult.rows.push([`${1}`,
         `${charges_info['cpk_1']} -> ${charges_info['cpk_2']}`,
         `${in_datetime} -> ${out_datetime}`,
@@ -107,11 +107,12 @@ export async function genTransactionPDF(req: express.Request, res: express.Respo
 
 export async function getTransactions(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
-        let datas = await DAL.transactionDAL.getTransactionList(req.params.limit ? parseInt(req.params.limit) : 10,
-            req.params.offset ? parseInt(req.params.offset) : 0, req.params.status ? parseInt(req.params.status) : 1);
+        let datas = await DAL.transactionDAL.getTransactionList(req.query.limit ? parseInt(req.query.limit) : null,
+            req.query.offset ? parseInt(req.query.offset) : null, req.query.date_from ? req.query.date_from : null,
+            req.query.date_to ? req.query.date_to : null, req.query.status ? parseInt(req.query.status) : 1);
         if (datas.count == 0) return res.status(HttpStatus.NOT_FOUND).send();
         let transaction_data = []
-        for (let i = 0; i < parseInt(req.params.limit); i++) {
+        for (let i = 0; i < parseInt(datas.data.length); i++) {
             let template_data = {} as any;
             let lp_info = await DAL.lpInfoDAL.getLpById(datas.data[i].lp_id)
             let charge_info = await DAL.chargesDAL.getChargesById(datas.data[i].charges_id);
