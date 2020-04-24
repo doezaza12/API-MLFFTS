@@ -12,6 +12,8 @@ export async function getUserInfo(req: express.Request, res: express.Response, n
         let user_data = await DAL.userInfoDAL.getUserInfoByAccountId(req['payload'].id);
         let account_data = await DAL.accountDAL.getAccountById(req['payload'].id);
         let data = {}
+        let e_code = (await DAL.easypassDAL.getEasyPassById(user_data.e_code_id)).e_code;
+        user_data.e_code_id = e_code;
         data = JSON.parse(JSON.stringify(user_data));
         data['type'] = account_data.type;
         data['access_token'] = account_data.access_token;
