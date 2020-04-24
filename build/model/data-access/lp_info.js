@@ -31,8 +31,8 @@ class lpInfoDAL {
             try {
                 let condition = {};
                 condition.where = { e_code_id: id };
-                limit ? condition.limit = limit : '';
-                offset ? condition.offset = offset : '';
+                (limit != null) ? condition.limit = limit : '';
+                (offset != null) ? condition.offset = offset : '';
                 let lps = await data_access_1.DAL.mysqlConnector.lp_info.findAll(condition);
                 resolve(lps);
             }

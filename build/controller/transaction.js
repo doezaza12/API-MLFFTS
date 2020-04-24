@@ -1,8 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const HttpStatus = require("http-status-codes");
+const s3 = require("aws-sdk/clients/s3");
 const pdf_1 = require("../util/pdf");
 const data_access_1 = require("../model/data-access/data-access");
+const bucket = new s3({
+    accessKeyId: process.env.accessKeyId,
+    secretAccessKey: process.env.secretAccessKey
+});
 async function genSingleTransactionPDF(req, res, next) {
     try {
         let transactions = await data_access_1.DAL.transactionDAL.getTransactionById(req.query.transaction_id);
@@ -105,7 +110,7 @@ async function genTransactionPDF(req, res, next) {
 exports.genTransactionPDF = genTransactionPDF;
 async function getTransactions(req, res, next) {
     try {
-        let datas = await data_access_1.DAL.transactionDAL.getTransactionList(req.query.limit ? parseInt(req.query.limit) : null, req.query.offset ? parseInt(req.query.offset) : null, req.query.date_from ? req.query.date_from : null, req.query.date_to ? req.query.date_to : null, req.query.status ? parseInt(req.query.status) : 1);
+        let datas = await data_access_1.DAL.transactionDAL.getTransactionList(req.query.limit ? parseInt(req.query.limit) : null, req.query.offset ? parseInt(req.query.offset) : null, req.query.date_from ? req.query.date_from : null, req.query.date_to ? req.query.date_to : null, req.query.status ? parseInt(req.query.status) : 1, req.query.lp_id);
         if (datas.count == 0)
             return res.status(HttpStatus.NOT_FOUND).send();
         let transaction_data = [];
@@ -157,6 +162,13 @@ async function insertTransactions(req, res, next) {
             transaction_data.status = 0;
         let result = await data_access_1.DAL.transactionDAL.insertTransaction(transaction_data);
         await data_access_1.DAL.historyDAL.updateExistHistory(req.body.history_id);
+        bucket.deleteObject({
+            Bucket: process.env.bucket_name,
+            Key: (process.env.key + '/' + req.body.image_name)
+        }, function (err, data) {
+            if (err)
+                console.error(err);
+        });
         if (result)
             return res.status(HttpStatus.CREATED).send();
         return res.status(HttpStatus.NOT_ACCEPTABLE);

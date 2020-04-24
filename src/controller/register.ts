@@ -51,7 +51,7 @@ export async function register(req: express.Request, res: express.Response, next
                 from: '59011449@kmitl.ac.th',
                 subject: '[MLFFTS] Please verify your email.',
                 text: ' ',
-                html: `<a href="${process.env.NODE_ENV ? `https://mlffts-api.herokuapp.com/verify=${result.id}` : `http://localhost:8080/verify=${result.id}`}">SIMPLY CLICK HERE</a>`
+                html: `<p>follow this link to activate your account:</p><p><a href="${process.env.NODE_ENV ? `https://mlffts-api.herokuapp.com/verify=${result.id}` : `http://localhost:8080/verify=${result.id}`}">${process.env.NODE_ENV ? `https://mlffts-api.herokuapp.com/verify=${result.id}` : `http://localhost:8080/verify=${result.id}`}</a></p>`
             }, false, (err, result) => {
                 if (err) console.error(err);
             });

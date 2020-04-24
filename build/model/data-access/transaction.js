@@ -19,14 +19,20 @@ class transactionDAL {
             }
         });
     }
-    getTransactionList(limit, offset, date_from, date_to, status) {
+    getTransactionList(limit, offset, date_from, date_to, status, lp_id) {
         return new Promise(async (resolve, reject) => {
             try {
                 let condition = {};
                 condition.status = status;
                 condition.order = [['last_update', 'desc']];
-                (limit && offset) ? (condition.limit = limit, condition.offset = offset) : '';
+                ((limit != null) && (offset != null)) ? (condition.limit = limit, condition.offset = offset) : '';
                 (date_from && date_to) ? (condition.where = { last_update: { $between: [date_from, date_to] } }) : '';
+                if (lp_id) {
+                    if (condition.where != undefined)
+                        condition.where.lp_id = lp_id;
+                    else
+                        condition.where = { lp_id: lp_id };
+                }
                 let data = await data_access_1.DAL.mysqlConnector.transaction.findAndCountAll(condition);
                 // let data = await DAL.mysqlConnector.transaction.findAndCountAll({
                 //     limit: limit, offset: offset,

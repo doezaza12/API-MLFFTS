@@ -28,6 +28,7 @@ export async function getDataLostInfo(req: express.Request, res: express.Respons
                 if (err) console.log(err);
                 // console.log(data)
                 return res.status(HttpStatus.OK).send({
+                    image_name: req.query.image_name,
                     charge_id: (await DAL.chargesDAL.getChargesByCpkid(parseInt(req.query.cpk_1), parseInt(req.query.cpk_2))).id,
                     image: 'data:image/png;base64,' + data.Body.toString('base64')
                 });

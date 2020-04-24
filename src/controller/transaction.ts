@@ -1,9 +1,16 @@
 import * as express from 'express';
 import * as HttpStatus from 'http-status-codes';
+import * as s3 from 'aws-sdk/clients/s3';
 import { PDFDocumentCustom as PDFDocument } from '../util/pdf';
 
 import { DAL } from '../model/data-access/data-access';
 import { transactionAttribute } from '../model/db';
+
+const bucket = new s3({
+    accessKeyId: process.env.accessKeyId,
+    secretAccessKey: process.env.secretAccessKey
+})
+
 export async function genSingleTransactionPDF(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
         let transactions = await DAL.transactionDAL.getTransactionById(req.query.transaction_id);
@@ -109,7 +116,7 @@ export async function getTransactions(req: express.Request, res: express.Respons
     try {
         let datas = await DAL.transactionDAL.getTransactionList(req.query.limit ? parseInt(req.query.limit) : null,
             req.query.offset ? parseInt(req.query.offset) : null, req.query.date_from ? req.query.date_from : null,
-            req.query.date_to ? req.query.date_to : null, req.query.status ? parseInt(req.query.status) : 1);
+            req.query.date_to ? req.query.date_to : null, req.query.status ? parseInt(req.query.status) : 1, req.query.lp_id);
         if (datas.count == 0) return res.status(HttpStatus.NOT_FOUND).send();
         let transaction_data = []
         for (let i = 0; i < parseInt(datas.data.length); i++) {
@@ -157,6 +164,12 @@ export async function insertTransactions(req: express.Request, res: express.Resp
         else transaction_data.status = 0;
         let result = await DAL.transactionDAL.insertTransaction(transaction_data);
         await DAL.historyDAL.updateExistHistory(req.body.history_id);
+        bucket.deleteObject({
+            Bucket: process.env.bucket_name,
+            Key: (process.env.key + '/' + req.body.image_name)
+        }, function (err, data) {
+            if(err) console.error(err);
+        });
         if (result) return res.status(HttpStatus.CREATED).send();
         return res.status(HttpStatus.NOT_ACCEPTABLE)
     } catch (err) {
