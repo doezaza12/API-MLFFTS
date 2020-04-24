@@ -26,11 +26,11 @@ export class lpInfoDAL {
     }
     getLpList(id: number, limit?: number, offset?: number) {
         return new Promise<lp_infoAttribute[]>(async (resolve, reject) => {
-            try {
+            try { 
                 let condition = {} as any;
                 condition.where = { e_code_id: id };
-                (limit != null) ? condition.limit = limit : '';
-                (offset != null) ? condition.offset = offset : '';
+                (!isNaN(limit)) ? condition.limit = limit : '';
+                (!isNaN(offset)) ? condition.offset = offset : '';
                 let lps = await DAL.mysqlConnector.lp_info.findAll(condition);
                 resolve(lps);
             } catch (err) {
