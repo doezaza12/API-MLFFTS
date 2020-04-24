@@ -19,7 +19,7 @@ export class transactionDAL {
             }
         });
     }
-    getTransactionList(limit?: number, offset?: number, date_from?: Date, date_to?: Date, status?: number, lp_id?: number) {
+    getTransactionList(account_id: number, limit?: number, offset?: number, date_from?: Date, date_to?: Date, status?: number, lp_id?: number) {
         return new Promise<any>(async (resolve, reject) => {
             try {
                 let condition = {} as any;
@@ -27,6 +27,7 @@ export class transactionDAL {
                 condition.order = [['last_update', 'desc']];
                 ((limit != null) && (offset != null)) ? (condition.limit = limit, condition.offset = offset) : '';
                 (date_from && date_to) ? (condition.where = { last_update: { $between: [date_from, date_to] } }) : '';
+                (condition.where != undefined) ? condition.where.account_id = account_id : condition.where = {account_id: account_id};
                 if (lp_id) {
                     if (condition.where != undefined) condition.where.lp_id = lp_id;
                     else condition.where = { lp_id: lp_id };

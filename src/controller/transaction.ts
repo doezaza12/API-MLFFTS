@@ -114,7 +114,7 @@ export async function genTransactionPDF(req: express.Request, res: express.Respo
 
 export async function getTransactions(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
-        let datas = await DAL.transactionDAL.getTransactionList(req.query.limit ? parseInt(req.query.limit) : null,
+        let datas = await DAL.transactionDAL.getTransactionList(req['payload'].id, req.query.limit ? parseInt(req.query.limit) : null,
             req.query.offset ? parseInt(req.query.offset) : null, req.query.date_from ? req.query.date_from : null,
             req.query.date_to ? req.query.date_to : null, req.query.status ? parseInt(req.query.status) : 1, req.query.lp_id);
         if (datas.count == 0) return res.status(HttpStatus.NOT_FOUND).send();
