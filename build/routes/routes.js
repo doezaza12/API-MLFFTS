@@ -15,7 +15,7 @@ const HistoryCtrl = require("../controller/history");
 const router = express.Router();
 exports.router = router;
 // account
-router.get('/verify=:id', AccountCtrl.verifyAccount);
+router.get('/verify=:token', AccountCtrl.verifyAccount);
 router.get('/account', Middleware.authentication, Middleware.checkAdminRole, AccountCtrl.getAccountList);
 router.get('/account/limit=:limit&offset=:offset', Middleware.authentication, Middleware.checkAdminRole, AccountCtrl.getAccountList);
 router.post('/account/edit', Middleware.authentication, Middleware.checkAdminRole, AccountCtrl.editAccountStatus);

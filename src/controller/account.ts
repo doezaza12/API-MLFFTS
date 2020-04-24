@@ -6,7 +6,7 @@ import { accountAttribute } from '../model/db';
 
 export async function verifyAccount(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
-        await DAL.accountDAL.verifyAccount(parseInt(req['params'].id));
+        await DAL.accountDAL.verifyAccount(req['params'].token);
         return res.status(HttpStatus.OK).send('Your email is verified.');
     } catch (err) {
         console.error(err);

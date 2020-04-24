@@ -16,7 +16,7 @@ import * as HistoryCtrl from '../controller/history';
 const router = express.Router();
 
 // account
-router.get('/verify=:id', AccountCtrl.verifyAccount);
+router.get('/verify=:token', AccountCtrl.verifyAccount);
 router.get('/account', Middleware.authentication, Middleware.checkAdminRole, AccountCtrl.getAccountList);
 router.get('/account/limit=:limit&offset=:offset', Middleware.authentication, Middleware.checkAdminRole, AccountCtrl.getAccountList);
 router.post('/account/edit', Middleware.authentication, Middleware.checkAdminRole, AccountCtrl.editAccountStatus);

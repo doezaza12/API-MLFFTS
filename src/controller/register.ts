@@ -2,6 +2,7 @@ import * as express from 'express';
 import * as HttpStatus from 'http-status-codes';
 import * as bcrypt from 'bcryptjs';
 import * as sgMail from '@sendgrid/mail';
+import { v1 } from 'uuid';
 
 import { DAL } from '../model/data-access/data-access';
 import { accountAttribute, lp_infoAttribute, user_infoAttribute } from '../model/db';
@@ -24,6 +25,7 @@ export async function register(req: express.Request, res: express.Response, next
                 resolve(hash);
             });
         });
+        account.token = v1();
         let result = await DAL.accountDAL.insertAccount(account);
 
         // lp-info
@@ -51,7 +53,7 @@ export async function register(req: express.Request, res: express.Response, next
                 from: '59011449@kmitl.ac.th',
                 subject: '[MLFFTS] Please verify your email.',
                 text: ' ',
-                html: `<p>follow this link to activate your account:</p><p><a href="${process.env.NODE_ENV ? `https://mlffts-api.herokuapp.com/verify=${result.id}` : `http://localhost:8080/verify=${result.id}`}">${process.env.NODE_ENV ? `https://mlffts-api.herokuapp.com/verify=${result.id}` : `http://localhost:8080/verify=${result.id}`}</a></p>`
+                html: `<p>follow this link to activate your account:</p><p><a href="${process.env.NODE_ENV ? `https://mlffts-api.herokuapp.com/verify=${result.token}` : `http://localhost:8080/verify=${result.token}`}">${process.env.NODE_ENV ? `https://mlffts-api.herokuapp.com/verify=${result.token}` : `http://localhost:8080/verify=${result.token}`}</a></p>`
             }, false, (err, result) => {
                 if (err) console.error(err);
             });

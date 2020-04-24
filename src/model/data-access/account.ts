@@ -111,10 +111,10 @@ export class accountDAL {
             }
         });
     }
-    verifyAccount(id: number) {
+    verifyAccount(token: string) {
         return new Promise<boolean>(async (resolve, reject) => {
             try {
-                await DAL.mysqlConnector.account.update({ _isVerify: 1 }, { where: { id: id } });
+                await DAL.mysqlConnector.account.update({ _isVerify: 1, token: null }, { where: { token: token } });
                 resolve(true);
             } catch (err) {
                 console.error(err);

@@ -125,10 +125,10 @@ class accountDAL {
             }
         });
     }
-    verifyAccount(id) {
+    verifyAccount(token) {
         return new Promise(async (resolve, reject) => {
             try {
-                await data_access_1.DAL.mysqlConnector.account.update({ _isVerify: 1 }, { where: { id: id } });
+                await data_access_1.DAL.mysqlConnector.account.update({ _isVerify: 1, token: null }, { where: { token: token } });
                 resolve(true);
             }
             catch (err) {
