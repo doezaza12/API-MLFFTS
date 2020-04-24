@@ -5,7 +5,8 @@ const data_access_1 = require("../model/data-access/data-access");
 async function verifyAccount(req, res, next) {
     try {
         await data_access_1.DAL.accountDAL.verifyAccount(req['params'].token);
-        return res.status(HttpStatus.OK).send('Your email is verified.');
+        // return res.status(HttpStatus.OK).send('Your email is verified.');
+        res.redirect('https://mlffts-web.herokuapp.com/verify');
     }
     catch (err) {
         console.error(err);

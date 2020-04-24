@@ -7,7 +7,8 @@ import { accountAttribute } from '../model/db';
 export async function verifyAccount(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
         await DAL.accountDAL.verifyAccount(req['params'].token);
-        return res.status(HttpStatus.OK).send('Your email is verified.');
+        // return res.status(HttpStatus.OK).send('Your email is verified.');
+        res.redirect('https://mlffts-web.herokuapp.com/verify');
     } catch (err) {
         console.error(err);
         return res.status(HttpStatus.NOT_FOUND).send();
