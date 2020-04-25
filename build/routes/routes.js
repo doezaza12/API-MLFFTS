@@ -30,8 +30,9 @@ router.get('/lpinfo/wc', Middleware.authentication, Middleware.checkAdminRole, L
 router.post('/lpinfo/add', Middleware.authentication, LpinfoCtrl.insertLpinfo);
 router.post('/lpinfo/delete', Middleware.authentication, LpinfoCtrl.deleteLpinfo);
 // login
-router.get('/cb-line', LoginCtrl.callbackLine);
+router.post('/cb-line', LoginCtrl.callbackLine);
 router.get('/logout', Middleware.authentication, LoginCtrl.logout);
+router.post('/cb-line-token', LoginCtrl.callbackLineToken);
 router.post('/login', LoginCtrl.login);
 // notification
 router.get('/cb-state-notify', NotifyCtrl.callbackStateNotify);

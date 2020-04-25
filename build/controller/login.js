@@ -14,51 +14,75 @@ function tokenGenerator(account_id, role) {
         expiresIn: '1h'
     });
 }
-async function callbackLine(req, res, next) {
+async function callbackLineToken(req, res, next) {
     try {
         let result = await new Promise(async (resolve, reject) => {
-            try {
-                request.post('https://api.line.me/oauth2/v2.1/token', {
-                    form: {
-                        grant_type: 'authorization_code',
-                        code: req.query.code,
-                        client_id: process.env.line_client_id || config_1.Configuration.line.client_id,
-                        client_secret: process.env.line_client_secret || config_1.Configuration.line.client_secret,
-                        redirect_uri: process.env.cb_line
-                    }
-                }, async (err, res, body) => {
-                    if (err)
-                        console.error(err);
-                    let jsonBody = JSON.parse(body);
-                    console.log(jsonBody);
-                    let payload = jwt.decode(jsonBody.id_token);
-                    console.log(payload);
-                    let account = await data_access_1.DAL.accountDAL.getAccountByUsername(payload['sub']);
-                    if (account)
-                        bcrypt.compare(payload['sub'], account.password, (err, same) => {
-                            if (err)
-                                reject(err);
-                            if (same)
-                                resolve({ isExist: true, token: tokenGenerator(account.id, account.type) });
-                        });
-                    else
-                        resolve({
-                            isExist: false, payload: {
-                                line_id: payload['sub'],
-                                name: payload['name'],
-                                email: payload['email']
-                            }
-                        });
-                });
-            }
-            catch (err) {
-                console.error(err);
-                reject(err);
-            }
+            request.post('https://api.line.me/oauth2/v2.1/token', {
+                form: {
+                    grant_type: 'authorization_code',
+                    code: req.query.code,
+                    client_id: process.env.line_client_id || config_1.Configuration.line.client_id,
+                    client_secret: process.env.line_client_secret || config_1.Configuration.line.client_secret,
+                    redirect_uri: process.env.cb_line
+                }
+            }, async (err, res, body) => {
+                if (err) {
+                    console.error(err);
+                    reject(err);
+                }
+                resolve(body);
+            });
         });
-        if (result.isExist)
-            return res.status(HttpStatus.OK).send({ token: result.token });
-        return res.status(HttpStatus.NOT_FOUND).send({ payload: result.payload });
+        return res.status(HttpStatus.OK).send(result);
+    }
+    catch (err) {
+        console.error(err);
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
+    }
+}
+exports.callbackLineToken = callbackLineToken;
+async function callbackLine(req, res, next) {
+    try {
+        // let result = await new Promise<any>(async (resolve, reject) => {
+        //     try {
+        //         request.post('https://api.line.me/oauth2/v2.1/token', {
+        //             form: {
+        //                 grant_type: 'authorization_code',
+        //                 code: req.query.code,
+        //                 client_id: process.env.line_client_id || Configuration.line.client_id,
+        //                 client_secret: process.env.line_client_secret || Configuration.line.client_secret,
+        //                 redirect_uri: process.env.cb_line
+        //             }
+        //         }, async (err, res, body) => {
+        //             if (err) console.error(err);
+        let jsonBody = JSON.parse(req.body.line_info);
+        console.log(jsonBody);
+        let payload = jwt.decode(jsonBody.id_token);
+        console.log(payload);
+        let account = await data_access_1.DAL.accountDAL.getAccountByUsername(payload['sub']);
+        if (account)
+            bcrypt.compare(payload['sub'], account.password, (err, same) => {
+                if (err)
+                    console.error(err);
+                if (same)
+                    return res.status(HttpStatus.OK).send({ isExist: true, token: tokenGenerator(account.id, account.type) });
+            });
+        else
+            return res.status(HttpStatus.NOT_FOUND).send({
+                isExist: false, payload: {
+                    line_id: payload['sub'],
+                    name: payload['name'],
+                    email: payload['email']
+                }
+            });
+        // });
+        //     } catch (err) {
+        //         console.error(err);
+        //         reject(err);
+        //     }
+        // });
+        // if (result.isExist) return res.status(HttpStatus.OK).send({ token: result.token });
+        // return res.status(HttpStatus.NOT_FOUND).send({ payload: result.payload });
     }
     catch (err) {
         console.error(err);

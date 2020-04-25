@@ -11,6 +11,8 @@ async function register(req, res, next) {
         // account
         let account = {};
         account.username = req.body.line_id ? req.body.line_id : req.body.username;
+        if (await data_access_1.DAL.accountDAL.getAccountByUsername(account.username))
+            return res.status(HttpStatus.CONFLICT).send('Username duplicates');
         // account.password = req.body.password ? req.body.password : null;
         account.type = 0;
         account._isVerify = req.body.line_id ? 1 : 0;
@@ -37,9 +39,13 @@ async function register(req, res, next) {
         user_data.firstname = req.body.firstname;
         user_data.lastname = req.body.lastname;
         user_data.email = req.body.email;
+        if (await data_access_1.DAL.userInfoDAL.checkDupByEmail(user_data.email))
+            return res.status(HttpStatus.CONFLICT).send('Email duplicates');
         let e_code = await data_access_1.DAL.easypassDAL.getEasyPassBye_code(req.body.e_code);
         if (!e_code)
             return res.status(HttpStatus.NOT_FOUND).send("Ecode was not found.");
+        if (await data_access_1.DAL.userInfoDAL.checkDupByEcode(e_code.id))
+            return res.status(HttpStatus.CONFLICT).send('Ecode duplicates');
         user_data.e_code_id = e_code.id;
         user_data.citizen_id = req.body.citizen_id;
         user_data.line_id = req.body.line_id ? req.body.line_id : null;
