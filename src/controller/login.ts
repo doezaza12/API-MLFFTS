@@ -57,7 +57,7 @@ export async function callbackLine(req: express.Request, res: express.Response, 
         //             }
         //         }, async (err, res, body) => {
         //             if (err) console.error(err);
-        let jsonBody = req.body.line_info;
+        let jsonBody = JSON.parse(req.body.line_info);
         console.log(jsonBody);
         let payload = jwt.decode(jsonBody.id_token);
         console.log(payload);
