@@ -16,31 +16,31 @@ function tokenGenerator(account_id: number, role: number) {
     });
 }
 
-export async function callbackLineToken(req: express.Request, res: express.Response, next: express.NextFunction) {
-    try {
-        let result = await new Promise<any>(async (resolve, reject) => {
-            request.post('https://api.line.me/oauth2/v2.1/token', {
-                form: {
-                    grant_type: 'authorization_code',
-                    code: req.query.code,
-                    client_id: process.env.line_client_id || Configuration.line.client_id,
-                    client_secret: process.env.line_client_secret || Configuration.line.client_secret,
-                    redirect_uri: process.env.cb_line
-                }
-            }, async (err, res, body) => {
-                if (err) {
-                    console.error(err);
-                    reject(err);
-                }
-                resolve(body);
-            });
-        });
-        return res.status(HttpStatus.OK).send(result);
-    } catch (err) {
-        console.error(err);
-        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
-    }
-}
+// export async function callbackLineToken(req: express.Request, res: express.Response, next: express.NextFunction) {
+//     try {
+//         let result = await new Promise<any>(async (resolve, reject) => {
+//             request.post('https://api.line.me/oauth2/v2.1/token', {
+//                 form: {
+//                     grant_type: 'authorization_code',
+//                     code: req.query.code,
+//                     client_id: process.env.line_client_id || Configuration.line.client_id,
+//                     client_secret: process.env.line_client_secret || Configuration.line.client_secret,
+//                     redirect_uri: process.env.cb_line
+//                 }
+//             }, async (err, res, body) => {
+//                 if (err) {
+//                     console.error(err);
+//                     reject(err);
+//                 }
+//                 resolve(body);
+//             });
+//         });
+//         return res.status(HttpStatus.OK).send(result);
+//     } catch (err) {
+//         console.error(err);
+//         return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
+//     }
+// }
 
 
 export async function callbackLine(req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -57,7 +57,7 @@ export async function callbackLine(req: express.Request, res: express.Response, 
         //             }
         //         }, async (err, res, body) => {
         //             if (err) console.error(err);
-        let jsonBody = JSON.parse(req.body.line_info);
+        let jsonBody = req.body.line_info;
         console.log(jsonBody);
         let payload = jwt.decode(jsonBody.id_token);
         console.log(payload);
