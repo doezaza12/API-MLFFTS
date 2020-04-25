@@ -36,7 +36,7 @@ router.post('/lpinfo/delete', Middleware.authentication, LpinfoCtrl.deleteLpinfo
 // login
 router.post('/cb-line', LoginCtrl.callbackLine);
 router.get('/logout', Middleware.authentication, LoginCtrl.logout);
-router.post('/cb-line-token', LoginCtrl.callbackLineToken)
+router.get('/cb-line-token', LoginCtrl.callbackLineToken)
 router.post('/login', LoginCtrl.login);
 
 // notification
