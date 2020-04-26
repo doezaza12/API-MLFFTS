@@ -41,12 +41,23 @@ async function register(req, res, next) {
         user_data.email = req.body.email;
         if (await data_access_1.DAL.userInfoDAL.checkDupByEmail(user_data.email))
             return res.status(HttpStatus.CONFLICT).send('Email duplicates');
-        let e_code = await data_access_1.DAL.easypassDAL.getEasyPassBye_code(req.body.e_code);
-        if (!e_code)
-            return res.status(HttpStatus.NOT_FOUND).send("Ecode was not found.");
-        if (await data_access_1.DAL.userInfoDAL.checkDupByEcode(e_code.id))
-            return res.status(HttpStatus.CONFLICT).send('Ecode duplicates');
+        /*
+        let e_code = await DAL.easypassDAL.getEasyPassBye_code(req.body.e_code);
+        if (!e_code) return res.status(HttpStatus.NOT_FOUND).send("Ecode was not found.");
+        if (await DAL.userInfoDAL.checkDupByEcode(e_code.id)) return res.status(HttpStatus.CONFLICT).send('Ecode duplicates');
         user_data.e_code_id = e_code.id;
+        */
+        let e_code_list = JSON.parse(req.body.e_code_list);
+        for (let i = 0; i < e_code_list.e_code.length; i++) {
+            let e_code = await data_access_1.DAL.easypassDAL.getEasyPassBye_code(e_code_list.e_code[i]);
+            if (!e_code)
+                return res.status(HttpStatus.NOT_FOUND).send(`${e_code} has not found`);
+            else {
+                if (await data_access_1.DAL.eCodeMapDAL.getEcodeById(e_code.id))
+                    return res.status(HttpStatus.CONFLICT).send('Ecode duplicates');
+                await data_access_1.DAL.eCodeMapDAL.insertEcodeMap({ e_code_id: e_code.id, account_id: result.id });
+            }
+        }
         user_data.citizen_id = req.body.citizen_id;
         user_data.line_id = req.body.line_id ? req.body.line_id : null;
         await data_access_1.DAL.userInfoDAL.insertUserInfo(user_data);

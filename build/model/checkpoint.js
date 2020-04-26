@@ -10,12 +10,12 @@ module.exports = function (sequelize, DataTypes) {
             autoIncrement: true
         },
         'lat': {
-            type: DataTypes.INTEGER(11),
+            type: DataTypes.FLOAT,
             allowNull: true,
             comment: "null"
         },
         'lng': {
-            type: DataTypes.INTEGER(11),
+            type: DataTypes.FLOAT,
             allowNull: true,
             comment: "null"
         },

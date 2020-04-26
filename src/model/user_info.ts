@@ -43,16 +43,6 @@ module.exports = function(sequelize: sequelize.Sequelize, DataTypes: DataTypes) 
 			allowNull: true,
 			comment: "null",
 			unique: true
-		},
-		'e_code_id': {
-			type: DataTypes.INTEGER(11),
-			allowNull: true,
-			comment: "easy pass code",
-			references: {
-				model: 'easypass',
-				key: 'id'
-			},
-			unique: true
 		}
 	}, {
 		tableName: 'user_info',

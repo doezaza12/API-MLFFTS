@@ -12,6 +12,7 @@ import * as LpinfoCtrl from '../controller/lp_info';
 import * as TransactionCtrl from '../controller/transaction';
 import * as NotifyCtrl from '../controller/notification';
 import * as HistoryCtrl from '../controller/history';
+import * as EcodeMapCtrl from '../controller/e_code_map';
 
 const router = express.Router();
 
@@ -28,9 +29,9 @@ router.post('/profile/edit', Middleware.authentication, UserInfoCtrl.editUserInf
 
 // lpinfo
 router.get('/lpinfo', Middleware.authentication, LpinfoCtrl.getLpList);
-router.get('/lpinfo/limit=:limit&offset=:offset', Middleware.authentication, LpinfoCtrl.getLpList);
+// router.get('/lpinfo/limit=:limit&offset=:offset', Middleware.authentication, LpinfoCtrl.getLpList);
 router.get('/lpinfo/wc', Middleware.authentication, Middleware.checkAdminRole, LpinfoCtrl.searchWildcardLpNum);
-router.post('/lpinfo/add', Middleware.authentication, LpinfoCtrl.insertLpinfo);
+// router.post('/lpinfo/add', Middleware.authentication, LpinfoCtrl.insertLpinfo);
 router.post('/lpinfo/delete', Middleware.authentication, LpinfoCtrl.deleteLpinfo);
 
 // login
@@ -67,6 +68,10 @@ router.get('/transaction/gen', Middleware.authentication, TransactionCtrl.genTra
 router.get('/transaction', Middleware.authentication, TransactionCtrl.getTransactions);
 // router.get('/transaction/limit=:limit&offset=:offset&status=:status', Middleware.authentication, TransactionCtrl.getTransactions);
 // router.get('/transaction/limit=:limit&offset=:offset', Middleware.authentication, TransactionCtrl.getTransactions);
+
+// ecodemap
+router.post('/ecodemap/add', Middleware.authentication, EcodeMapCtrl.insertEcodeMap);
+router.post('/ecodemap/delete', Middleware.authentication, EcodeMapCtrl.deleteEcodeMap);
 
 // admin
 router.get('/invalid/info', Middleware.authentication, Middleware.checkAdminRole, HistoryCtrl.getDataLostInfo);

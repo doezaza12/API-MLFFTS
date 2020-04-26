@@ -11,6 +11,7 @@ import { chargesDAL } from './charges';
 import { transactionDAL } from './transaction';
 import { easypassDAL } from './easypass';
 import { historyDAL } from './history';
+import { eCodeMapDAL } from './e_code_map';
 
 export class DAL {
     static sequelize: Sequelize.Sequelize;
@@ -23,6 +24,7 @@ export class DAL {
     static transactionDAL: transactionDAL;
     static easypassDAL: easypassDAL;
     static historyDAL: historyDAL;
+    static eCodeMapDAL: eCodeMapDAL;
     static mongoConnector: Mongoose.Connection
 
     constructor(config: MySqlConfig) {
@@ -46,6 +48,7 @@ export class DAL {
             DAL.chargesDAL = new chargesDAL();
             DAL.transactionDAL = new transactionDAL();
             DAL.easypassDAL = new easypassDAL();
+            DAL.eCodeMapDAL = new eCodeMapDAL();
 
             // MongoDB
             DAL.mongoConnector = Mongoose.createConnection(process.env.MONGO_URI,

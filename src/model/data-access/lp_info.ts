@@ -26,7 +26,7 @@ export class lpInfoDAL {
     }
     getLpList(id: number, limit?: number, offset?: number) {
         return new Promise<lp_infoAttribute[]>(async (resolve, reject) => {
-            try { 
+            try {
                 let condition = {} as any;
                 condition.where = { e_code_id: id };
                 (!isNaN(limit)) ? condition.limit = limit : '';
@@ -54,6 +54,17 @@ export class lpInfoDAL {
         return new Promise<lp_infoAttribute>(async (resolve, reject) => {
             try {
                 let lp = await DAL.mysqlConnector.lp_info.findOne({ where: { license_number: lp_num, province: prov } });
+                resolve(lp);
+            } catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+    }
+    getLpByEcodeId(e_code_id: number) {
+        return new Promise<lp_infoAttribute>(async (resolve, reject) => {
+            try {
+                let lp = await DAL.mysqlConnector.lp_info.findOne({ where: { e_code_id: e_code_id } });
                 resolve(lp);
             } catch (err) {
                 console.error(err);

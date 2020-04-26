@@ -11,6 +11,7 @@ const charges_1 = require("./charges");
 const transaction_1 = require("./transaction");
 const easypass_1 = require("./easypass");
 const history_1 = require("./history");
+const e_code_map_1 = require("./e_code_map");
 class DAL {
     constructor(config) {
         try {
@@ -35,6 +36,7 @@ class DAL {
             DAL.chargesDAL = new charges_1.chargesDAL();
             DAL.transactionDAL = new transaction_1.transactionDAL();
             DAL.easypassDAL = new easypass_1.easypassDAL();
+            DAL.eCodeMapDAL = new e_code_map_1.eCodeMapDAL();
             // MongoDB
             DAL.mongoConnector = Mongoose.createConnection(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true, dbName: 'mlffts' });
             DAL.historyDAL = new history_1.historyDAL();

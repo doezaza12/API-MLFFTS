@@ -11,6 +11,7 @@ class MySQLConnector {
         this.charges = this.table.charges;
         this.transaction = this.table.transaction;
         this.easypass = this.table.easypass;
+        this.e_code_map = this.table.e_code_map;
     }
 }
 exports.MySQLConnector = MySQLConnector;

@@ -21,7 +21,7 @@ async function genSingleTransactionPDF(req, res, next) {
             headers: ['ข้อมูลผู้ใช้', ''],
             rows: [
                 [
-                    `หมายเลข e-code: ${(await data_access_1.DAL.easypassDAL.getEasyPassById(userInfo.e_code_id)).e_code}\nชื่อเจ้าของบัตร: ${userInfo.firstname} ${userInfo.lastname}\nเลขที่เบียนรถ: ${lpInfo.license_number} ${lpInfo.province}`,
+                    `หมายเลข e-code: ${(await data_access_1.DAL.easypassDAL.getEasyPassById(lpInfo.e_code_id)).e_code}\nชื่อเจ้าของบัตร: ${userInfo.firstname} ${userInfo.lastname}\nเลขที่เบียนรถ: ${lpInfo.license_number} ${lpInfo.province}`,
                     `เลขบัตรประจำตัว: ${userInfo.citizen_id}\nemail: ${userInfo.email}`
                 ]
             ]
@@ -73,7 +73,7 @@ async function genTransactionPDF(req, res, next) {
             headers: ['ข้อมูลผู้ใช้', ''],
             rows: [
                 [
-                    `หมายเลข e-code: ${(await data_access_1.DAL.easypassDAL.getEasyPassById(userInfo.e_code_id)).e_code}\nชื่อเจ้าของบัตร: ${userInfo.firstname} ${userInfo.lastname}\nเลขที่เบียนรถ: ${lpInfo.license_number} ${lpInfo.province}`,
+                    `หมายเลข e-code: ${(await data_access_1.DAL.easypassDAL.getEasyPassById(lpInfo.e_code_id)).e_code}\nชื่อเจ้าของบัตร: ${userInfo.firstname} ${userInfo.lastname}\nเลขที่เบียนรถ: ${lpInfo.license_number} ${lpInfo.province}`,
                     `เลขบัตรประจำตัว: ${userInfo.citizen_id}\nemail: ${userInfo.email}`
                 ]
             ]

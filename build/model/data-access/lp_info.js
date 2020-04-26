@@ -66,6 +66,18 @@ class lpInfoDAL {
             }
         });
     }
+    getLpByEcodeId(e_code_id) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let lp = await data_access_1.DAL.mysqlConnector.lp_info.findOne({ where: { e_code_id: e_code_id } });
+                resolve(lp);
+            }
+            catch (err) {
+                console.error(err);
+                reject(err);
+            }
+        });
+    }
     getLpNumByWildcard(lp_num) {
         return new Promise(async (resolve, reject) => {
             try {

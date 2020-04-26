@@ -5,7 +5,7 @@ import * as sgMail from '@sendgrid/mail';
 import { v1 } from 'uuid';
 
 import { DAL } from '../model/data-access/data-access';
-import { accountAttribute, lp_infoAttribute, user_infoAttribute } from '../model/db';
+import { accountAttribute, lp_infoAttribute, user_infoAttribute, e_code_mapAttribute } from '../model/db';
 
 sgMail.setApiKey(process.env.sendgrid);
 
@@ -14,7 +14,7 @@ export async function register(req: express.Request, res: express.Response, next
         // account
         let account = {} as accountAttribute;
         account.username = req.body.line_id ? req.body.line_id : req.body.username;
-        if(await DAL.accountDAL.getAccountByUsername(account.username)) return res.status(HttpStatus.CONFLICT).send('Username duplicates')
+        if (await DAL.accountDAL.getAccountByUsername(account.username)) return res.status(HttpStatus.CONFLICT).send('Username duplicates')
         // account.password = req.body.password ? req.body.password : null;
         account.type = 0;
         account._isVerify = req.body.line_id ? 1 : 0;
@@ -43,10 +43,21 @@ export async function register(req: express.Request, res: express.Response, next
         user_data.lastname = req.body.lastname;
         user_data.email = req.body.email;
         if (await DAL.userInfoDAL.checkDupByEmail(user_data.email)) return res.status(HttpStatus.CONFLICT).send('Email duplicates');
+        /*
         let e_code = await DAL.easypassDAL.getEasyPassBye_code(req.body.e_code);
         if (!e_code) return res.status(HttpStatus.NOT_FOUND).send("Ecode was not found.");
         if (await DAL.userInfoDAL.checkDupByEcode(e_code.id)) return res.status(HttpStatus.CONFLICT).send('Ecode duplicates');
         user_data.e_code_id = e_code.id;
+        */
+        let e_code_list = JSON.parse(req.body.e_code_list);
+        for (let i = 0; i < e_code_list.e_code.length; i++) {
+            let e_code = await DAL.easypassDAL.getEasyPassBye_code(e_code_list.e_code[i]);
+            if (!e_code) return res.status(HttpStatus.NOT_FOUND).send(`${e_code} has not found`);
+            else {
+                if (await DAL.eCodeMapDAL.getEcodeById(e_code.id)) return res.status(HttpStatus.CONFLICT).send('Ecode duplicates');
+                await DAL.eCodeMapDAL.insertEcodeMap({ e_code_id: e_code.id, account_id: result.id } as e_code_mapAttribute)
+            }
+        }
         user_data.citizen_id = req.body.citizen_id;
         user_data.line_id = req.body.line_id ? req.body.line_id : null;
         await DAL.userInfoDAL.insertUserInfo(user_data);

@@ -11,6 +11,7 @@ export class MySQLConnector {
     charges: dbModel.chargesModel;
     transaction: dbModel.transactionModel;
     easypass: dbModel.easypassModel;
+    e_code_map: dbModel.e_code_mapModel;
 
     constructor(sequelize: Sequelize.Sequelize) {
         this.table = dbTables.getModels(sequelize);
@@ -21,5 +22,6 @@ export class MySQLConnector {
         this.charges = this.table.charges;
         this.transaction = this.table.transaction;
         this.easypass = this.table.easypass;
+        this.e_code_map = this.table.e_code_map;
     }
 }

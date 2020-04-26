@@ -10,9 +10,16 @@ async function getUserInfo(req, res, next) {
         let user_data = await data_access_1.DAL.userInfoDAL.getUserInfoByAccountId(req['payload'].id);
         let account_data = await data_access_1.DAL.accountDAL.getAccountById(req['payload'].id);
         let data = {};
-        let e_code = (await data_access_1.DAL.easypassDAL.getEasyPassById(user_data.e_code_id)).e_code;
-        user_data.e_code_id = e_code;
+        // let e_code = (await DAL.easypassDAL.getEasyPassById(user_data.e_code_id)).e_code;
+        // user_data.e_code_id = e_code;
+        let e_code_list = await data_access_1.DAL.eCodeMapDAL.getEcodeByAccountId(req['payload'].id);
+        let e_code = [];
+        for (let i = 0; i < e_code_list.length; i++) {
+            let e_code_info = await data_access_1.DAL.easypassDAL.getEasyPassById(e_code_list[i].e_code_id);
+            e_code.push({ e_code_id: e_code_info.id, e_code: e_code_info.e_code });
+        }
         data = JSON.parse(JSON.stringify(user_data));
+        data['e_code_id'] = e_code;
         data['type'] = account_data.type;
         data['access_token'] = account_data.access_token;
         return res.status(HttpStatus.OK).send(data);
@@ -28,7 +35,7 @@ async function editUserInfo(req, res, next) {
         let user_data = {};
         let account_id = req['payload'].id;
         user_data.citizen_id = req.body.citizen_id;
-        user_data.e_code_id = (await data_access_1.DAL.easypassDAL.getEasyPassBye_code(req.body.e_code)).id;
+        // user_data.e_code_id = (await DAL.easypassDAL.getEasyPassBye_code(req.body.e_code)).id;
         user_data.email = req.body.email;
         user_data.firstname = req.body.firstname;
         user_data.lastname = req.body.lastname;

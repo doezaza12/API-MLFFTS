@@ -12,6 +12,7 @@ const LpinfoCtrl = require("../controller/lp_info");
 const TransactionCtrl = require("../controller/transaction");
 const NotifyCtrl = require("../controller/notification");
 const HistoryCtrl = require("../controller/history");
+const EcodeMapCtrl = require("../controller/e_code_map");
 const router = express.Router();
 exports.router = router;
 // account
@@ -25,9 +26,9 @@ router.get('/profile', Middleware.authentication, UserInfoCtrl.getUserInfo);
 router.post('/profile/edit', Middleware.authentication, UserInfoCtrl.editUserInfo);
 // lpinfo
 router.get('/lpinfo', Middleware.authentication, LpinfoCtrl.getLpList);
-router.get('/lpinfo/limit=:limit&offset=:offset', Middleware.authentication, LpinfoCtrl.getLpList);
+// router.get('/lpinfo/limit=:limit&offset=:offset', Middleware.authentication, LpinfoCtrl.getLpList);
 router.get('/lpinfo/wc', Middleware.authentication, Middleware.checkAdminRole, LpinfoCtrl.searchWildcardLpNum);
-router.post('/lpinfo/add', Middleware.authentication, LpinfoCtrl.insertLpinfo);
+// router.post('/lpinfo/add', Middleware.authentication, LpinfoCtrl.insertLpinfo);
 router.post('/lpinfo/delete', Middleware.authentication, LpinfoCtrl.deleteLpinfo);
 // login
 router.get('/logout', Middleware.authentication, LoginCtrl.logout);
@@ -58,6 +59,9 @@ router.get('/transaction/gen', Middleware.authentication, TransactionCtrl.genTra
 router.get('/transaction', Middleware.authentication, TransactionCtrl.getTransactions);
 // router.get('/transaction/limit=:limit&offset=:offset&status=:status', Middleware.authentication, TransactionCtrl.getTransactions);
 // router.get('/transaction/limit=:limit&offset=:offset', Middleware.authentication, TransactionCtrl.getTransactions);
+// ecodemap
+router.post('/ecodemap/add', Middleware.authentication, EcodeMapCtrl.insertEcodeMap);
+router.post('/ecodemap/delete', Middleware.authentication, EcodeMapCtrl.deleteEcodeMap);
 // admin
 router.get('/invalid/info', Middleware.authentication, Middleware.checkAdminRole, HistoryCtrl.getDataLostInfo);
 router.get('/invalid/limit=:limit&offset=:offset&cpkid=:cpk_id', Middleware.authentication, Middleware.checkAdminRole, HistoryCtrl.getDataLostList);
