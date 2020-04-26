@@ -31,8 +31,10 @@ async function genSingleTransactionPDF(req, res, next) {
             rows: []
         };
         let cost = 0;
-        let in_datetime = new Date((new Date(transactions.in_datetime)).setHours(new Date(transactions.in_datetime).getHours() - 7));
-        let out_datetime = new Date((new Date(transactions.out_datetime)).setHours(new Date(transactions.out_datetime).getHours() - 7));
+        let in_datetime = new Date((new Date(transactions.in_datetime)).setHours(new Date(transactions.in_datetime).getHours() + 7));
+        let out_datetime = new Date((new Date(transactions.out_datetime)).setHours(new Date(transactions.out_datetime).getHours() + 7));
+        // let in_datetime = new Date((new Date(transactions.in_datetime)).setHours(new Date(transactions.in_datetime).getHours() - 7));
+        // let out_datetime = new Date((new Date(transactions.out_datetime)).setHours(new Date(transactions.out_datetime).getHours() - 7));
         tableResult.rows.push([`${1}`,
             `${charges_info['cpk_1']} -> ${charges_info['cpk_2']}`,
             `${in_datetime} -> ${out_datetime}`,
@@ -87,7 +89,8 @@ async function genTransactionPDF(req, res, next) {
             let tmp_charges = charges_info.filter((ele) => { return ele.id == transactions[i].charges_id; });
             tableResult.rows.push([`${i + 1}`,
                 `${tmp_charges[0]['cpk_1']} -> ${tmp_charges[0]['cpk_2']}`,
-                `${transactions[i].in_datetime} -> ${transactions[i].out_datetime}`,
+                // `${transactions[i].in_datetime} -> ${transactions[i].out_datetime}`,
+                `${new Date((new Date(transactions[i].in_datetime)).setHours(new Date(transactions[i].in_datetime).getHours() + 7))} -> ${new Date((new Date(transactions[i].out_datetime)).setHours(new Date(transactions[i].out_datetime).getHours() + 7))}`,
                 `${tmp_charges[0]['cost']}`]);
             cost += tmp_charges[0]['cost'];
         }
