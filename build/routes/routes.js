@@ -59,6 +59,7 @@ router.get('/transaction/gen', Middleware.authentication, TransactionCtrl.genTra
 router.get('/transaction', Middleware.authentication, TransactionCtrl.getTransactions);
 // router.get('/transaction/limit=:limit&offset=:offset&status=:status', Middleware.authentication, TransactionCtrl.getTransactions);
 // router.get('/transaction/limit=:limit&offset=:offset', Middleware.authentication, TransactionCtrl.getTransactions);
+router.get('/transaction/month', Middleware.authentication, TransactionCtrl.getMonthRange);
 // ecodemap
 router.post('/ecodemap/add', Middleware.authentication, EcodeMapCtrl.insertEcodeMap);
 router.post('/ecodemap/delete', Middleware.authentication, EcodeMapCtrl.deleteEcodeMap);

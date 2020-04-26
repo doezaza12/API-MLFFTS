@@ -180,3 +180,22 @@ export async function insertTransactions(req: express.Request, res: express.Resp
         return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
     }
 }
+
+export async function getMonthRange(req: express.Request, res: express.Response, next: express.NextFunction) {
+    try {
+        let datas = await DAL.transactionDAL.getTransactionList(req['payload'].id, req.query.limit ? parseInt(req.query.limit) : null,
+            req.query.offset ? parseInt(req.query.offset) : null, req.query.date_from ? req.query.date_from : null,
+            req.query.date_to ? req.query.date_to : null, req.query.status ? parseInt(req.query.status) : 1, req.query.lp_id, req.query.asc ? true : false);
+        if (datas.count == 0) return res.status(HttpStatus.NOT_FOUND).send();
+        let months = []
+        for (let i = 0; i < parseInt(datas.data.length); i++) {
+            let month = new Date(datas.data[i].last_update).getMonth();
+            months.push(month + 1);
+        }
+        let uniqueMonths = [...new Set(months)]
+        return res.status(HttpStatus.OK).send(uniqueMonths);
+    } catch (err) {
+        console.error(err);
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
+    }
+}

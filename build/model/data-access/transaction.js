@@ -19,12 +19,12 @@ class transactionDAL {
             }
         });
     }
-    getTransactionList(account_id, limit, offset, date_from, date_to, status, lp_id) {
+    getTransactionList(account_id, limit, offset, date_from, date_to, status, lp_id, asc) {
         return new Promise(async (resolve, reject) => {
             try {
                 let condition = {};
                 condition.status = status;
-                condition.order = [['last_update', 'desc']];
+                condition.order = [['last_update', (asc ? 'asc' : 'desc')]];
                 ((limit != null) && (offset != null)) ? (condition.limit = limit, condition.offset = offset) : '';
                 (date_from && date_to) ? (condition.where = { last_update: { $between: [date_from, date_to] } }) : '';
                 (condition.where != undefined) ? condition.where.account_id = account_id : condition.where = { account_id: account_id };
