@@ -38,6 +38,7 @@ router.post('/login', LoginCtrl.login);
 // notification
 router.get('/cb-state-notify', NotifyCtrl.callbackStateNotify);
 router.post('/cb-notify', Middleware.authentication, NotifyCtrl.callbackNotify);
+router.post('/notify/update', Middleware.authentication, NotifyCtrl.updateNotify);
 // register
 router.post('/register', RegisterCtrl.register);
 // checkpoint

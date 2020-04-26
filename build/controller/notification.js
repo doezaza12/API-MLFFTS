@@ -47,4 +47,16 @@ async function callbackNotify(req, res, next) {
     }
 }
 exports.callbackNotify = callbackNotify;
+async function updateNotify(req, res, next) {
+    try {
+        // let user = await DAL.userInfoDAL.getUserInfoByAccountId(req['payload'].id)
+        await data_access_1.DAL.accountDAL.updateAccessTokenById(req['payload'].id, req.body.access_token);
+        return res.status(HttpStatus.OK).send();
+    }
+    catch (err) {
+        console.error(err);
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
+    }
+}
+exports.updateNotify = updateNotify;
 //# sourceMappingURL=notification.js.map

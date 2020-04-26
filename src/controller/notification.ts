@@ -46,3 +46,14 @@ export async function callbackNotify(req: express.Request, res: express.Response
         return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
     }
 }
+
+export async function updateNotify(req: express.Request, res: express.Response, next: express.NextFunction) {
+    try {
+        // let user = await DAL.userInfoDAL.getUserInfoByAccountId(req['payload'].id)
+        await DAL.accountDAL.updateAccessTokenById(req['payload'].id, req.body.access_token);
+        return res.status(HttpStatus.OK).send();
+    } catch (err) {
+        console.error(err);
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
+    }
+}
