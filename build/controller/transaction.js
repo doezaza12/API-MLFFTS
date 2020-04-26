@@ -31,8 +31,8 @@ async function genSingleTransactionPDF(req, res, next) {
             rows: []
         };
         let cost = 0;
-        let in_datetime = new Date((new Date(transactions.in_datetime)).setHours(new Date(transactions.in_datetime).getHours()));
-        let out_datetime = new Date((new Date(transactions.out_datetime)).setHours(new Date(transactions.out_datetime).getHours()));
+        let in_datetime = new Date((new Date(transactions.in_datetime)).setHours(new Date(transactions.in_datetime).getHours())).toUTCString();
+        let out_datetime = new Date((new Date(transactions.out_datetime)).setHours(new Date(transactions.out_datetime).getHours())).toUTCString();
         // let in_datetime = new Date((new Date(transactions.in_datetime)).setHours(new Date(transactions.in_datetime).getHours() - 7));
         // let out_datetime = new Date((new Date(transactions.out_datetime)).setHours(new Date(transactions.out_datetime).getHours() - 7));
         tableResult.rows.push([`${1}`,
@@ -90,7 +90,7 @@ async function genTransactionPDF(req, res, next) {
             tableResult.rows.push([`${i + 1}`,
                 `${tmp_charges[0]['cpk_1']} -> ${tmp_charges[0]['cpk_2']}`,
                 // `${transactions[i].in_datetime} -> ${transactions[i].out_datetime}`,
-                `${new Date((new Date(transactions[i].in_datetime)).setHours(new Date(transactions[i].in_datetime).getHours()))} -> ${new Date((new Date(transactions[i].out_datetime)).setHours(new Date(transactions[i].out_datetime).getHours()))}`,
+                `${new Date((new Date(transactions[i].in_datetime)).setHours(new Date(transactions[i].in_datetime).getHours())).toUTCString()} -> ${new Date((new Date(transactions[i].out_datetime)).setHours(new Date(transactions[i].out_datetime).getHours())).toUTCString()}`,
                 `${tmp_charges[0]['cost']}`]);
             cost += tmp_charges[0]['cost'];
         }
