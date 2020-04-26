@@ -45,18 +45,17 @@ class userInfoDAL {
             }
         });
     }
-    getUserInfoIdByEcodeId(e_code_id) {
-        return new Promise(async (resolve, reject) => {
-            try {
-                let user_info = await data_access_1.DAL.mysqlConnector.user_info.findOne({ where: { e_code_id: e_code_id } });
-                resolve(user_info);
-            }
-            catch (err) {
-                console.error(err);
-                reject(false);
-            }
-        });
-    }
+    // getUserInfoIdByEcodeId(e_code_id: number) {
+    //     return new Promise<user_infoAttribute>(async (resolve, reject) => {
+    //         try {
+    //             let user_info = await DAL.mysqlConnector.user_info.findOne({ where: { e_code_id: e_code_id } });
+    //             resolve(user_info);
+    //         } catch (err) {
+    //             console.error(err);
+    //             reject(false);
+    //         }
+    //     });
+    // }
     checkDupByEmail(email) {
         return new Promise(async (resolve, reject) => {
             try {

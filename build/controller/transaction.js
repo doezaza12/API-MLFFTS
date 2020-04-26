@@ -147,7 +147,7 @@ async function insertTransactions(req, res, next) {
         let lp_info = (await data_access_1.DAL.lpInfoDAL.getLpByLpnumAndProvince(req.body.lp_num, req.body.province));
         if (!lp_info)
             return res.status(HttpStatus.NOT_FOUND).send('License plate number was not found on the server.');
-        let account_id = (await data_access_1.DAL.userInfoDAL.getUserInfoIdByEcodeId(lp_info.e_code_id)).account_id;
+        let account_id = (await data_access_1.DAL.eCodeMapDAL.getEcodeById(lp_info.e_code_id)).account_id;
         transaction_data.account_id = account_id;
         transaction_data.charges_id = req.body.charges_id;
         transaction_data.lp_id = lp_info.id;

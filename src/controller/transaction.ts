@@ -150,7 +150,7 @@ export async function insertTransactions(req: express.Request, res: express.Resp
         let transaction_data = {} as transactionAttribute;
         let lp_info = (await DAL.lpInfoDAL.getLpByLpnumAndProvince(req.body.lp_num, req.body.province));
         if (!lp_info) return res.status(HttpStatus.NOT_FOUND).send('License plate number was not found on the server.');
-        let account_id = (await DAL.userInfoDAL.getUserInfoIdByEcodeId(lp_info.e_code_id)).account_id;
+        let account_id = (await DAL.eCodeMapDAL.getEcodeById(lp_info.e_code_id)).account_id;
         transaction_data.account_id = account_id;
         transaction_data.charges_id = req.body.charges_id;
         transaction_data.lp_id = lp_info.id;
