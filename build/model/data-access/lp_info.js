@@ -103,7 +103,7 @@ class lpInfoDAL {
             try {
                 let lp_list = await data_access_1.DAL.mysqlConnector.lp_info.findAll({
                     attributes: ['province'],
-                    where: { license_number: { $like: `${prov}%` } },
+                    where: { province: { $like: `${prov}%` } },
                     limit: 10
                 });
                 let list = [];
